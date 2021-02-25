@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAME_H
+#define GAME_H
 
 #include "GameTime.h"
 #include "RenderManager.h"
@@ -53,3 +54,6 @@ public:
 	virtual void render() = 0;
 
 };
+
+
+#endif

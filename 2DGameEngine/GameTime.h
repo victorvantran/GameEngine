@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAME_TIME_H
+#define GAME_TIME_H
 
 class GameTime
 {
@@ -35,3 +36,6 @@ public:
 		return;
 	}
 };
+
+
+#endif

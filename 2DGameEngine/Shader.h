@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHADER_H
+#define SHADER_H
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -16,12 +17,36 @@
 class Shader
 {
 private:
-	std::uint32_t _shaderProgram;
+	std::uint32_t _id;
 private:
-	static std::string loadShaderSourceCode( const char* filename )
+	static std::string loadShaderSourceCode( const char* filepath )
 	{
 		// Pass a filename, return the source code of the file to dynamically compile during runtime
 		// vertex and fragment shader glsl files
+
+		std::string contents = "";
+
+		std::ifstream shaderFile;
+		try
+		{
+			shaderFile.open( filepath );
+
+			std::stringstream shaderContentBuffer;
+			shaderContentBuffer << shaderFile.rdbuf();
+
+			shaderFile.close();
+
+			contents = shaderContentBuffer.str();
+		}
+		catch ( std::ifstream::failure& e )
+		{
+			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n" << e.what() << std::endl;
+		}
+
+
+		return contents;
+
+		/*
 		std::ifstream file;
 		std::stringstream buf;
 
@@ -42,6 +67,7 @@ private:
 		file.close();
 
 		return contents;
+		*/
 	}
 
 
@@ -98,28 +124,53 @@ private:
 		return shader;
 	}
 public:
-	Shader() : _shaderProgram( 0 ) {}
+	Shader() : _id( 0 ) {}
 
 
 	~Shader() 
 	{
-		glDeleteProgram( this->_shaderProgram );
+		glDeleteProgram( this->_id );
 	}
 
 
-	GLuint getShaderProgram() const
+	/// Getters
+	GLuint getProgramId() const
 	{
-		return this->_shaderProgram;
+		return this->_id;
 	}
 
 
+	/// Setters
 	void setProgramId( std::uint32_t programId )
 	{
-		this->_shaderProgram = programId;
+		this->_id = programId;
 		return;
 	}
 
 
+	/// Utility Uniform Functions
+	void setBool( const std::string& name, bool value ) const 
+	{
+		glUniform1i( glGetUniformLocation( this->_id, name.c_str() ), ( GLint )value );
+		return;
+	}
+
+
+	void setInt( const std::string& name, int value ) const
+	{
+		glUniform1i( glGetUniformLocation( this->_id, name.c_str() ), ( GLint )value );
+		return;
+	}
+
+
+	void setFloat( const std::string& name, float value ) const
+	{
+		glUniform1f( glGetUniformLocation( this->_id, name.c_str() ), ( GLfloat )value );
+		return;
+	}
+
+
+	///
 	void load( const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath )
 	{
 		// Compile Vertex and Fragment Shaders. Create ShaderProgram by linking the shaders.
@@ -137,27 +188,30 @@ public:
 		GLuint fragmentShader = Shader::createShader( GL_FRAGMENT_SHADER, fragmentShaderFilePath );
 
 		// Create ShaderProgram
-		this->_shaderProgram = glCreateProgram();
-		glAttachShader( this->_shaderProgram, vertexShader );
-		glAttachShader( this->_shaderProgram, fragmentShader );
-		glBindAttribLocation( this->_shaderProgram, 0, "position" ); // tells openGL what part of the data to read in your pipeline
-		glLinkProgram( this->_shaderProgram );
-		Shader::checkShaderError( this->_shaderProgram, GL_LINK_STATUS );
-		glValidateProgram( this->_shaderProgram );
-		Shader::checkShaderError( this->_shaderProgram, GL_VALIDATE_STATUS );
+		this->_id = glCreateProgram();
+		glAttachShader( this->_id, vertexShader );
+		glAttachShader( this->_id, fragmentShader );
+		glBindAttribLocation( this->_id, 0, "position" ); // tells openGL what part of the data to read in your pipeline
+		glLinkProgram( this->_id );
+		Shader::checkShaderError( this->_id, GL_LINK_STATUS );
+		glValidateProgram( this->_id );
+		Shader::checkShaderError( this->_id, GL_VALIDATE_STATUS );
 
 		// Clean up and delete shader objects once linked into our program
-		glDetachShader( this->_shaderProgram, vertexShader );
-		glDetachShader( this->_shaderProgram, fragmentShader );
+		glDetachShader( this->_id, vertexShader );
+		glDetachShader( this->_id, fragmentShader );
 		glDeleteShader( vertexShader );
 		glDeleteShader( fragmentShader );
 		return;
 	}
 
 
-	void bind()
+	void use()
 	{
-		glUseProgram( this->_shaderProgram );
+		glUseProgram( this->_id );
 		return;
 	}
+
 };
+
+#endif

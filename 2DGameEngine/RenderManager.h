@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RENDER_MANAGER_H
+#define RENDER_MANAGER_H
 
 #include <cstdint>
 #include <glad/glad.h>
@@ -103,3 +104,6 @@ public:
 		return this->_window;
 	}
 };
+
+
+#endif

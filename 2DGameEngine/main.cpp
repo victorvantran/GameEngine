@@ -16,7 +16,7 @@
 
 int main()
 {
-	Game* game = new TinkerGame( 800, 640, "Tinker" );
+	Game* game = new TinkerGame( 1920, 1080, "Tinker" );
 	game->run();
 
 	delete game;

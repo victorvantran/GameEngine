@@ -148,6 +148,17 @@
     <ClCompile Include="lib\stb.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\fragment_core.glsl" />
+    <None Include="assets\shaders\vertex_core.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameTime.h" />
+    <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="TinkerGame.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

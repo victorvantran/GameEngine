@@ -16,6 +16,12 @@
     <Filter Include="Source Files\lib">
       <UniqueIdentifier>{589103b0-b0e2-4213-af66-d577c78cdefe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{5ece9439-3b90-4530-8737-7410ccf24abf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\shaders">
+      <UniqueIdentifier>{13f4a305-e781-45e7-9a1a-c89cd7dd65f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -27,5 +33,30 @@
     <ClCompile Include="lib\stb.cpp">
       <Filter>Source Files\lib</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\fragment_core.glsl">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\vertex_core.glsl">
+      <Filter>assets\shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TinkerGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -48,6 +48,15 @@ public:
 	}
 
 
+	void processInput( GLFWwindow* window )
+	{
+		if ( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
+		{
+			glfwSetWindowShouldClose( window, true );
+		}
+	}
+
+
 	virtual void initialize() = 0;
 	virtual void loadContent() = 0;
 	virtual void update() = 0;

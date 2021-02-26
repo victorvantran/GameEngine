@@ -12,13 +12,22 @@
 class TinkerGame : public Game
 {
 private:
-	std::uint32_t _vao;
 	Shader _shader;
 	TestMesh _testMesh;
-	Texture _texture;
+	Texture _texture0;
+	Texture _texture1;
+
 public:
-	TinkerGame() : Game(), _vao( 0 ), _shader(), _testMesh(), _texture() {}
-	TinkerGame( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) : Game( windowWidth, windowHeight, windowTitle ), _vao( 0 ), _shader(), _testMesh(), _texture() {}
+	TinkerGame() : 
+		Game(), 
+		_shader(), 
+		_testMesh(),
+		_texture0(), _texture1() {}
+	TinkerGame( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) :
+		Game( windowWidth, windowHeight, windowTitle ), 
+		_shader(), 
+		_testMesh(), 
+		_texture0(), _texture1() {}
 	~TinkerGame() {}
 
 
@@ -35,8 +44,6 @@ public:
 
 
 		// Load Mesh
-		
-		
 		Vertex vertices[] =
 		{
 			Vertex( glm::vec3( -0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	0.0f,	0.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
@@ -45,6 +52,19 @@ public:
 			Vertex( glm::vec3( 0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	1.0f,	0.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
 
 		};
+
+
+		/*
+		glm::vec4 vec( 1.0f, 0.0f, 0.0f, 1.0f );
+		glm::mat4 transformer = glm::mat4( 1.0f );
+		transformer = glm::translate( transformer, glm::vec3( 1.0f, 1.0f, 0.0f ) );
+		vec = transformer * vec;
+		std::cout << vec.x << ", " << vec.y << ", " << vec.z << std::endl;
+		*/
+
+
+
+
 		std::uint32_t indices[] =
 		{
 			0, 1, 2,
@@ -58,7 +78,8 @@ public:
 
 
 
-		this->_texture.load( "assets/textures/buzz.jpg" );
+		this->_texture0.load( "assets/textures/dewey_finn.jpg" );
+		this->_texture1.load( "assets/textures/wall.jpg" );
 
 		return;
 	}
@@ -66,6 +87,8 @@ public:
 
 	void update()
 	{
+		this->processInput( this->_renderManager.getWindow() );
+
 		return;
 	}
 
@@ -79,17 +102,45 @@ public:
 		// Activate shader
 		this->_shader.use();
 
+
+		// Process Transform
+		glm::mat4 transformer = glm::mat4( 1.0f );
+		transformer = glm::translate( transformer, glm::vec3( 0.0f, 0.25f, 0.0f ) );
+		transformer = glm::rotate( transformer, ( float )glfwGetTime() * 2, glm::vec3( 0.0, 0.0, 1.0 ) ); // 2) rotate around normalized z-axis
+		transformer = glm::scale( transformer, glm::vec3( 0.5f, 0.5f, 0.5f ) ); // 1) scale
+
+		this->_shader.setMat4( "transform", transformer );
+
+
+
 		// Render triangle
-		this->_texture.bind( 0 );
+		this->_texture0.bind( 0 );
+		this->_texture1.bind( 1 );
 		this->_testMesh.draw();
+
+
+
+
+		
+		for ( int i = 0; i < 100; i++ )
+		{
+			// Process Transform
+			transformer = glm::mat4( 1.0f );
+			transformer = glm::translate( transformer, glm::vec3( std::sin( glfwGetTime() ) * i * 0.01f, std::cos( glfwGetTime() ) * i * 0.01f, i * 0.01f ) );
+			transformer = glm::rotate( transformer, -( float )glfwGetTime() * i * 0.01f, glm::vec3( 0.0, 1.0, 1.0 ) ); // 2) rotate around normalized z-axis
+			transformer = glm::scale( transformer, glm::vec3( 0.5f, 0.5f, 0.5f ) ); // 1) scale
+
+			this->_shader.setMat4( "transform", transformer );
+
+
+			// Render triangle
+			this->_texture0.bind( 0 );
+			this->_texture1.bind( 1 );
+			this->_testMesh.draw();
+		}
+		
 		
 
-		//glBindVertexArray( this->_vao );
-		//glDrawArrays( GL_TRIANGLES, 0, 3);
-		//glBindVertexArray( 0 );
-
-		//glBindVertexArray( this->_vao );
-		//glDrawElements( GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0 );
 
 		//this->_shader.setFloat( "xOffset", ( std::sin( glfwGetTime() * 5.0f ) / 4.0f ) );
 

@@ -44,31 +44,72 @@ public:
 
 
 		// Load Mesh
+		/*
 		Vertex vertices[] =
 		{
 			Vertex( glm::vec3( -0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	0.0f,	0.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
 			Vertex( glm::vec3( -0.5f,	-0.5f,	0.0f ), glm::vec4( 0.0f,	1.0f,	0.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
 			Vertex( glm::vec3( 0.5f,	-0.5f,	0.0f ), glm::vec4( 0.0f,	0.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
-			Vertex( glm::vec3( 0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	1.0f,	0.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
-
+			Vertex( glm::vec3( 0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	1.0f,	0.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) )
 		};
-
-
-		/*
-		glm::vec4 vec( 1.0f, 0.0f, 0.0f, 1.0f );
-		glm::mat4 transformer = glm::mat4( 1.0f );
-		transformer = glm::translate( transformer, glm::vec3( 1.0f, 1.0f, 0.0f ) );
-		vec = transformer * vec;
-		std::cout << vec.x << ", " << vec.y << ", " << vec.z << std::endl;
 		*/
 
+		// Load Cube
+		Vertex vertices[] =
+		{
+			Vertex( glm::vec3( -0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
+			Vertex( glm::vec3( 0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+			Vertex( glm::vec3( 0.5f,  0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
+			Vertex( glm::vec3( 0.5f,  0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
+			Vertex( glm::vec3( -0.5f,  0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+			Vertex( glm::vec3( -0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
+
+			Vertex( glm::vec3( -0.5f, -0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
+			Vertex( glm::vec3( 0.5f, -0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+			Vertex( glm::vec3( 0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
+			Vertex( glm::vec3( 0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
+			Vertex( glm::vec3( -0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+			Vertex( glm::vec3( -0.5f, -0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
+
+			Vertex( glm::vec3( -0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+			Vertex( glm::vec3( -0.5f,  0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
+			Vertex( glm::vec3( -0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+			Vertex( glm::vec3( -0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+			Vertex( glm::vec3( -0.5f, -0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
+			Vertex( glm::vec3( -0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+
+			Vertex( glm::vec3( 0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+			Vertex( glm::vec3( 0.5f,  0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
+			Vertex( glm::vec3( 0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+			Vertex( glm::vec3( 0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+			Vertex( glm::vec3( 0.5f, -0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
+			Vertex( glm::vec3( 0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+
+			Vertex( glm::vec3( -0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+			Vertex( glm::vec3( 0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
+			Vertex( glm::vec3( 0.5f, -0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+			Vertex( glm::vec3( 0.5f, -0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+			Vertex( glm::vec3( -0.5f, -0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
+			Vertex( glm::vec3( -0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+
+			Vertex( glm::vec3( -0.5f,  0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+			Vertex( glm::vec3( 0.5f,  0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
+			Vertex( glm::vec3( 0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+			Vertex( glm::vec3( 0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+			Vertex( glm::vec3( -0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
+			Vertex( glm::vec3( -0.5f,  0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+		};
 
 
 
 		std::uint32_t indices[] =
 		{
-			0, 1, 2,
-			2, 3, 0
+			0, 1, 2, 3, 4, 5,
+			6, 7, 8, 9, 10, 11,
+			12, 13, 14, 15, 16, 17,
+			18, 19, 20, 21, 22, 23,
+			24, 25, 26, 27, 28, 29,
+			30, 31, 32, 33, 34, 35
 		};
 		this->_testMesh.loadPrimitives(
 			vertices, sizeof( vertices ) / sizeof( vertices[0] ), 
@@ -78,7 +119,7 @@ public:
 
 
 
-		this->_texture0.load( "assets/textures/dewey_finn.jpg" );
+		this->_texture0.load( "assets/textures/aperture_science_cube.png" );
 		this->_texture1.load( "assets/textures/wall.jpg" );
 
 		return;
@@ -97,36 +138,18 @@ public:
 	{
 		// Clear the colorbuffer
 		glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
-		glClear( GL_COLOR_BUFFER_BIT );
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		// Activate shader
 		this->_shader.use();
 
 
 		/*
-		// Process Transform
-		glm::mat4 transformer = glm::mat4( 1.0f );
-		transformer = glm::translate( transformer, glm::vec3( 0.0f, 0.25f, 0.0f ) );
-		transformer = glm::rotate( transformer, ( float )glfwGetTime() * 2, glm::vec3( 0.0, 0.0, 1.0 ) ); // 2) rotate around normalized z-axis
-		transformer = glm::scale( transformer, glm::vec3( 0.5f, 0.5f, 0.5f ) ); // 1) scale
-
-		this->_shader.setMat4( "transform", transformer );
-		
-
-
-		// Render triangle
-		this->_texture0.bind( 0 );
-		this->_texture1.bind( 1 );
-		this->_testMesh.draw();
-		*/
-
-
-
-	
-
-
 		glm::mat4 model = glm::mat4( 1.0f );
-		model = glm::rotate( model, glm::radians( -55.0f ), glm::vec3( 1.0f, 0.0f, 0.0f ) );
+		//model = glm::rotate( model, glm::radians( -55.0f ), glm::vec3( 1.0f, 0.0f, 0.0f ) );
+		//model = glm::rotate( model, ( float )glfwGetTime() * glm::radians( 50.0f ), glm::vec3( 0.5f, 1.0f, 0.0f ) );
+		//model = glm::rotate( model, ( float )glfwGetTime() * glm::radians( 50.0f ), glm::vec3( 0.5f, 1.0f, ( std::sin( ( float )glfwGetTime() ) + 1.0f ) / 2.0f ) );
+		model = glm::rotate( model, ( float )glfwGetTime() * glm::radians( 50.0f ), glm::vec3( std::cos( ( float )glfwGetTime() ), 0.0f, std::sin( ( float )glfwGetTime() ) ) );
 
 
 		glm::mat4 view = glm::mat4( 1.0f );
@@ -146,7 +169,35 @@ public:
 		this->_texture0.bind( 0 );
 		this->_texture1.bind( 1 );
 		this->_testMesh.draw();
-	
+		*/
+
+		for ( int x = -5; x < 5; x++ )
+		{
+			for ( int y = -5; y < 5; y++ )
+			{
+				glm::mat4 model = glm::mat4( 1.0f );
+				model = glm::rotate( model, ( float )glfwGetTime() * glm::radians( 50.0f ), glm::vec3( std::cos( ( float )glfwGetTime() ), 0.0f, std::sin( ( float )glfwGetTime() ) ) );
+
+
+				glm::mat4 view = glm::mat4( 1.0f );
+				view = glm::translate( view, glm::vec3( x * 2.0f, y * 2.0f, -10.0f ) );
+
+
+				glm::mat4 projection;
+				projection = glm::perspective( glm::radians( 45.0f ), 1920.0f / 1080.0f, 0.1f, 100.0f );
+
+
+				this->_shader.setMat4( "model", model );
+				this->_shader.setMat4( "view", view );
+				this->_shader.setMat4( "projection", projection );
+
+
+				// Render triangle
+				this->_texture0.bind( 0 );
+				this->_texture1.bind( 1 );
+				this->_testMesh.draw();
+			}
+		}
 
 
 		//this->_shader.setFloat( "xOffset", ( std::sin( glfwGetTime() * 5.0f ) / 4.0f ) );

@@ -88,6 +88,8 @@ public:
 
 		glfwSwapInterval( vSynch ? 1 : 0 );
 
+		glEnable( GL_DEPTH_TEST );
+
 		return;
 	}
 

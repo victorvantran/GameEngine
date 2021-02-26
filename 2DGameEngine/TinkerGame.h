@@ -17,6 +17,15 @@ private:
 	Texture _texture0;
 	Texture _texture1;
 
+
+
+
+	// Camera
+	glm::vec3 _cameraPos = glm::vec3( 0.0f, 0.0f, 3.0f );
+	glm::vec3 _cameraFront = glm::vec3( 0.0f, 0.0f, -1.0f );
+	glm::vec3 _cameraUp = glm::vec3( 0.0f, 1.0f, 0.0f );
+
+
 public:
 	TinkerGame() : 
 		Game(), 
@@ -99,9 +108,6 @@ public:
 			Vertex( glm::vec3( -0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
 			Vertex( glm::vec3( -0.5f,  0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
 		};
-
-
-
 		std::uint32_t indices[] =
 		{
 			0, 1, 2, 3, 4, 5,
@@ -120,6 +126,7 @@ public:
 
 
 		this->_texture0.load( "assets/textures/aperture_science_cube.png" );
+		//this->_texture0.load( "assets/textures/dewey_finn.jpg" );
 		this->_texture1.load( "assets/textures/wall.jpg" );
 
 		return;
@@ -140,64 +147,88 @@ public:
 		glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+
+
+
 		// Activate shader
 		this->_shader.use();
+		glm::vec3 cubeWorldPositions[] =
+		{
+			glm::vec3( 0.0f,  0.0f,  0.0f ),
+			glm::vec3( 2.0f,  5.0f, -5.0f ),
+			glm::vec3( -1.5f, -2.2f, -2.5f ),
+			glm::vec3( -3.8f, -2.0f, -12.3f ),
+			glm::vec3( 2.4f, -0.4f, -3.5f ),
+			glm::vec3( -1.7f,  3.0f, -7.5f ),
+			glm::vec3( 1.3f, -2.0f, -2.5f ),
+			glm::vec3( 1.5f,  2.0f, -2.5f ),
+			glm::vec3( 1.5f,  0.2f, -1.5f ),
+			glm::vec3( -1.3f,  1.0f, -1.5f )
+		};
 
 
-		/*
-		glm::mat4 model = glm::mat4( 1.0f );
-		//model = glm::rotate( model, glm::radians( -55.0f ), glm::vec3( 1.0f, 0.0f, 0.0f ) );
-		//model = glm::rotate( model, ( float )glfwGetTime() * glm::radians( 50.0f ), glm::vec3( 0.5f, 1.0f, 0.0f ) );
-		//model = glm::rotate( model, ( float )glfwGetTime() * glm::radians( 50.0f ), glm::vec3( 0.5f, 1.0f, ( std::sin( ( float )glfwGetTime() ) + 1.0f ) / 2.0f ) );
-		model = glm::rotate( model, ( float )glfwGetTime() * glm::radians( 50.0f ), glm::vec3( std::cos( ( float )glfwGetTime() ), 0.0f, std::sin( ( float )glfwGetTime() ) ) );
 
 
-		glm::mat4 view = glm::mat4( 1.0f );
-		view = glm::translate( view, glm::vec3( 0.0f, 0.0f, -3.0f ) );
+		glm::mat4 projection = glm::mat4( 1.0f );
+		projection = glm::perspective( glm::radians( 45.0f ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 100.0f );
 
-
-		glm::mat4 projection;
-		projection = glm::perspective( glm::radians( 45.0f ), 1920.0f / 1080.0f, 0.1f, 100.0f );
-
-
-		this->_shader.setMat4( "model", model );
-		this->_shader.setMat4( "view", view );
 		this->_shader.setMat4( "projection", projection );
 
-
-		// Render triangle
-		this->_texture0.bind( 0 );
-		this->_texture1.bind( 1 );
-		this->_testMesh.draw();
-		*/
-
-		for ( int x = -5; x < 5; x++ )
+		for ( int i = 0; i < 10; i++ )
 		{
-			for ( int y = -5; y < 5; y++ )
-			{
-				glm::mat4 model = glm::mat4( 1.0f );
-				model = glm::rotate( model, ( float )glfwGetTime() * glm::radians( 50.0f ), glm::vec3( std::cos( ( float )glfwGetTime() ), 0.0f, std::sin( ( float )glfwGetTime() ) ) );
+			// Camera
+			// Camera position
+			glm::vec3 cameraPos = glm::vec3( 0.0f, 0.0f, 3.0f ); // camera position in worldSpace
+
+			// Camera direction ( negative z-axis -> positive z-axis )
+			glm::vec3 cameraTarget = glm::vec3( 0.0f, 0.0f, 0.0f ); // camera point at orign of worldSpace
+			glm::vec3 cameraDirection = glm::normalize( cameraPos - cameraTarget );
+
+			// Right axis (positive x-axis): cross product of the up vector and direction ( orthogonal )
+			glm::vec3 up = glm::vec3( 0.0f, 1.0f, 0.0f );
+			glm::vec3 cameraRight = glm::normalize( glm::cross( up, cameraDirection ) );
+
+			// Up axis ( positive y-axis ): cross product of camera direction and camera right
+			glm::vec3 cameraUp = glm::cross( cameraDirection, cameraRight );
 
 
-				glm::mat4 view = glm::mat4( 1.0f );
-				view = glm::translate( view, glm::vec3( x * 2.0f, y * 2.0f, -10.0f ) );
+
+			// Maniupulate camera
+			const float radius = 50.0f;
+			float camX = std::sinf( glfwGetTime() ) * radius;
+			float camZ = std::cosf( glfwGetTime() ) * radius;
+			cameraPos = glm::vec3( camX, 0.0, camZ );
 
 
-				glm::mat4 projection;
-				projection = glm::perspective( glm::radians( 45.0f ), 1920.0f / 1080.0f, 0.1f, 100.0f );
+			// Look At matrix (view)
+			glm::mat4 view = glm::lookAt(
+				cameraPos,
+				cameraTarget,
+				up
+			);
 
 
-				this->_shader.setMat4( "model", model );
-				this->_shader.setMat4( "view", view );
-				this->_shader.setMat4( "projection", projection );
+
+			// Objects
+			glm::mat4 model = glm::mat4( 1.0f );
+			model = glm::translate( model, cubeWorldPositions[i] );
+			model = glm::rotate( model, glm::radians( 360.0f * -std::sinf( i ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
+			//model = glm::translate( model, glm::vec3( 0.0f, 0.0f, -( ( 100.0f * std::sinf( glfwGetTime() ) ) + 100.0f ) / 2.0f ) );
+			//model = glm::rotate( model, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
 
 
-				// Render triangle
-				this->_texture0.bind( 0 );
-				this->_texture1.bind( 1 );
-				this->_testMesh.draw();
-			}
+
+			this->_shader.setMat4( "model", model );
+			this->_shader.setMat4( "view", view );
+
+
+
+			// Render triangle
+			this->_texture0.bind( 0 );
+			this->_texture1.bind( 1 );
+			this->_testMesh.draw();
 		}
+
 
 
 		//this->_shader.setFloat( "xOffset", ( std::sin( glfwGetTime() * 5.0f ) / 4.0f ) );

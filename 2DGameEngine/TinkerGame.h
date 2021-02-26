@@ -120,7 +120,7 @@ public:
 
 
 
-
+		/*
 		
 		for ( int i = 0; i < 100; i++ )
 		{
@@ -132,14 +132,14 @@ public:
 
 			this->_shader.setMat4( "transform", transformer );
 
-
+			
 			// Render triangle
 			this->_texture0.bind( 0 );
 			this->_texture1.bind( 1 );
 			this->_testMesh.draw();
 		}
 		
-		
+		*/
 
 
 		//this->_shader.setFloat( "xOffset", ( std::sin( glfwGetTime() * 5.0f ) / 4.0f ) );

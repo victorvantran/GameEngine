@@ -20,12 +20,6 @@ private:
 
 
 
-	// Camera
-	glm::vec3 _cameraPos = glm::vec3( 0.0f, 0.0f, 3.0f );
-	glm::vec3 _cameraFront = glm::vec3( 0.0f, 0.0f, -1.0f );
-	glm::vec3 _cameraUp = glm::vec3( 0.0f, 1.0f, 0.0f );
-
-
 public:
 	TinkerGame() : 
 		Game(), 
@@ -202,9 +196,9 @@ public:
 
 			// Look At matrix (view)
 			glm::mat4 view = glm::lookAt(
-				cameraPos,
-				cameraTarget,
-				up
+				this->_cameraPos,
+				this->_cameraPos + this->_cameraFront,
+				this->_cameraUp
 			);
 
 

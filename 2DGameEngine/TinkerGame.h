@@ -103,6 +103,7 @@ public:
 		this->_shader.use();
 
 
+		/*
 		// Process Transform
 		glm::mat4 transformer = glm::mat4( 1.0f );
 		transformer = glm::translate( transformer, glm::vec3( 0.0f, 0.25f, 0.0f ) );
@@ -110,36 +111,42 @@ public:
 		transformer = glm::scale( transformer, glm::vec3( 0.5f, 0.5f, 0.5f ) ); // 1) scale
 
 		this->_shader.setMat4( "transform", transformer );
-
+		
 
 
 		// Render triangle
 		this->_texture0.bind( 0 );
 		this->_texture1.bind( 1 );
 		this->_testMesh.draw();
-
-
-
-		/*
-		
-		for ( int i = 0; i < 100; i++ )
-		{
-			// Process Transform
-			transformer = glm::mat4( 1.0f );
-			transformer = glm::translate( transformer, glm::vec3( std::sin( glfwGetTime() ) * i * 0.01f, std::cos( glfwGetTime() ) * i * 0.01f, i * 0.01f ) );
-			transformer = glm::rotate( transformer, -( float )glfwGetTime() * i * 0.01f, glm::vec3( 0.0, 1.0, 1.0 ) ); // 2) rotate around normalized z-axis
-			transformer = glm::scale( transformer, glm::vec3( 0.5f, 0.5f, 0.5f ) ); // 1) scale
-
-			this->_shader.setMat4( "transform", transformer );
-
-			
-			// Render triangle
-			this->_texture0.bind( 0 );
-			this->_texture1.bind( 1 );
-			this->_testMesh.draw();
-		}
-		
 		*/
+
+
+
+	
+
+
+		glm::mat4 model = glm::mat4( 1.0f );
+		model = glm::rotate( model, glm::radians( -55.0f ), glm::vec3( 1.0f, 0.0f, 0.0f ) );
+
+
+		glm::mat4 view = glm::mat4( 1.0f );
+		view = glm::translate( view, glm::vec3( 0.0f, 0.0f, -3.0f ) );
+
+
+		glm::mat4 projection;
+		projection = glm::perspective( glm::radians( 45.0f ), 1920.0f / 1080.0f, 0.1f, 100.0f );
+
+
+		this->_shader.setMat4( "model", model );
+		this->_shader.setMat4( "view", view );
+		this->_shader.setMat4( "projection", projection );
+
+
+		// Render triangle
+		this->_texture0.bind( 0 );
+		this->_texture1.bind( 1 );
+		this->_testMesh.draw();
+	
 
 
 		//this->_shader.setFloat( "xOffset", ( std::sin( glfwGetTime() * 5.0f ) / 4.0f ) );

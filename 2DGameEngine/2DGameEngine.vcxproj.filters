@@ -22,6 +22,9 @@
     <Filter Include="assets\shaders">
       <UniqueIdentifier>{13f4a305-e781-45e7-9a1a-c89cd7dd65f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\textures">
+      <UniqueIdentifier>{1d0bc5b8-40d8-4060-8b5b-9a02c04e408a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -64,5 +67,16 @@
     <ClInclude Include="Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TestMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\wall.jpg">
+      <Filter>assets\textures</Filter>
+    </Image>
+    <Image Include="assets\textures\dewey_finn.jpg">
+      <Filter>assets\textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

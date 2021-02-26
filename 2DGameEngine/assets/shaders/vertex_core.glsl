@@ -2,21 +2,17 @@
 
 layout( location = 0 ) in vec3 aPosition;
 layout( location = 1 ) in vec4 aColor;
+layout( location = 2 ) in vec2 aTexCoord;
 
 
-out vec4 vertexPosition;
+
 out vec4 ourColor;
-
-uniform float xOffset;
+out vec2 TexCoord;
 
 void main()
 {
-	/*
-	gl_Position = vec4( aPosition.x + xOffset, aPosition.yz, 1.0 );
-	vertexPosition = gl_Position;
-	ourColor = aColor;
-	*/
 	gl_Position = vec4( aPosition.xyz, 1.0 );
+	TexCoord = aTexCoord;
 	ourColor = aColor;
 	return;
 }

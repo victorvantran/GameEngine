@@ -6,13 +6,14 @@
 #include "Game.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "TestMesh.h"
 
 class TinkerGame : public Game
 {
 private:
 	std::uint32_t _vao;
 	Shader _shader;
-	Mesh _testMesh;
+	TestMesh _testMesh;
 public:
 	TinkerGame() : Game(), _vao( 0 ), _shader(), _testMesh() {}
 	TinkerGame( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) : Game( windowWidth, windowHeight, windowTitle ), _vao( 0 ), _shader(), _testMesh() {}
@@ -32,33 +33,46 @@ public:
 
 
 		// Load Mesh
+		
+		
 		Vertex vertices[] =
 		{
-			Vertex( glm::vec3( -0.75f,	0.0f,	0.0f ), glm::vec4( 1.0f,	0.0f,	0.0f,	1.0f ) ),
-			Vertex( glm::vec3( -0.5f,	0.5f,	0.0f ), glm::vec4( 0.0f,	1.0f,	0.0f,	1.0f ) ),
-			Vertex( glm::vec3( -0.25f,	0.0f,	0.0f ), glm::vec4( 0.0f,	0.0f,	1.0f,	1.0f ) ),
+			Vertex( glm::vec3( -0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	0.0f,	0.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+			Vertex( glm::vec3( -0.5f,	-0.5f,	0.0f ), glm::vec4( 0.0f,	1.0f,	0.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
+			Vertex( glm::vec3( 0.5f,	-0.5f,	0.0f ), glm::vec4( 0.0f,	0.0f,	1.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+			Vertex( glm::vec3( 0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	1.0f,	0.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
 
-			Vertex( glm::vec3( 0.25f,	0.0f,	0.0f ), glm::vec4( 1.0f,	0.0f,	0.0f,	1.0f ) ),
-			Vertex( glm::vec3( 0.5f,	0.5f,	0.0f ), glm::vec4( 0.0f,	1.0f,	0.0f,	1.0f ) ),
-			Vertex( glm::vec3( 0.75f,	0.0f,	0.0f ), glm::vec4( 0.0f,	0.0f,	1.0f,	1.0f ) ),
-
-			Vertex( glm::vec3( -0.25f,	-0.25f,	0.0f ), glm::vec4( 1.0f,	0.0f,	0.0f,	1.0f ) ),
-			Vertex( glm::vec3( 0.0f,	-0.75f,	0.0f ), glm::vec4( 0.0f,	1.0f,	0.0f,	1.0f ) ),
-			Vertex( glm::vec3( 0.25f,	-0.25f,	0.0f ), glm::vec4( 0.0f,	0.0f,	1.0f,	1.0f ) )
 		};
-
 		std::uint32_t indices[] =
 		{
 			0, 1, 2,
-			3, 4, 5,
-			6, 7, 8
+			2, 3, 0
 		};
+		
 
-		this->_testMesh.load( 
+		/*
+		Vertex vertices[] =
+		{
+			Vertex( glm::vec3( 0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	0.0f,	0.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
+			Vertex( glm::vec3( 0.5f,	-0.5f,	0.0f ), glm::vec4( 0.0f,	1.0f,	0.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
+			Vertex( glm::vec3( -0.5f,	-0.5f,	0.0f ), glm::vec4( 0.0f,	0.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
+			Vertex( glm::vec3( -0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	1.0f,	0.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
+
+		};
+		std::uint32_t indices[] =
+		{
+			0, 1, 3,
+			1, 2, 3,
+			2, 0, 3
+		};
+		*/
+
+		this->_testMesh.loadPrimitives(
 			vertices, sizeof( vertices ) / sizeof( vertices[0] ), 
 			indices, sizeof( indices ) / sizeof( indices[0] )
 		);
 
+		this->_testMesh.loadTextures();
 
 		return;
 	}

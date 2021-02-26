@@ -158,8 +158,13 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="TestMesh.h" />
     <ClInclude Include="TinkerGame.h" />
     <ClInclude Include="Vertex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\dewey_finn.jpg" />
+    <Image Include="assets\textures\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

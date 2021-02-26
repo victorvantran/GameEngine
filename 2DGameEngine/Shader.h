@@ -202,6 +202,11 @@ public:
 		glDetachShader( this->_id, fragmentShader );
 		glDeleteShader( vertexShader );
 		glDeleteShader( fragmentShader );
+
+
+		glUseProgram( this->_id );
+		glUniform1i( glGetUniformLocation( this->_id, "texture0" ), 0 );
+		glUniform1i( glGetUniformLocation( this->_id, "texture1" ), 1 );
 		return;
 	}
 

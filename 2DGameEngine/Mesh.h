@@ -4,11 +4,14 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "stb/stb_image.h"
 #include "Vertex.h"
 
 class Mesh
 {
 private:
+
+protected:
 	enum class VBO
 	{
 		Position,
@@ -26,10 +29,10 @@ private:
 	GLuint _ebo[( std::size_t )EBO::count];
 	std::uint64_t _vertexCount;
 	std::uint64_t _elementCount;
-protected:
 
+	//GLuint _texture;
 public:
-	Mesh() : _vao( 0 ), _vbo{}, _ebo{}, _vertexCount( 0 ), _elementCount( 0 )
+	Mesh() : _vao( 0 ), _vbo{}, _ebo{}, _vertexCount( 0 ), _elementCount( 0 ) /*_texture( 0 )*/
 	{
 	}
 
@@ -40,7 +43,7 @@ public:
 	}
 
 
-	void load( Vertex* vertices, std::size_t numVertices, std::uint32_t* indices, std::size_t numIndices )
+	void loadPrimitives( Vertex* vertices, std::size_t numVertices, std::uint32_t* indices, std::size_t numIndices )
 	{
 		this->_vertexCount = numVertices;
 		this->_elementCount = numIndices;
@@ -56,11 +59,14 @@ public:
 
 		// Fill VAO with attribute pointers
 		// Position attribute
-		glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof( float ), ( void* )( 0 ) ); // Get position data // AttribPointer->layout
+		glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, sizeof( vertices[0] ), ( void* )( 0 ) ); // Get position data // AttribPointer->layout
 		glEnableVertexAttribArray( 0 );
 		// Color attribute
-		glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof( float ), ( void* )( 3 * sizeof( float ) ) ); // Get rgb data
+		glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, sizeof( vertices[0] ), ( void* )( 3 * sizeof( float ) ) ); // Get rgb data
 		glEnableVertexAttribArray( 1 );
+		// Texture coordinates attribute
+		glVertexAttribPointer( 2, 2, GL_FLOAT, GL_FALSE, sizeof( vertices[0] ), ( void* )( 7 * sizeof( float ) ) ); // Get rgb data
+		glEnableVertexAttribArray( 2 );
 
 		// Bind Element Buffer Object ( EBO ) and fill with indices data
 		glGenBuffers( ( GLsizei )EBO::count, this->_ebo );
@@ -80,9 +86,43 @@ public:
 	}
 
 
+	/*
+	void loadTexture( const char* filepath )
+	{
+		glGenTextures( 1, &this->_texture );
+		glActiveTexture( GL_TEXTURE0 );
+		glBindTexture( GL_TEXTURE_2D, this->_texture );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+		std::int32_t width, height, nrChannels;
+		unsigned char* data = stbi_load( filepath, &width, &height, &nrChannels, 0 );
+		if ( data != nullptr )
+		{
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data );
+			glGenerateMipmap( GL_TEXTURE_2D );
+		}
+		else
+		{
+			std::cout << "Failed to load texture" << std::endl;
+		}
+
+		// Done generating texture and mipmaps, so free the image memory
+		stbi_image_free( data );
+
+		return;
+	}
+	*/
+
+
+
+
 	void draw()
 	{
 		glBindVertexArray( this->_vao );
+		//glBindTexture( GL_TEXTURE_2D, this->_texture );
 		glDrawElements( GL_TRIANGLES, this->_elementCount, GL_UNSIGNED_INT, 0 );
 		glBindVertexArray( 0 );
 		return;

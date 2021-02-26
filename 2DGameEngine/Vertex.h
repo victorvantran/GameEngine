@@ -6,13 +6,14 @@
 class Vertex
 {
 private:
-	glm::vec3 _pos;
+	glm::vec3 _position;
 	glm::vec4 _color;
+	glm::vec2 _textureCoordinates;
 protected:
 
 public:
-	Vertex() : _pos(), _color() {}
-	Vertex( const glm::vec3& pos, const glm::vec4& color )  : _pos( pos ), _color( color ) {}
+	Vertex() : _position(), _color(), _textureCoordinates() {}
+	Vertex( const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates )  : _position( position ), _color( color ), _textureCoordinates( textureCoordinates ) {}
 	~Vertex() {}
 };
 

@@ -2,11 +2,16 @@
 
 out vec4 FragColor;
 
-in vec4 vertexPosition;
+in vec2 TexCoord;
 in vec4 ourColor;
+
+uniform sampler2D texture0;
+uniform sampler2D texture1;
+
 
 void main()
 {
-	FragColor = ourColor; //vec4( ( vertexPosition.xyz + 1.0f ) / 2.0f, vertexPosition.w ); //ourColor;
+	FragColor = mix( texture( texture0, TexCoord ), texture( texture1, TexCoord ), 0.2 ) * ourColor;
+	// texture( ourTexture, TexCoord ) * ourColor;  //texture( ourTexture, TexCoord );	//ourColor; //vec4( ( vertexPosition.xyz + 1.0f ) / 2.0f, vertexPosition.w ); //ourColor;
 	return;
 }

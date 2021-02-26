@@ -39,7 +39,7 @@ public:
 
 
 	void createWindow( std::uint16_t width = 800, std::uint16_t height = 640, const std::string& title = "untitled",
-		bool resizable = false, bool vSynch = false )
+		bool resizable = true, bool vSynch = false )
 	{
 		// Initialize the framework with the correct version (3.3) and using CORE_PROFILE mode
 		glfwInit();

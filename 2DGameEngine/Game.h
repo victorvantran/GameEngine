@@ -34,7 +34,7 @@ public:
 			this->_gameTime.setDeltaTime( ( float )( glfwGetTime() - this->_gameTime.getTotalElapsedSeconds() ) );
 			this->_gameTime.setTotalElapsedSeconds( glfwGetTime() );
 
-			std::cout << 1.0 / this->_gameTime.getDeltaTime() << std::endl;
+			std::cout << (int )( 1.0 / this->_gameTime.getDeltaTime() ) << std::endl;
 
 			// Update game logic
 			this->update();

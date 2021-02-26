@@ -23,7 +23,6 @@ private:
 	{
 		// Pass a filename, return the source code of the file to dynamically compile during runtime
 		// vertex and fragment shader glsl files
-
 		std::string contents = "";
 
 		std::ifstream shaderFile;
@@ -43,31 +42,7 @@ private:
 			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n" << e.what() << std::endl;
 		}
 
-
 		return contents;
-
-		/*
-		std::ifstream file;
-		std::stringstream buf;
-
-		std::string contents = "";
-
-		file.open( filename );
-
-		if ( file.is_open() )
-		{
-			buf << file.rdbuf();
-			contents = buf.str();
-		}
-		else
-		{
-			std::cout << "Could not open: " << filename << std::endl;
-		}
-
-		file.close();
-
-		return contents;
-		*/
 	}
 
 
@@ -197,16 +172,16 @@ public:
 		glValidateProgram( this->_id );
 		Shader::checkShaderError( this->_id, GL_VALIDATE_STATUS );
 
+		// Set uniform variables
+		glUseProgram( this->_id );
+		glUniform1i( glGetUniformLocation( this->_id, "texture0" ), 0 );
+		// glUniform1i( glGetUniformLocation( this->_id, "texture1" ), 1 );
+
 		// Clean up and delete shader objects once linked into our program
 		glDetachShader( this->_id, vertexShader );
 		glDetachShader( this->_id, fragmentShader );
 		glDeleteShader( vertexShader );
 		glDeleteShader( fragmentShader );
-
-
-		glUseProgram( this->_id );
-		glUniform1i( glGetUniformLocation( this->_id, "texture0" ), 0 );
-		glUniform1i( glGetUniformLocation( this->_id, "texture1" ), 1 );
 		return;
 	}
 

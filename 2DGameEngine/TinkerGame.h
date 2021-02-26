@@ -7,6 +7,7 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "TestMesh.h"
+#include "Texture.h"
 
 class TinkerGame : public Game
 {
@@ -14,9 +15,10 @@ private:
 	std::uint32_t _vao;
 	Shader _shader;
 	TestMesh _testMesh;
+	Texture _texture;
 public:
-	TinkerGame() : Game(), _vao( 0 ), _shader(), _testMesh() {}
-	TinkerGame( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) : Game( windowWidth, windowHeight, windowTitle ), _vao( 0 ), _shader(), _testMesh() {}
+	TinkerGame() : Game(), _vao( 0 ), _shader(), _testMesh(), _texture() {}
+	TinkerGame( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) : Game( windowWidth, windowHeight, windowTitle ), _vao( 0 ), _shader(), _testMesh(), _texture() {}
 	~TinkerGame() {}
 
 
@@ -48,31 +50,15 @@ public:
 			0, 1, 2,
 			2, 3, 0
 		};
-		
-
-		/*
-		Vertex vertices[] =
-		{
-			Vertex( glm::vec3( 0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	0.0f,	0.0f,	1.0f ), glm::vec2( 1.0f, 1.0f ) ),
-			Vertex( glm::vec3( 0.5f,	-0.5f,	0.0f ), glm::vec4( 0.0f,	1.0f,	0.0f,	1.0f ), glm::vec2( 1.0f, 0.0f ) ),
-			Vertex( glm::vec3( -0.5f,	-0.5f,	0.0f ), glm::vec4( 0.0f,	0.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
-			Vertex( glm::vec3( -0.5f,	0.5f,	0.0f ), glm::vec4( 1.0f,	1.0f,	0.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
-
-		};
-		std::uint32_t indices[] =
-		{
-			0, 1, 3,
-			1, 2, 3,
-			2, 0, 3
-		};
-		*/
-
 		this->_testMesh.loadPrimitives(
 			vertices, sizeof( vertices ) / sizeof( vertices[0] ), 
 			indices, sizeof( indices ) / sizeof( indices[0] )
 		);
 
-		this->_testMesh.loadTextures();
+
+
+
+		this->_texture.load( "assets/textures/buzz.jpg" );
 
 		return;
 	}
@@ -94,6 +80,7 @@ public:
 		this->_shader.use();
 
 		// Render triangle
+		this->_texture.bind( 0 );
 		this->_testMesh.draw();
 		
 

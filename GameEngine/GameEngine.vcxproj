@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="InputsManager.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="InputsManager.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="TestMesh.h" />
     <ClInclude Include="Texture.h" />

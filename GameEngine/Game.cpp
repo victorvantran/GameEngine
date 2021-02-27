@@ -1,11 +1,11 @@
 #include "Game.h"
 
 
-Game::Game() : _gameTime(), _renderManager(), _camera( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 0.0f, 1.0f, 0.0f ), -90.0f, 0.0f ),
+Game::Game() : _gameTime(), _renderManager(), _camera(),
 _windowWidth( 800 ), _windowHeight( 640 ), _windowTitle( "untitled" ) {}
 
 
-Game::Game( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) : _gameTime(), _renderManager(), _camera( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 0.0f, 1.0f, 0.0f ), -90.0f, 0.0f ),
+Game::Game( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) : _gameTime(), _renderManager(), _camera(),
 _windowWidth( windowWidth ), _windowHeight( windowHeight ), _windowTitle( windowTitle ) {}
 
 

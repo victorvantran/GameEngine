@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "Settings.h"
 
 class Camera
 {
@@ -33,94 +34,59 @@ public:
 	float _zoom;
 
 public:
-	Camera( glm::vec3 position, glm::vec3 up, float yaw, float pitch ) : 
-		_position( position ),
-		_front( glm::vec3( 0.0f, 0.0f, -1.0f ) ),
-		_worldUp( up ),
-		_yaw( yaw ),
-		_pitch( pitch ),
-		_panSpeed( 2.0f ),
-		_tiltSensitivity( 0.1f ),
-		_zoom( 45.0f )
-	{
-		this->updateCameraOrientation();
-	}
-
-	~Camera() {}
+	Camera( glm::vec3 position = settings::camera::DEFAULT_POSITION, glm::vec3 up = settings::camera::DEFAULT_UP, float yaw = settings::camera::DEFAULT_YAW, float pitch = settings::camera::DEFAULT_PITCH );
 
 
-	glm::mat4 getViewMatrix()
-	{
-		return glm::lookAt( this->_position, this->_position + this->_front, this->_up );
-	}
+	~Camera();
 
 
-	void processPanInput( PanDirection direction, float deltaTime )
-	{
-		float velocity = this->_panSpeed * deltaTime;
-		if ( direction == PanDirection::UP ) this->_position += this->_worldUp * velocity;
-		if ( direction == PanDirection::DOWN ) this->_position -= this->_worldUp * velocity;
-		if ( direction == PanDirection::LEFT ) this->_position -= this->_right * velocity;
-		if ( direction == PanDirection::RIGHT ) this->_position += this->_right * velocity;
-		if ( direction == PanDirection::LEFT ) this->_position -= this->_right * velocity;
-		if ( direction == PanDirection::RIGHT ) this->_position += this->_right * velocity;
-		if ( direction == PanDirection::FORWARD ) this->_position += this->_front * velocity;
-		if ( direction == PanDirection::BACKWARD ) this->_position -= this->_front * velocity;
-
-		return;
-	}
+	glm::mat4 getViewMatrix();
 
 
-	void processTiltInput( float xOffset, float yOffset, GLboolean constrainPitch = true )
-	{
-		xOffset *= this->_tiltSensitivity;
-		yOffset *= this->_tiltSensitivity;
-
-		this->_yaw += xOffset;
-		this->_yaw = glm::mod( this->_yaw + xOffset, 360.0f );
-
-		this->_pitch += yOffset;
-
-		if ( constrainPitch )
-		{
-			if ( this->_pitch > 89.9375f )
-				this->_pitch = 89.9375f;
-			if ( this->_pitch < -89.9375f )
-				this->_pitch = -89.9375f;
-		}
-
-		// Update camera orientation vectors using the updated Euler angles
-		updateCameraOrientation();
-
-		return;
-	}
+	/**
+	 * Update the position of the camera based on a direction and deltaTime for velocity
+	 *
+	 * Pan determines the view matrix
+	 *
+	 * @param direction a PanDirection represents direction of the camera
+	 * @param float deltaTime a float that synchronizes time-based calculations for different hardware
+	 * @return void
+	 */
+	void processPanInput( PanDirection direction, float deltaTime );
 
 
-	void processZoom( float yOffset )
-	{
-		this->_zoom -= yOffset;
-		if ( this->_zoom < 1.0f ) this->_zoom = 1.0f;
-		if ( this->_zoom > 45.0f ) this->_zoom = 45.0f;
+	/**
+	 * Update the yaw and pitch of the camera
+	 *
+	 * Tilt determines view matrix
+	 *
+	 * @param xOffset float to be treated as degrees to be added to yaw
+	 * @param yOffset float to be treated as degrees to be added to pitch
+	 * @param constrainPitch boolean that toggles the pitch range. Avoids upsidedown
+	 * @return void
+	 */
+	void processTiltInput( float xOffset, float yOffset, GLboolean constrainPitch = true );
 
-		return;
-	}
+
+	/**
+	 * Update the zoom based on offset of the camera
+	 *
+	 * Zoom determines the projection matrix
+	 *
+	 * @param yOffset float to be added to the _zoom
+	 * @return void
+	 */
+	void processZoom( float yOffset );
 
 
-	void updateCameraOrientation()
-	{
-		// Recalculate the front vector
-		glm::vec3 newFront;
-		newFront.x = std::cosf( glm::radians( this->_yaw ) ) * std::cosf( glm::radians( this->_pitch ) );
-		newFront.y = std::sinf( glm::radians( this->_pitch ) );
-		newFront.z = std::sinf( glm::radians( this->_yaw ) ) * std::cosf( glm::radians( this->_pitch ) );
-		this->_front = glm::normalize( newFront );
-
-		// Recalculate the Right and Up vector
-		this->_right = glm::normalize( glm::cross( this->_front, this->_worldUp ) );
-		this->_up = glm::normalize( glm::cross( this->_right, this->_front ) );
-
-		return;
-	}
+	/**
+	 * Update the camera orientation based on yaw and pitch values
+	 *
+	 * Orientation is given by three orthognal vectors: _up, _right, and _front
+	 *
+	 * @return void
+	 */
+	void updateCameraOrientation();
 
 };
 

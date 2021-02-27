@@ -5,9 +5,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Settings.h"
 #include "GameTime.h"
 #include "RenderManager.h"
 #include "Camera.h"
+
+
 
 class Game
 {

@@ -21,11 +21,7 @@ protected:
 
 
 
-	// Camera
-	glm::vec3 _cameraPos = glm::vec3( 0.0f, 0.0f, 3.0f );
-	glm::vec3 _cameraFront = glm::vec3( 0.0f, 0.0f, -1.0f );
-	glm::vec3 _cameraUp = glm::vec3( 0.0f, 1.0f, 0.0f );
-	glm::vec3 _cameraRight = glm::vec3( 1.0f, 0.0f, 0.0f );
+
 public:
 	Game() : _gameTime(), _renderManager(),
 		_windowWidth( 800 ), _windowHeight( 640 ), _windowTitle( "untitled" ) {}
@@ -72,19 +68,19 @@ public:
 		//std::cout << "y: " << glm::cross( this->_cameraFront, this->_cameraRight ).y << std::endl;
 		//std::cout << "x: " << glm::cross( this->_cameraFront, this->_cameraUp ).x << std::endl;
 
-		const float cameraSpeed = 0.05f;
-		if ( glfwGetKey( window, GLFW_KEY_Q ) == GLFW_PRESS )
-			this->_cameraPos += glm::normalize( this->_cameraFront ) * cameraSpeed;
-		if ( glfwGetKey( window, GLFW_KEY_E ) == GLFW_PRESS )
-			this->_cameraPos -= glm::normalize( this->_cameraFront ) * cameraSpeed;
+		const float cameraSpeed = 2.5f * this->_gameTime.getDeltaTime();
 		if ( glfwGetKey( window, GLFW_KEY_W ) == GLFW_PRESS )
-			this->_cameraPos += glm::normalize( glm::cross( this->_cameraFront, -this->_cameraRight ) ) * cameraSpeed;
+			this->_renderManager._cameraPos += glm::normalize( this->_renderManager._cameraFront ) * cameraSpeed;
 		if ( glfwGetKey( window, GLFW_KEY_S ) == GLFW_PRESS )
-			this->_cameraPos -= glm::normalize( glm::cross( this->_cameraFront, -this->_cameraRight ) ) * cameraSpeed;
+			this->_renderManager._cameraPos -= glm::normalize( this->_renderManager._cameraFront ) * cameraSpeed;
+		if ( glfwGetKey( window, GLFW_KEY_Q ) == GLFW_PRESS )
+			this->_renderManager._cameraPos += this->_renderManager._cameraUp * cameraSpeed;
+		if ( glfwGetKey( window, GLFW_KEY_E ) == GLFW_PRESS )
+			this->_renderManager._cameraPos -= this->_renderManager._cameraUp * cameraSpeed;
 		if ( glfwGetKey( window, GLFW_KEY_A ) == GLFW_PRESS )
-			this->_cameraPos -= glm::normalize( glm::cross( this->_cameraFront, this->_cameraUp ) ) * cameraSpeed;
+			this->_renderManager._cameraPos -= glm::normalize( glm::cross( this->_renderManager._cameraFront, this->_renderManager._cameraUp ) ) * cameraSpeed;
 		if ( glfwGetKey( window, GLFW_KEY_D ) == GLFW_PRESS )
-			this->_cameraPos += glm::normalize( glm::cross( this->_cameraFront, this->_cameraUp ) ) * cameraSpeed;
+			this->_renderManager._cameraPos += glm::normalize( glm::cross( this->_renderManager._cameraFront, this->_renderManager._cameraUp ) ) * cameraSpeed;
 	}
 
 

@@ -162,59 +162,25 @@ public:
 
 
 
-
-		glm::mat4 projection = glm::mat4( 1.0f );
-		projection = glm::perspective( glm::radians( 45.0f ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 100.0f );
-
+		// Perspective projection
+		glm::mat4 projection = glm::perspective( glm::radians( 45.0f ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 100.0f );
 		this->_shader.setMat4( "projection", projection );
+
+		// Camera
+		glm::mat4 view = glm::lookAt( this->_renderManager._cameraPos, this->_renderManager._cameraPos + this->_renderManager._cameraFront, this->_renderManager._cameraUp );
+		this->_shader.setMat4( "view", view );
+
+		
 
 		for ( int i = 0; i < 10; i++ )
 		{
-			// Camera
-			// Camera position
-			glm::vec3 cameraPos = glm::vec3( 0.0f, 0.0f, 3.0f ); // camera position in worldSpace
-
-			// Camera direction ( negative z-axis -> positive z-axis )
-			glm::vec3 cameraTarget = glm::vec3( 0.0f, 0.0f, 0.0f ); // camera point at orign of worldSpace
-			glm::vec3 cameraDirection = glm::normalize( cameraPos - cameraTarget );
-
-			// Right axis (positive x-axis): cross product of the up vector and direction ( orthogonal )
-			glm::vec3 up = glm::vec3( 0.0f, 1.0f, 0.0f );
-			glm::vec3 cameraRight = glm::normalize( glm::cross( up, cameraDirection ) );
-
-			// Up axis ( positive y-axis ): cross product of camera direction and camera right
-			glm::vec3 cameraUp = glm::cross( cameraDirection, cameraRight );
-
-
-
-			// Maniupulate camera
-			const float radius = 50.0f;
-			float camX = std::sinf( glfwGetTime() ) * radius;
-			float camZ = std::cosf( glfwGetTime() ) * radius;
-			cameraPos = glm::vec3( camX, 0.0, camZ );
-
-
-			// Look At matrix (view)
-			glm::mat4 view = glm::lookAt(
-				this->_cameraPos,
-				this->_cameraPos + this->_cameraFront,
-				this->_cameraUp
-			);
-
-
-
 			// Objects
 			glm::mat4 model = glm::mat4( 1.0f );
 			model = glm::translate( model, cubeWorldPositions[i] );
-			model = glm::rotate( model, glm::radians( 360.0f * -std::sinf( i ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
+			//model = glm::rotate( model, glm::radians( 360.0f * -std::sinf( i ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
 			//model = glm::translate( model, glm::vec3( 0.0f, 0.0f, -( ( 100.0f * std::sinf( glfwGetTime() ) ) + 100.0f ) / 2.0f ) );
-			//model = glm::rotate( model, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
-
-
-
+			model = glm::rotate( model, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
 			this->_shader.setMat4( "model", model );
-			this->_shader.setMat4( "view", view );
-
 
 
 			// Render triangle

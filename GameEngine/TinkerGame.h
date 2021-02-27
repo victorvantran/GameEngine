@@ -12,7 +12,8 @@
 class TinkerGame : public Game
 {
 private:
-	Shader _shader;
+	Shader _cubeShader;
+	Shader _lightSourceShader;
 	TestMesh _cubeMesh;
 	Texture _texture0;
 	Texture _texture1;
@@ -23,12 +24,14 @@ private:
 public:
 	TinkerGame() : 
 		Game(), 
-		_shader(), 
+		_cubeShader(),
+		_lightSourceShader(),
 		_cubeMesh(),
 		_texture0(), _texture1() {}
 	TinkerGame( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) :
 		Game( windowWidth, windowHeight, windowTitle ), 
-		_shader(), 
+		_cubeShader(),
+		_lightSourceShader(),
 		_cubeMesh(),
 		_texture0(), _texture1() {}
 	~TinkerGame() {}
@@ -43,7 +46,12 @@ public:
 	void loadContent()
 	{
 		// Load Shader
-		this->_shader.load( "assets/shaders/vertex_core.glsl", "assets/shaders/fragment_core.glsl" );
+		this->_lightSourceShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/lightsource_fragment_shader.glsl" );
+
+		
+		this->_cubeShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/basic_fragment_shader.glsl" );
+		this->_cubeShader.setVec3( "objectColor", glm::vec3( 1.0f, 0.5f, 0.31f ) );
+		this->_cubeShader.setVec3( "lightColor", glm::vec3( 1.0f, 1.0f, 1.0f ) );
 
 
 
@@ -143,8 +151,6 @@ public:
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 
-		// Activate shader
-		this->_shader.use();
 		glm::vec3 cubeWorldPositions[] =
 		{
 			glm::vec3( 0.0f,  0.0f,  0.0f ),
@@ -159,36 +165,41 @@ public:
 			glm::vec3( -1.3f,  1.0f, -1.5f )
 		};
 
-
-		// Perspective projection
 		glm::mat4 projection = glm::perspective( glm::radians( this->_camera._zoom ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 100.0f );
-		this->_shader.setMat4( "projection", projection );
-
-		// Camera
 		glm::mat4 view = this->_camera.getViewMatrix();
-		this->_shader.setMat4( "view", view );
+
+
+		// Draw Light Source
+		this->_lightSourceShader.use();
+		this->_lightSourceShader.setMat4( "projection", projection );
+		this->_lightSourceShader.setMat4( "view", view );
+		glm::vec3 lightSourcePos = glm::vec3( 1.2f, 1.0f, 2.0f );
+		glm::mat4 lightSourceModel = glm::mat4( 1.0f );
+		lightSourceModel = glm::translate( lightSourceModel, lightSourcePos );
+		lightSourceModel = glm::scale( lightSourceModel, glm::vec3( 0.2f ) );
+		this->_lightSourceShader.setMat4( "model", lightSourceModel );
+		this->_cubeMesh.draw();
+
+
+		// Draw Cube
+		this->_cubeShader.use();
+		this->_cubeShader.setMat4( "projection", projection );
+		this->_cubeShader.setMat4( "view", view );
+		glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
+		glm::mat4 cubeModel = glm::mat4( 1.0f );
+		cubeModel = glm::translate( cubeModel, cubePos );
+		this->_cubeShader.setMat4( "model", cubeModel );
+		this->_cubeMesh.draw();
+
+
+
+
+
+
+
+
+
 		
-
-		for ( int i = 0; i < 10; i++ )
-		{
-			// Objects
-			glm::mat4 model = glm::mat4( 1.0f );
-			model = glm::translate( model, cubeWorldPositions[i] );
-			//model = glm::rotate( model, glm::radians( 360.0f * -std::sinf( i ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
-			//model = glm::translate( model, glm::vec3( 0.0f, 0.0f, -( ( 100.0f * std::sinf( glfwGetTime() ) ) + 100.0f ) / 2.0f ) );
-			model = glm::rotate( model, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
-			this->_shader.setMat4( "model", model );
-
-
-			// Render triangle
-			this->_texture0.bind( 0 );
-			this->_texture1.bind( 1 );
-			this->_cubeMesh.draw();
-		}
-
-
-
-		//this->_shader.setFloat( "xOffset", ( std::sin( glfwGetTime() * 5.0f ) / 4.0f ) );
 
 		// Swap Buffers
 		glfwSwapBuffers( this->_renderManager.getWindow() );

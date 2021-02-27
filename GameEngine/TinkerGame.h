@@ -47,11 +47,11 @@ public:
 	void loadContent()
 	{
 		// Load Textures
-		//this->_texture0.load( "assets/textures/aperture_science_cube.png" );
+		this->_texture0.load( "assets/textures/aperture_science_cube.png" );
 		//this->_texture0.load( "assets/textures/dewey_finn.jpg" );
-		this->_texture0.load( "assets/textures/wooden_crate.png" );
-		this->_texture1.load( "assets/textures/crate_specular_borders.png" );
-
+		//this->_texture0.load( "assets/textures/wooden_crate.png" );
+		//this->_texture1.load( "assets/textures/crate_specular_borders.png" );
+		this->_texture1.load( "assets/textures/aperture_science_cube.png" );
 
 		// Load Shader
 		this->_lightSourceShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/lightsource_fragment_shader.glsl" );
@@ -241,6 +241,7 @@ public:
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		// World Environment
+		/*
 		glm::vec3 cubeWorldPositions[] =
 		{
 			glm::vec3( 0.0f,  0.0f,  0.0f ),
@@ -253,7 +254,72 @@ public:
 			glm::vec3( 1.5f,  2.0f, -2.5f ),
 			glm::vec3( 1.5f,  0.2f, -1.5f ),
 			glm::vec3( -1.3f,  1.0f, -1.5f )
+		};*/
+		glm::vec3 cubeWorldPositions[] =
+		{
+			glm::vec3( 0.0f,  0.0f,  0.0f ),
+			glm::vec3( 2.0f,  5.0f, -5.0f ),
+			glm::vec3( -1.5f, -2.2f, -2.5f ),
+			glm::vec3( -3.8f, -2.0f, -12.3f ),
+			glm::vec3( 2.4f, -0.4f, -3.5f ),
+			glm::vec3( -1.7f,  3.0f, -7.5f ),
+			glm::vec3( 1.3f, -2.0f, -2.5f ),
+			glm::vec3( 1.5f,  2.0f, -2.5f ),
+			glm::vec3( 1.5f,  0.2f, -1.5f ),
+			glm::vec3( -1.3f,  1.0f, -1.5f ),
+
+			glm::vec3( 10.0f,  20.0f,  10.0f ),
+			glm::vec3( 12.0f,  15.0f, -51.0f ),
+			glm::vec3( -11.5f, -12.2f, -2.5f ),
+			glm::vec3( -31.8f, -2.0f, -12.3f ),
+			glm::vec3( 21.4f, -10.4f, -3.5f ),
+			glm::vec3( -11.7f,  31.0f, -7.5f ),
+			glm::vec3( 11.3f, -2.0f, -2.5f ),
+			glm::vec3( 11.5f,  2.0f, -12.5f ),
+			glm::vec3( 11.5f,  10.2f, -11.5f ),
+			glm::vec3( -1.3f,  1.0f, -11.5f ),
+
+
+
+			glm::vec3( 20.0f,  20.0f,  20.0f ),
+			glm::vec3( 12.0f,  25.0f, -21.0f ),
+			glm::vec3( -21.5f, -12.2f, -22.5f ),
+			glm::vec3( -21.8f, -22.0f, -12.3f ),
+			glm::vec3( 22.4f, -12.4f, -23.5f ),
+			glm::vec3( -12.7f,  31.0f, -7.5f ),
+			glm::vec3( 11.3f, -22.0f, -2.5f ),
+			glm::vec3( 21.5f,  2.0f, -22.5f ),
+			glm::vec3( 21.5f,  20.2f, -11.5f ),
+			glm::vec3( -2.3f,  1.0f, -21.5f ),
+
+
+
+			glm::vec3( 30.0f,  23.0f,  23.0f ),
+			glm::vec3( 12.0f,  25.0f, -31.0f ),
+			glm::vec3( -23.5f, -13.2f, -32.5f ),
+			glm::vec3( -31.8f, -22.0f, -12.3f ),
+			glm::vec3( 22.3f, -32.4f, -23.5f ),
+			glm::vec3( -12.7f,  33.0f, -37.5f ),
+			glm::vec3( 13.3f, -22.0f, -32.5f ),
+			glm::vec3( 23.5f,  2.0f, -22.5f ),
+			glm::vec3( 31.5f,  20.2f, -11.5f ),
+			glm::vec3( -2.3f,  1.0f, -31.5f ),
+
+
+
+			glm::vec3( 40.0f,  24.0f,  23.0f ),
+			glm::vec3( 12.0f,  24.0f, -41.0f ),
+			glm::vec3( -23.5f, -43.2f, -32.5f ),
+			glm::vec3( -34.8f, -42.0f, -12.3f ),
+			glm::vec3( 22.4f, -42.4f, -23.5f ),
+			glm::vec3( -12.7f,  43.0f, -34.5f ),
+			glm::vec3( 14.3f, -22.0f, -34.5f ),
+			glm::vec3( 43.5f,  2.0f, -22.5f ),
+			glm::vec3( 41.5f,  40.2f, -11.5f ),
+			glm::vec3( -4.3f,  4.0f, -31.5f ),
 		};
+
+
 
 		glm::mat4 projection = glm::perspective( glm::radians( this->_camera._zoom ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 100.0f );
 		glm::mat4 view = this->_camera.getViewMatrix();
@@ -290,7 +356,8 @@ public:
 
 
 		// Draw Cubes
-		for ( int i = 0; i < 10; i++ )
+		/*
+		for ( int i = 0; i < 1000; i++ )
 		{
 			this->_lightingShader.use();
 
@@ -299,13 +366,13 @@ public:
 			this->_lightingShader.setMat4( "view", view );
 			//glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
 			glm::vec3 cubePos = glm::vec3( 
-				cubeWorldPositions[i].x + (  ( i % 2 == 0 ) ? 1 : - 1 ) * std::cosf( glfwGetTime() ) * 5.0f,
-				cubeWorldPositions[i].y,
-				cubeWorldPositions[i].z + ( ( i % 2 == 0 ) ? 1 : -1 ) * std::sinf( glfwGetTime() ) * 5.0f 
+				cubeWorldPositions[i % 10].x + (  ( i % 2 == 0 ) ? 1 : - 1 ) * std::cosf( glfwGetTime() ) * 5.0f * ( i / 1000.0f ),
+				cubeWorldPositions[i % 10].y,
+				cubeWorldPositions[i % 10].z + ( ( i % 2 == 0 ) ? 1 : -1 ) * std::sinf( glfwGetTime() ) * 5.0f * ( i / 1000.0f )
 			);
 			glm::mat4 cubeModel = glm::mat4( 1.0f );
-			//cubeModel = glm::translate( cubeModel, cubePos );
-			//cubeModel = glm::rotate( cubeModel, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
+			cubeModel = glm::translate( cubeModel, cubePos );
+			cubeModel = glm::rotate( cubeModel, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
 			this->_lightingShader.setMat4( "model", cubeModel );
 
 
@@ -333,7 +400,52 @@ public:
 			// Draw
 			this->_basicMesh.draw();
 		}
-		
+		*/
+
+
+		for ( int i = 0; i < 1000; i++ )
+		{
+			this->_lightingShader.use();
+
+			// World Properties
+			this->_lightingShader.setMat4( "projection", projection );
+			this->_lightingShader.setMat4( "view", view );
+			//glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
+			glm::vec3 cubePos = glm::vec3(
+				cubeWorldPositions[i % 40].x + i / 10.0f + ( ( i % 2 == 0 ) ? 1 : -1 ) * std::cosf( glfwGetTime() * ( i / 1000.0f ) ) * 5.0f * ( i / 1000.0f ),
+				cubeWorldPositions[i % 40].y + i / 10.0f,
+				cubeWorldPositions[i % 40].z + i / 10.0f + ( ( i % 2 == 0 ) ? 1 : -1 ) * std::sinf( glfwGetTime() * ( i / 1000.0f ) ) * 5.0f * ( i / 1000.0f )
+			);
+			glm::mat4 cubeModel = glm::mat4( 1.0f );
+			cubeModel = glm::translate( cubeModel, cubePos );
+			cubeModel = glm::rotate( cubeModel, glm::radians( 360.0f * -std::sinf( glfwGetTime() * ( i / 1000.0f ) ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
+			this->_lightingShader.setMat4( "model", cubeModel );
+
+
+			// Light Properties
+			this->_lightingShader.setVec3( "lightPos", lightSourcePos ); // Light will be coming from light source origin position
+			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
+			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.05f );
+			this->_lightingShader.setVec3( "light.ambient", ambientColor );
+			this->_lightingShader.setVec3( "light.diffuse", diffuseColor );
+			this->_lightingShader.setVec3( "light.specular", glm::vec3( 1.0f ) );
+
+
+			// Material Properties
+			// Calculate norm matrix to account for non-uniform scaling and rotation
+			glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
+			this->_lightingShader.setMat3( "normMatrix", normMatrix );
+			this->_lightingShader.setVec3( "material.specular", glm::vec3( 0.5f ) );
+			this->_lightingShader.setFloat( "material.shininess", 64.0f );
+
+
+			// Bind texture
+			this->_texture0.bind( 0 );
+			this->_texture1.bind( 1 );
+
+			// Draw
+			this->_basicMesh.draw();
+		}
 
 
 		

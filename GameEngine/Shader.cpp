@@ -133,6 +133,9 @@ void Shader::load( const std::string& vertexShaderFilePath, const std::string& f
 	glDetachShader( this->_id, fragmentShader );
 	glDeleteShader( vertexShader );
 	glDeleteShader( fragmentShader );
+
+	glUseProgram( 0 );
+
 	return;
 }
 

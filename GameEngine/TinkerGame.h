@@ -261,12 +261,14 @@ public:
 		//glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
 		glm::vec3 cubePos = glm::vec3( std::cosf( glfwGetTime() ) * 5.0f, 0.0f, std::sinf( glfwGetTime() ) * 5.0f );
 		glm::mat4 cubeModel = glm::mat4( 1.0f );
-		cubeModel = glm::translate( cubeModel, cubePos );
-		cubeModel = glm::rotate( cubeModel, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
+		//cubeModel = glm::translate( cubeModel, cubePos );
+		//cubeModel = glm::rotate( cubeModel, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
 		this->_cubeShader.setMat4( "model", cubeModel );
 
 		glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
 		this->_cubeShader.setMat3( "normMatrix", normMatrix );
+
+		this->_cubeShader.setVec3( "viewPos", this->_camera._position );
 
 		this->_basicMesh.draw();
 

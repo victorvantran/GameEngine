@@ -6,9 +6,10 @@ layout( location = 1 ) in vec3 aNormal;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+
 uniform mat3 normMatrix;
 
-out vec3 Normal;
+out vec3 Normal; // normal to the surface 
 out vec3 FragPos;
 
 

@@ -14,7 +14,7 @@ void main()
 {
 	// Ambient light
 	float ambientMagnitude = 0.1f;
-	vec3 ambient = lightColor * ambientMagnitude;
+	vec3 ambient = vec3( 1.0f, 1.0f, 1.0f ) * ambientMagnitude;
 
 	// Diffuse light
 	vec3 norm = normalize( Normal );

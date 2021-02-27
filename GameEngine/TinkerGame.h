@@ -239,15 +239,6 @@ public:
 		glm::mat4 view = this->_camera.getViewMatrix();
 
 
-		// Lighting Environment
-		glm::vec3 lightColor = glm::vec3( 1.0f, 1.0f, 1.0f );
-
-		// Ambient light
-		float ambientMagnitude = 0.1f;
-		glm::vec3 ambient = ambientMagnitude * lightColor;
-
-
-
 
 
 		// Draw Light Source
@@ -268,10 +259,15 @@ public:
 		this->_cubeShader.setMat4( "view", view );
 		this->_cubeShader.setVec3( "lightPos", lightSourcePos );
 		//glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
-		glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, std::sinf( glfwGetTime() ) * 5.0f );
+		glm::vec3 cubePos = glm::vec3( std::cosf( glfwGetTime() ) * 5.0f, 0.0f, std::sinf( glfwGetTime() ) * 5.0f );
 		glm::mat4 cubeModel = glm::mat4( 1.0f );
 		cubeModel = glm::translate( cubeModel, cubePos );
+		cubeModel = glm::rotate( cubeModel, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
 		this->_cubeShader.setMat4( "model", cubeModel );
+
+		glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
+		this->_cubeShader.setMat3( "normMatrix", normMatrix );
+
 		this->_basicMesh.draw();
 
 

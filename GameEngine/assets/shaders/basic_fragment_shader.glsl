@@ -6,6 +6,7 @@ struct Material
 {
 	sampler2D diffuse;
 	sampler2D specular;
+	sampler2D emission;
 	float shininess;
 };
 
@@ -27,7 +28,6 @@ out vec4 FragColor;
 
 /// Texture
 in vec2 TexCoord;
-uniform sampler2D texture0;
 
 
 
@@ -52,6 +52,10 @@ void main()
 	vec3 phongLight = ( ambient + diffuse + specular );
 
 
-	FragColor = vec4( phongLight, 1.0f );
+	// Emission
+	vec3 emission = vec3( 1.0f, 1.0f, 1.0f ) * ( vec3( texture( material.emission, TexCoord ) ) );
+
+
+	FragColor = vec4( phongLight + emission, 1.0f );
 	return;
 }

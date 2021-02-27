@@ -125,8 +125,6 @@ void Shader::load( const std::string& vertexShaderFilePath, const std::string& f
 
 	// Set uniform variables
 	glUseProgram( this->_id );
-	glUniform1i( glGetUniformLocation( this->_id, "texture0" ), 0 );
-	glUniform1i( glGetUniformLocation( this->_id, "texture1" ), 1 );
 
 	// Clean up and delete shader objects once linked into our program
 	glDetachShader( this->_id, vertexShader );

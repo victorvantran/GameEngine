@@ -16,9 +16,9 @@ private:
 	Shader _lightingShader;
 	Shader _lightSourceShader;
 	BasicMesh _basicMesh;
-	Texture _texture0;
-	Texture _texture1;
-
+	Texture _diffuseTexture;
+	Texture _specularTexture;
+	Texture _emmisionTexture;
 
 
 
@@ -28,13 +28,13 @@ public:
 		_lightingShader(),
 		_lightSourceShader(),
 		_basicMesh(),
-		_texture0(), _texture1() {}
+		_diffuseTexture(), _specularTexture(), _emmisionTexture() {}
 	TinkerGame( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) :
 		Game( windowWidth, windowHeight, windowTitle ), 
 		_lightingShader(),
 		_lightSourceShader(),
 		_basicMesh(),
-		_texture0(), _texture1() {}
+		_diffuseTexture(), _specularTexture(), _emmisionTexture() {}
 	~TinkerGame() {}
 
 
@@ -47,11 +47,11 @@ public:
 	void loadContent()
 	{
 		// Load Textures
-		this->_texture0.load( "assets/textures/aperture_science_cube.png" );
-		//this->_texture0.load( "assets/textures/dewey_finn.jpg" );
+		this->_diffuseTexture.load( "assets/textures/aperture_science_cube.png" );
+		this->_specularTexture.load( "assets/textures/aperture_science_cube.png" );
 		//this->_texture0.load( "assets/textures/wooden_crate.png" );
 		//this->_texture1.load( "assets/textures/crate_specular_borders.png" );
-		this->_texture1.load( "assets/textures/aperture_science_cube.png" );
+		this->_emmisionTexture.load( "assets/textures/code_emission.jpg" );
 
 		// Load Shader
 		this->_lightSourceShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/lightsource_fragment_shader.glsl" );
@@ -61,7 +61,7 @@ public:
 		this->_lightingShader.use();
 		this->_lightingShader.setInt( "material.diffuse", 0 );
 		this->_lightingShader.setInt( "material.specular", 1 );
-
+		this->_lightingShader.setInt( "material.emission", 2 );
 
 		// Load Meshes
 		/*
@@ -403,6 +403,7 @@ public:
 		*/
 
 
+		/*
 		for ( int i = 0; i < 1000; i++ )
 		{
 			this->_lightingShader.use();
@@ -446,7 +447,43 @@ public:
 			// Draw
 			this->_basicMesh.draw();
 		}
+		*/
 
+
+
+		// Draw Cube
+		this->_lightingShader.use();
+
+		// World Properties
+		this->_lightingShader.setMat4( "projection", projection );
+		this->_lightingShader.setMat4( "view", view );
+		glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
+		glm::mat4 cubeModel = glm::mat4( 1.0f );
+		this->_lightingShader.setMat4( "model", cubeModel );
+
+		// Light Properties
+		this->_lightingShader.setVec3( "lightPos", lightSourcePos ); // Light will be coming from light source origin position
+		glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
+		glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.05f );
+		this->_lightingShader.setVec3( "light.ambient", ambientColor );
+		this->_lightingShader.setVec3( "light.diffuse", diffuseColor );
+		this->_lightingShader.setVec3( "light.specular", glm::vec3( 1.0f ) );
+
+		// Material Properties
+		// Calculate norm matrix to account for non-uniform scaling and rotation
+		glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
+		this->_lightingShader.setMat3( "normMatrix", normMatrix );
+		this->_lightingShader.setVec3( "material.specular", glm::vec3( 0.5f ) );
+		this->_lightingShader.setFloat( "material.shininess", 64.0f );
+
+
+		// Bind texture
+		this->_diffuseTexture.bind( 0 );
+		this->_specularTexture.bind( 1 );
+		// this->_emmisionTexture.bind( 2 );
+
+		// Draw
+		this->_basicMesh.draw();
 
 		
 

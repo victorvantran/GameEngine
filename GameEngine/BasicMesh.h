@@ -1,32 +1,27 @@
-#ifndef TEST_MESH_H
-#define TEST_MESH_H
+#ifndef BASIC_MESH_H
+#define BASIC_MESH_H
 
 #include "Mesh.h"
 
-
-class TestMesh : public Mesh
+class BasicMesh : public Mesh
 {
 private:
 
 public:
-	TestMesh() : Mesh() {}
-	~TestMesh() 
+	BasicMesh() : Mesh()
+	{
+	}
+
+
+	~BasicMesh() 
 	{
 		if ( this->_loaded ) glDeleteVertexArrays( 1, &this->_vao );
 	}
 
-	/**
-     * Helper function to load in source code from a shader file path
-     *
-     * @param verticies a pointer to an array of Vertex
-     * @param numVerticies a size_t representing the number of Vertex
-     * @param indicies a pointer to an array of index used to draw by element
-     * @param numIndices a size_t representing the number of elements to draw
-     * @return void
-     */
-    void loadPrimitives( Vertex* vertices, std::size_t numVertices, std::uint32_t* indices, std::size_t numIndices )
-    {
-		this->_vertexCount = numVertices;
+
+	void loadPrimitives( float* rawVertices, std::uint8_t rawVertexLength, std::size_t numRawVertices, std::uint32_t* indices, std::size_t numIndices )
+	{
+		this->_vertexCount = numRawVertices;
 		this->_elementCount = numIndices;
 
 		// Create and bind Vertex Array Object ( VAO )
@@ -36,18 +31,16 @@ public:
 		// Create, bind Vertex Buffer Object ( VBO ) and fill with verticies data
 		glGenBuffers( ( GLsizei )VBO::count, this->_vbo );
 		glBindBuffer( GL_ARRAY_BUFFER, this->_vbo[( std::size_t )VBO::Position] );
-		glBufferData( GL_ARRAY_BUFFER, numVertices * sizeof( vertices[0] ), vertices, GL_STATIC_DRAW );
+		glBufferData( GL_ARRAY_BUFFER, numRawVertices * ( sizeof( rawVertices[0] ) * rawVertexLength ), rawVertices, GL_STATIC_DRAW );
 
 		// Fill VAO with attribute pointers
 		// Position attribute
-		glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, sizeof( vertices[0] ), ( void* )( 0 ) ); // Get position data // AttribPointer->layout
+		glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, ( sizeof( rawVertices[0] ) * rawVertexLength ), ( void* )( 0 ) );
 		glEnableVertexAttribArray( 0 );
-		// Color attribute
-		glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, sizeof( vertices[0] ), ( void* )( 3 * sizeof( float ) ) ); // Get rgb data
+		// Normal vector attribute
+		glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, ( sizeof( rawVertices[0] ) * rawVertexLength ), ( void* )( 3 * sizeof( rawVertices[0] ) ) );
 		glEnableVertexAttribArray( 1 );
-		// Texture coordinates attribute
-		glVertexAttribPointer( 2, 2, GL_FLOAT, GL_FALSE, sizeof( vertices[0] ), ( void* )( 7 * sizeof( float ) ) ); // Get rgb data
-		glEnableVertexAttribArray( 2 );
+
 
 		// Bind Element Buffer Object ( EBO ) and fill with indices data
 		glGenBuffers( ( GLsizei )EBO::count, this->_ebo );
@@ -65,7 +58,7 @@ public:
 
 		this->_loaded = true;
 		return;
-    }
+	}
 
 
 	void draw()
@@ -78,4 +71,4 @@ public:
 
 };
 
-#endif
+#endif // !BASIC_MESH_H

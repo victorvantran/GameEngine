@@ -30,23 +30,10 @@ protected:
 	std::uint64_t _vertexCount;
 	std::uint64_t _elementCount;
 
+	bool _loaded;
 public:
 	Mesh();
-
-
-	virtual ~Mesh();
-
-
-	/**
-	 * Helper function to load in source code from a shader file path
-	 *
-	 * @param verticies a pointer to an array of Vertex
-	 * @param numVerticies a size_t representing the number of Vertex
-	 * @param indicies a pointer to an array of index used to draw by element
-	 * @param numIndices a size_t representing the number of elements to draw
-	 * @return void
-	 */
-	void loadPrimitives( Vertex* vertices, std::size_t numVertices, std::uint32_t* indices, std::size_t numIndices );
+	virtual ~Mesh() = 0;
 
 
 	/**
@@ -54,7 +41,7 @@ public:
 	 *
 	 * @return void
 	 */
-	virtual void draw();
+	virtual void draw() = 0;
 };
 
 

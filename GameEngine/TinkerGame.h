@@ -7,6 +7,7 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "TestMesh.h"
+#include "BasicMesh.h"
 #include "Texture.h"
 
 class TinkerGame : public Game
@@ -14,7 +15,7 @@ class TinkerGame : public Game
 private:
 	Shader _cubeShader;
 	Shader _lightSourceShader;
-	TestMesh _cubeMesh;
+	BasicMesh _basicMesh;
 	Texture _texture0;
 	Texture _texture1;
 
@@ -26,13 +27,13 @@ public:
 		Game(), 
 		_cubeShader(),
 		_lightSourceShader(),
-		_cubeMesh(),
+		_basicMesh(),
 		_texture0(), _texture1() {}
 	TinkerGame( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) :
 		Game( windowWidth, windowHeight, windowTitle ), 
 		_cubeShader(),
 		_lightSourceShader(),
-		_cubeMesh(),
+		_basicMesh(),
 		_texture0(), _texture1() {}
 	~TinkerGame() {}
 
@@ -67,6 +68,7 @@ public:
 		*/
 
 		// Cube
+		/*
 		Vertex vertices[] =
 		{
 			Vertex( glm::vec3( -0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
@@ -111,6 +113,8 @@ public:
 			Vertex( glm::vec3( -0.5f,  0.5f,  0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
 			Vertex( glm::vec3( -0.5f,  0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 1.0f ) ),
 		};
+
+
 		std::uint32_t indices[] =
 		{
 			0, 1, 2, 3, 4, 5,
@@ -120,10 +124,76 @@ public:
 			24, 25, 26, 27, 28, 29,
 			30, 31, 32, 33, 34, 35
 		};
+
 		this->_cubeMesh.loadPrimitives(
-			vertices, sizeof( vertices ) / sizeof( vertices[0] ), 
+			vertices, 6,
+			sizeof( vertices ) / ( sizeof( vertices[0] * 6 ) ),
 			indices, sizeof( indices ) / sizeof( indices[0] )
 		);
+
+		*/
+
+
+		float vertices[] = {
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+		};
+
+		std::uint32_t indices[] =
+		{
+			0, 1, 2, 3, 4, 5,
+			6, 7, 8, 9, 10, 11,
+			12, 13, 14, 15, 16, 17,
+			18, 19, 20, 21, 22, 23,
+			24, 25, 26, 27, 28, 29,
+			30, 31, 32, 33, 34, 35
+		};
+
+		this->_basicMesh.loadPrimitives(
+			vertices, 6,
+			sizeof( vertices ) / ( sizeof( vertices[0] ) * 6 ),
+			indices, sizeof( indices ) / sizeof( indices[0] )
+		);
+
 
 
 
@@ -150,7 +220,7 @@ public:
 		glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-
+		// World Environment
 		glm::vec3 cubeWorldPositions[] =
 		{
 			glm::vec3( 0.0f,  0.0f,  0.0f ),
@@ -169,6 +239,17 @@ public:
 		glm::mat4 view = this->_camera.getViewMatrix();
 
 
+		// Lighting Environment
+		glm::vec3 lightColor = glm::vec3( 1.0f, 1.0f, 1.0f );
+
+		// Ambient light
+		float ambientMagnitude = 0.1f;
+		glm::vec3 ambient = ambientMagnitude * lightColor;
+
+
+
+
+
 		// Draw Light Source
 		this->_lightSourceShader.use();
 		this->_lightSourceShader.setMat4( "projection", projection );
@@ -178,24 +259,20 @@ public:
 		lightSourceModel = glm::translate( lightSourceModel, lightSourcePos );
 		lightSourceModel = glm::scale( lightSourceModel, glm::vec3( 0.2f ) );
 		this->_lightSourceShader.setMat4( "model", lightSourceModel );
-		this->_cubeMesh.draw();
+		this->_basicMesh.draw();
 
 
 		// Draw Cube
 		this->_cubeShader.use();
 		this->_cubeShader.setMat4( "projection", projection );
 		this->_cubeShader.setMat4( "view", view );
-		glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
+		this->_cubeShader.setVec3( "lightPos", lightSourcePos );
+		//glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
+		glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, std::sinf( glfwGetTime() ) * 5.0f );
 		glm::mat4 cubeModel = glm::mat4( 1.0f );
 		cubeModel = glm::translate( cubeModel, cubePos );
 		this->_cubeShader.setMat4( "model", cubeModel );
-		this->_cubeMesh.draw();
-
-
-
-
-
-
+		this->_basicMesh.draw();
 
 
 

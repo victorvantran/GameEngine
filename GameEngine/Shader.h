@@ -26,7 +26,7 @@ public:
 	Shader();
 
 
-	~Shader();
+	virtual ~Shader();
 
 
 	/// Getters

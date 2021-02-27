@@ -1,12 +1,30 @@
 #version 330 core
 
-uniform vec3 objectColor;
-uniform vec3 lightColor;
-uniform vec3 lightPos;
-uniform vec3 viewPos;
+struct Material
+{
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float shininess;
+};
 
-in vec3 Normal;
-in vec3 FragPos;
+
+struct Light
+{
+	vec3 position;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+
+
+uniform Material material;
+uniform Light light;
+
+
+in vec3 vNormal;
+in vec3 vFragPos;
+in vec3 vLightPos;
 
 out vec4 FragColor;
 
@@ -14,28 +32,25 @@ out vec4 FragColor;
 void main()
 {
 	// Ambient light
-	float ambientIntensity = 0.1f;
-	vec3 ambient = vec3( 1.0f, 1.0f, 1.0f ) * ambientIntensity;
+	vec3 ambient = light.ambient * material.ambient;
 
 
 	// Diffuse light
-	vec3 norm = normalize( Normal );
-	vec3 lightDir = normalize( lightPos - FragPos );
+	vec3 norm = normalize( vNormal );
+	vec3 lightDir = normalize( vLightPos - vFragPos );
 	float diffImpact = max( dot( norm, lightDir ), 0.0f );
-	vec3 diffuse = diffImpact * lightColor;
+	vec3 diffuse = light.diffuse * ( diffImpact * material.diffuse );
 
 
 	// Specular light
-	float specularIntensity = 0.5f;
-	vec3 viewDir = normalize( viewPos - FragPos );
+	vec3 viewDir = normalize( -vFragPos );
 	vec3 reflectDir = reflect( -lightDir, norm );
-	int shininess = 32;
-	float specMaterialImpact = pow( max( dot( viewDir, reflectDir ), 0.0f ), shininess );
-	vec3 specular = specularIntensity * specMaterialImpact * lightColor;
+	float specImpact = pow( max( dot( viewDir, reflectDir ), 0.0f ), material.shininess );
+	vec3 specular = light.specular * ( specImpact * material.specular );
 
 
 	// Phong Light
-	vec3 phongLight = ( ambient + diffuse + specular ) * objectColor;
+	vec3 phongLight = ( ambient + diffuse + specular );
 
 	FragColor = vec4( phongLight, 1.0f );
 	return;

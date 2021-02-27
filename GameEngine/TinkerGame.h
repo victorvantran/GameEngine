@@ -51,8 +51,6 @@ public:
 
 		
 		this->_cubeShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/basic_fragment_shader.glsl" );
-		this->_cubeShader.setVec3( "objectColor", glm::vec3( 1.0f, 0.5f, 0.31f ) );
-		this->_cubeShader.setVec3( "lightColor", glm::vec3( 1.0f, 1.0f, 1.0f ) );
 
 
 
@@ -239,6 +237,14 @@ public:
 		glm::mat4 view = this->_camera.getViewMatrix();
 
 
+		// Caclulate light source color
+		glm::vec3 lightColor;
+		lightColor.x = sin( glfwGetTime() * 1.0f );
+		lightColor.y = sin( glfwGetTime() * 0.2f );
+		lightColor.z = sin( glfwGetTime() * 0.3f );
+
+		glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
+		glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.05f );
 
 
 		// Draw Light Source
@@ -250,9 +256,51 @@ public:
 		lightSourceModel = glm::translate( lightSourceModel, lightSourcePos );
 		lightSourceModel = glm::scale( lightSourceModel, glm::vec3( 0.2f ) );
 		this->_lightSourceShader.setMat4( "model", lightSourceModel );
+
+
+		this->_lightSourceShader.setVec3( "lightColor", lightColor );
+
 		this->_basicMesh.draw();
 
 
+		// Draw Cubes
+		for ( int i = 0; i < 10; i++ )
+		{
+			this->_cubeShader.use();
+			this->_cubeShader.setMat4( "projection", projection );
+			this->_cubeShader.setMat4( "view", view );
+			this->_cubeShader.setVec3( "lightPos", lightSourcePos ); // Light will be coming from light source origin position
+			//glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
+			glm::vec3 cubePos = glm::vec3( 
+				cubeWorldPositions[i].x + (  ( i % 2 == 0 ) ? 1 : - 1 ) * std::cosf( glfwGetTime() ) * 5.0f,
+				cubeWorldPositions[i].y,
+				cubeWorldPositions[i].z + ( ( i % 2 == 0 ) ? 1 : -1 ) * std::sinf( glfwGetTime() ) * 5.0f 
+			);
+			glm::mat4 cubeModel = glm::mat4( 1.0f );
+			cubeModel = glm::translate( cubeModel, cubePos );
+			cubeModel = glm::rotate( cubeModel, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
+			this->_cubeShader.setMat4( "model", cubeModel );
+
+			// Calculate norm matrix to account for non-uniform scaling and rotation
+			glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
+			this->_cubeShader.setMat3( "normMatrix", normMatrix );
+
+			this->_cubeShader.setVec3( "material.ambient", glm::vec3( 1.0f, 0.5f, 0.31f ) );
+			this->_cubeShader.setVec3( "material.diffuse", glm::vec3( 1.0f, 0.5f, 0.31f ) );
+			this->_cubeShader.setVec3( "material.specular", glm::vec3( 0.5f ) );
+			this->_cubeShader.setFloat( "material.shininess", 32.0f );
+
+
+
+			this->_cubeShader.setVec3( "light.ambient", ambientColor );
+			this->_cubeShader.setVec3( "light.diffuse", diffuseColor );
+			this->_cubeShader.setVec3( "light.specular", glm::vec3( 1.0f ) );
+
+
+
+			this->_basicMesh.draw();
+		}
+		/*
 		// Draw Cube
 		this->_cubeShader.use();
 		this->_cubeShader.setMat4( "projection", projection );
@@ -261,8 +309,8 @@ public:
 		//glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
 		glm::vec3 cubePos = glm::vec3( std::cosf( glfwGetTime() ) * 5.0f, 0.0f, std::sinf( glfwGetTime() ) * 5.0f );
 		glm::mat4 cubeModel = glm::mat4( 1.0f );
-		//cubeModel = glm::translate( cubeModel, cubePos );
-		//cubeModel = glm::rotate( cubeModel, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
+		cubeModel = glm::translate( cubeModel, cubePos );
+		cubeModel = glm::rotate( cubeModel, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
 		this->_cubeShader.setMat4( "model", cubeModel );
 
 		glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
@@ -271,6 +319,7 @@ public:
 		this->_cubeShader.setVec3( "viewPos", this->_camera._position );
 
 		this->_basicMesh.draw();
+		*/
 
 
 

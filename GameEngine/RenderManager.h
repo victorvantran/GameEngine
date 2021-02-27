@@ -25,18 +25,6 @@ class RenderManager
 private:
 	GLFWwindow* _window;
 public:
-	// Camera
-	glm::vec3 _cameraPos = glm::vec3( 0.0f, 0.0f, 3.0f );
-	glm::vec3 _cameraFront = glm::vec3( 0.0f, 0.0f, -1.0f );
-	glm::vec3 _cameraUp = glm::vec3( 0.0f, 1.0f, 0.0f );
-	glm::vec3 _cameraRight = glm::vec3( 1.0f, 0.0f, 0.0f );
-	float _yaw = -90.0f;
-	float _pitch = 0.0f;
-
-	float _lastMouseX = 1920.0f / 2.0f;
-	float _lastMouseY = 1080.0f / 2.0f;
-
-
 public:
 	RenderManager();
 	~RenderManager();
@@ -81,7 +69,7 @@ public:
 	 * @param height an int of the current the working area height
 	 * @return void
 	 */
-	void resize_window_callback( int width, int height );
+	void resize_window_callback( GLint width, GLint height );
 
 
 	/**
@@ -93,7 +81,19 @@ public:
 	 * @param x a double of the current mouse y-coordinate
 	 * @return void
 	 */
-	void mouse_callback( double x, double y );
+	void mouse_callback( GLdouble x, GLdouble y );
+
+
+	/**
+	 * To be called every time a key is pressed. Perform subsequent tasks.
+	 *
+	 * @param key an integer to represent the key pressed
+	 * @param scancode platform-specific scancode
+	 * @param action specific action on key
+	 * @param mods
+	 * @return void
+	 */
+	void keyfun_callback( GLint key, GLint scancode, GLint action, GLint mods );
 
 };
 

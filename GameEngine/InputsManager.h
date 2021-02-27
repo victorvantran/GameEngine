@@ -14,6 +14,17 @@ class InputsManager
 private:
 
 public:
+    /**
+     * Relays the mouse_callback
+     *
+     * Finds the pointer to the Game object that owns the window.
+     * Calls the subsequent method for mouse_callback
+     *
+     * @return void
+     */
+    static void keyfun_callback( GLFWwindow* window, GLint key, GLint scanCode, GLint action, GLint mods );
+
+
 	/**
      * Relays the mouse_callback
      *
@@ -22,7 +33,7 @@ public:
      *
      * @return void
      */
-	static void mouse_callback( GLFWwindow* window, double x, double y );
+	static void mouse_callback( GLFWwindow* window, GLdouble x, GLdouble y );
 
 
     /**
@@ -33,7 +44,7 @@ public:
      *
      * @return void
      */
-	static void resize_window_callback( GLFWwindow* window, int x, int y );
+	static void resize_window_callback( GLFWwindow* window, GLint x, GLint y );
 
 };
 

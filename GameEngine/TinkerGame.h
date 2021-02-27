@@ -142,8 +142,6 @@ public:
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 
-
-
 		// Activate shader
 		this->_shader.use();
 		glm::vec3 cubeWorldPositions[] =
@@ -161,15 +159,14 @@ public:
 		};
 
 
-
 		// Perspective projection
-		glm::mat4 projection = glm::perspective( glm::radians( 45.0f ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 100.0f );
+		//glm::mat4 projection = glm::perspective( glm::radians( 45.0f ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 100.0f );
+		glm::mat4 projection = glm::perspective( glm::radians( this->_camera._zoom ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 100.0f );
 		this->_shader.setMat4( "projection", projection );
 
 		// Camera
-		glm::mat4 view = glm::lookAt( this->_renderManager._cameraPos, this->_renderManager._cameraPos + this->_renderManager._cameraFront, this->_renderManager._cameraUp );
+		glm::mat4 view = this->_camera.getViewMatrix();
 		this->_shader.setMat4( "view", view );
-
 		
 
 		for ( int i = 0; i < 10; i++ )

@@ -66,14 +66,12 @@ void RenderManager::createWindow( std::uint16_t width, std::uint16_t height, con
 
 	// Mouse
 	glfwSetInputMode( this->_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED );
-	this->_lastMouseX = width / 2;
-	this->_lastMouseY = height / 2;
 
 	// Callback Handling
 	glfwSetWindowUserPointer( this->_window, reinterpret_cast< void* >( this ) );
-	glfwSetCursorPosCallback( this->_window, InputsManager::mouse_callback );
-	glfwSetFramebufferSizeCallback( this->_window, InputsManager::resize_window_callback );
-
+	//glfwSetCursorPosCallback( this->_window, InputsManager::mouse_callback );
+	//glfwSetFramebufferSizeCallback( this->_window, InputsManager::resize_window_callback );
+	//glfwSetKeyCallback( this->_window, InputsManager::keyfun_callback );
 	return;
 }
 
@@ -91,37 +89,20 @@ GLFWwindow* RenderManager::getWindow()
 }
 
 
-void RenderManager::resize_window_callback( int width, int height )
+void RenderManager::resize_window_callback( GLint width, GLint height )
 {
 	glViewport( 0, 0, width, height );
 	return;
 }
 
 
-void RenderManager::mouse_callback( double x, double y )
+void RenderManager::mouse_callback( GLdouble x, GLdouble y )
 {
-	float xOffset = x - this->_lastMouseX;
-	float yOffset = this->_lastMouseY - y;
-	this->_lastMouseX = x;
-	this->_lastMouseY = y;
-
-	const float sensitivity = 0.05f;
-	xOffset *= sensitivity;
-	yOffset *= sensitivity;
-
-	this->_yaw = glm::mod( this->_yaw + xOffset, 360.0f );
-
-	this->_pitch += yOffset;
+	return;
+}
 
 
-	if ( this->_pitch > 89.5f )
-		this->_pitch = 89.5f;
-	if ( this->_pitch < -89.5f )
-		this->_pitch = -89.5f;
-
-	glm::vec3 newFront;
-	newFront.x = std::cosf( glm::radians( this->_yaw ) ) * std::cosf( glm::radians( this->_pitch ) );
-	newFront.y = std::sinf( glm::radians( this->_pitch ) );
-	newFront.z = std::sinf( glm::radians( this->_yaw ) ) * std::cosf( glm::radians( this->_pitch ) );
-	this->_cameraFront = glm::normalize( newFront );
+void RenderManager::keyfun_callback( GLint key, GLint scancode, GLint action, GLint mods )
+{
+	return;
 }

@@ -7,21 +7,22 @@
 
 #include "GameTime.h"
 #include "RenderManager.h"
+#include "Camera.h"
 
 class Game
 {
 protected:
 	GameTime _gameTime;
 	RenderManager _renderManager;
+	Camera _camera;
 
 	std::uint16_t _windowWidth;
 	std::uint16_t _windowHeight;
 	std::string _windowTitle;
 
 
-
-
-
+	double _prevMouseX;
+	double _prevMouseY;
 public:
 	Game();
 

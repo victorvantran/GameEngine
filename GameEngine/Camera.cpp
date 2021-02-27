@@ -58,7 +58,6 @@ void Camera::processTiltInput( float xOffset, float yOffset, GLboolean constrain
 			this->_pitch = -89.9375f;
 	}
 
-	// Update camera orientation vectors using the updated Euler angles
 	updateCameraOrientation();
 
 	return;

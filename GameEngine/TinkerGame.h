@@ -13,7 +13,7 @@ class TinkerGame : public Game
 {
 private:
 	Shader _shader;
-	TestMesh _testMesh;
+	TestMesh _cubeMesh;
 	Texture _texture0;
 	Texture _texture1;
 
@@ -24,12 +24,12 @@ public:
 	TinkerGame() : 
 		Game(), 
 		_shader(), 
-		_testMesh(),
+		_cubeMesh(),
 		_texture0(), _texture1() {}
 	TinkerGame( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) :
 		Game( windowWidth, windowHeight, windowTitle ), 
 		_shader(), 
-		_testMesh(), 
+		_cubeMesh(),
 		_texture0(), _texture1() {}
 	~TinkerGame() {}
 
@@ -46,7 +46,8 @@ public:
 		this->_shader.load( "assets/shaders/vertex_core.glsl", "assets/shaders/fragment_core.glsl" );
 
 
-		// Load Mesh
+
+		// Load Meshes
 		/*
 		Vertex vertices[] =
 		{
@@ -57,7 +58,7 @@ public:
 		};
 		*/
 
-		// Load Cube
+		// Cube
 		Vertex vertices[] =
 		{
 			Vertex( glm::vec3( -0.5f, -0.5f, -0.5f ), glm::vec4( 1.0f,	1.0f,	1.0f,	1.0f ), glm::vec2( 0.0f, 0.0f ) ),
@@ -111,17 +112,17 @@ public:
 			24, 25, 26, 27, 28, 29,
 			30, 31, 32, 33, 34, 35
 		};
-		this->_testMesh.loadPrimitives(
+		this->_cubeMesh.loadPrimitives(
 			vertices, sizeof( vertices ) / sizeof( vertices[0] ), 
 			indices, sizeof( indices ) / sizeof( indices[0] )
 		);
 
 
 
-
+		// Load Textures
 		this->_texture0.load( "assets/textures/aperture_science_cube.png" );
-		//this->_texture0.load( "assets/textures/dewey_finn.jpg" );
 		this->_texture1.load( "assets/textures/wall.jpg" );
+		//this->_texture0.load( "assets/textures/dewey_finn.jpg" );
 
 		return;
 	}
@@ -182,7 +183,7 @@ public:
 			// Render triangle
 			this->_texture0.bind( 0 );
 			this->_texture1.bind( 1 );
-			this->_testMesh.draw();
+			this->_cubeMesh.draw();
 		}
 
 

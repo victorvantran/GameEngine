@@ -80,7 +80,7 @@ public:
 
 
 	/**
-	 * Update the camera orientation based on yaw and pitch values
+	 * Update the camera orientation based on yaw and pitch values ( euler values updated )
 	 *
 	 * Orientation is given by three orthognal vectors: _up, _right, and _front
 	 *

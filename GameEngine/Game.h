@@ -23,72 +23,59 @@ protected:
 
 
 public:
-	Game() : _gameTime(), _renderManager(),
-		_windowWidth( 800 ), _windowHeight( 640 ), _windowTitle( "untitled" ) {}
-	Game( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) : _gameTime(), _renderManager(),
-		_windowWidth( windowWidth ), _windowHeight( windowHeight ), _windowTitle( windowTitle ) {}
-	~Game() {}
-
-	void run()
-	{
-		this->initialize();
-
-		this->_renderManager.createWindow( this->_windowWidth, this->_windowHeight, this->_windowTitle );
-
-		this->loadContent();
-
-		while ( !glfwWindowShouldClose( this->_renderManager.getWindow() ) )
-		{
-			// Update time
-			this->_gameTime.setDeltaTime( ( float )( glfwGetTime() - this->_gameTime.getTotalElapsedSeconds() ) );
-			this->_gameTime.setTotalElapsedSeconds( glfwGetTime() );
-
-			std::cout << (int )( 1.0 / this->_gameTime.getDeltaTime() ) << std::endl;
-
-			// Update game logic
-			this->update();
-
-			glfwPollEvents();
-
-			this->render();
-		}
-
-		this->_renderManager.destroyWindow();
-	}
+	Game();
 
 
-	void processInput( GLFWwindow* window )
-	{
-		if ( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
-		{
-			glfwSetWindowShouldClose( window, true );
-		}
+	Game( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle );
 
 
-		//std::cout << "y: " << glm::cross( this->_cameraFront, this->_cameraRight ).y << std::endl;
-		//std::cout << "x: " << glm::cross( this->_cameraFront, this->_cameraUp ).x << std::endl;
+	~Game();
 
-		const float cameraSpeed = 2.5f * this->_gameTime.getDeltaTime();
-		if ( glfwGetKey( window, GLFW_KEY_W ) == GLFW_PRESS )
-			this->_renderManager._cameraPos += glm::normalize( this->_renderManager._cameraFront ) * cameraSpeed;
-		if ( glfwGetKey( window, GLFW_KEY_S ) == GLFW_PRESS )
-			this->_renderManager._cameraPos -= glm::normalize( this->_renderManager._cameraFront ) * cameraSpeed;
-		if ( glfwGetKey( window, GLFW_KEY_Q ) == GLFW_PRESS )
-			this->_renderManager._cameraPos += this->_renderManager._cameraUp * cameraSpeed;
-		if ( glfwGetKey( window, GLFW_KEY_E ) == GLFW_PRESS )
-			this->_renderManager._cameraPos -= this->_renderManager._cameraUp * cameraSpeed;
-		if ( glfwGetKey( window, GLFW_KEY_A ) == GLFW_PRESS )
-			this->_renderManager._cameraPos -= glm::normalize( glm::cross( this->_renderManager._cameraFront, this->_renderManager._cameraUp ) ) * cameraSpeed;
-		if ( glfwGetKey( window, GLFW_KEY_D ) == GLFW_PRESS )
-			this->_renderManager._cameraPos += glm::normalize( glm::cross( this->_renderManager._cameraFront, this->_renderManager._cameraUp ) ) * cameraSpeed;
-	}
+	/**
+	 * The first function to be called after successful construction. Run the game.
+	 *
+	 * @return void
+	 */
+	void run();
 
 
+	/**
+	 * Handles input every frame.
+	 *
+	 * @return void
+	 */
+	void processInput( GLFWwindow* window );
+
+
+	/**
+	 * To be called immediately when running. Initialize game logics.
+	 *
+	 * @return void
+	 */
 	virtual void initialize() = 0;
-	virtual void loadContent() = 0;
-	virtual void update() = 0;
-	virtual void render() = 0;
 
+
+	/**
+	 * To be called after initialization and before the game loop. Load content.
+	 *
+	 * @return void
+	 */
+	virtual void loadContent() = 0;
+
+
+	/**
+	 * To be called every frame. Update the game logic.
+	 *
+	 * @return void
+	 */
+	virtual void update() = 0;
+
+	/**
+	 * To be called every frame. Use the proper shaders and draw the proper meshes.
+	 *
+	 * @return void
+	 */
+	virtual void render() = 0;
 };
 
 

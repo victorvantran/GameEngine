@@ -47,10 +47,10 @@ public:
 	void loadContent()
 	{
 		// Load Textures
-		//this->_diffuseTexture.load( "assets/textures/aperture_science_cube.png" );
-		//this->_specularTexture.load( "assets/textures/aperture_science_cube.png" );
-		this->_diffuseTexture.load( "assets/textures/wooden_crate.png" );
-		this->_specularTexture.load( "assets/textures/crate_specular_borders.png" );
+		this->_diffuseTexture.load( "assets/textures/aperture_science_cube.png" );
+		this->_specularTexture.load( "assets/textures/aperture_science_cube.png" );
+		//this->_diffuseTexture.load( "assets/textures/wooden_crate.png" );
+		//this->_specularTexture.load( "assets/textures/crate_specular_borders.png" );
 		this->_emmisionTexture.load( "assets/textures/aperture_science_cube_emission.png" );
 		
 
@@ -386,7 +386,7 @@ public:
 
 			
 			this->_lightingShader.setFloat( "light.innerCutOff", glm::cos(glm::radians(12.5f)) );
-			this->_lightingShader.setFloat( "light.outerCutOff", glm::cos( glm::radians( 12.5f ) ) );
+			this->_lightingShader.setFloat( "light.outerCutOff", glm::cos( glm::radians( 17.5f ) ) );
 
 
 			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
@@ -409,7 +409,7 @@ public:
 			// Bind texture
 			this->_diffuseTexture.bind( 0 );
 			this->_specularTexture.bind( 1 );
-			//this->_emmisionTexture.bind( 2 );
+			this->_emmisionTexture.bind( 2 );
 
 			// Draw
 			this->_basicMesh.draw();

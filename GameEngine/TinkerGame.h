@@ -353,54 +353,6 @@ public:
 
 
 		// Draw Cubes
-		/*
-		for ( int i = 0; i < 1000; i++ )
-		{
-			this->_lightingShader.use();
-
-			// World Properties
-			this->_lightingShader.setMat4( "projection", projection );
-			this->_lightingShader.setMat4( "view", view );
-			//glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
-			glm::vec3 cubePos = glm::vec3( 
-				cubeWorldPositions[i % 10].x + (  ( i % 2 == 0 ) ? 1 : - 1 ) * std::cosf( glfwGetTime() ) * 5.0f * ( i / 1000.0f ),
-				cubeWorldPositions[i % 10].y,
-				cubeWorldPositions[i % 10].z + ( ( i % 2 == 0 ) ? 1 : -1 ) * std::sinf( glfwGetTime() ) * 5.0f * ( i / 1000.0f )
-			);
-			glm::mat4 cubeModel = glm::mat4( 1.0f );
-			cubeModel = glm::translate( cubeModel, cubePos );
-			cubeModel = glm::rotate( cubeModel, glm::radians( 360.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
-			this->_lightingShader.setMat4( "model", cubeModel );
-
-
-			// Light Properties
-			this->_lightingShader.setVec3( "lightPos", lightSourcePos ); // Light will be coming from light source origin position
-			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
-			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.05f );
-			this->_lightingShader.setVec3( "light.ambient", ambientColor );
-			this->_lightingShader.setVec3( "light.diffuse", diffuseColor );
-			this->_lightingShader.setVec3( "light.specular", glm::vec3( 1.0f ) );
-
-
-			// Material Properties
-			// Calculate norm matrix to account for non-uniform scaling and rotation
-			glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( view * cubeModel ) ) );
-			this->_lightingShader.setMat3( "normMatrix", normMatrix );
-			this->_lightingShader.setVec3( "material.specular", glm::vec3( 0.5f ) );
-			this->_lightingShader.setFloat( "material.shininess", 64.0f );
-
-
-			// Bind texture
-			this->_texture0.bind( 0 );
-			this->_texture1.bind( 1 );
-
-			// Draw
-			this->_basicMesh.draw();
-		}
-		*/
-
-
-		
 		for ( int i = 0; i < 2000; i++ )
 		{
 			this->_lightingShader.use();
@@ -421,7 +373,8 @@ public:
 
 
 			// Light Properties
-			this->_lightingShader.setVec3( "light.position", lightSourcePos ); // Light will be coming from light source origin position
+			glm::vec3 vLightPos = glm::vec3( view * glm::vec4( lightSourcePos, 1.0f ) );
+			this->_lightingShader.setVec3( "light.vPosition", vLightPos ); // Light will be coming from light source origin position
 			this->_lightingShader.setVec3( "light.direction", -0.2f, -1.0f, -0.3f );
 
 			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
@@ -452,42 +405,6 @@ public:
 		
 
 
-		/*
-		// Draw Cube
-		this->_lightingShader.use();
-
-		// World Properties
-		this->_lightingShader.setMat4( "projection", projection );
-		this->_lightingShader.setMat4( "view", view );
-		glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
-		glm::mat4 cubeModel = glm::mat4( 1.0f );
-		this->_lightingShader.setMat4( "model", cubeModel );
-
-		// Light Properties
-		this->_lightingShader.setVec3( "lightPos", lightSourcePos ); // Light will be coming from light source origin position
-		glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
-		glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.05f );
-		this->_lightingShader.setVec3( "light.ambient", ambientColor );
-		this->_lightingShader.setVec3( "light.diffuse", diffuseColor );
-		this->_lightingShader.setVec3( "light.specular", glm::vec3( 1.0f ) );
-
-		// Material Properties
-		// Calculate norm matrix to account for non-uniform scaling and rotation
-		glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( view * cubeModel ) ) );
-		this->_lightingShader.setMat3( "normMatrix", normMatrix );
-		this->_lightingShader.setVec3( "material.specular", glm::vec3( 0.5f ) );
-		this->_lightingShader.setFloat( "material.shininess", 64.0f );
-
-
-		// Bind texture
-		this->_diffuseTexture.bind( 0 );
-		this->_specularTexture.bind( 1 );
-		//this->_emmisionTexture.bind( 2 );
-
-		// Draw
-		this->_basicMesh.draw();
-		*/
-		
 
 		// Swap Buffers
 		glfwSwapBuffers( this->_renderManager.getWindow() );

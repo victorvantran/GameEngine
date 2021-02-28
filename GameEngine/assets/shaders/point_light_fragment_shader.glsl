@@ -12,7 +12,7 @@ struct Material
 
 struct Light
 {
-	vec3 position;
+	vec3 vPosition;
 
 	vec3 ambient;
 	vec3 diffuse;
@@ -38,17 +38,12 @@ in vec2 TexCoord;
 
 void main()
 {
-	// Light
-	float distance = length( vLightPos - vFragPos );
-	float attenuation = ( 1.0f / ( light.kConstant + light.kLinear * distance + light.kQuadratic * ( distance * distance ) ) );
-
-
 	// Ambient light
 	vec3 ambient = light.ambient * ( vec3( texture( material.diffuse, TexCoord ) ) );
 
 	// Diffuse light
 	vec3 norm = normalize( vNormal );
-	vec3 lightDir = normalize( vLightPos - vFragPos ); // point light
+	vec3 lightDir = normalize( light.vPosition - vFragPos );
 	float diffImpact = max( dot( norm, lightDir ), 0.0f );
 	vec3 diffuse = light.diffuse * ( diffImpact * vec3( texture( material.diffuse, TexCoord ) ) );
 
@@ -59,13 +54,15 @@ void main()
 	vec3 specular = light.specular * ( specImpact * vec3( texture( material.specular, TexCoord ) ) );
 
 	// Phong Light
-	vec3 phongLight = ( ambient + diffuse + specular ) * attenuation;
-
+	vec3 phongLight = ( ambient + diffuse + specular );
 
 	// Emission
 	vec3 emission = vec3( 1.0f, 1.0f, 1.0f ) * ( vec3( texture( material.emission, TexCoord ) ) );
 
+	// Attenuate
+	float distance = length( light.vPosition - vFragPos );
+	float attenuation = ( 1.0f / ( light.kConstant + light.kLinear * distance + light.kQuadratic * ( distance * distance ) ) );
 
-	FragColor = vec4( phongLight + emission, 1.0f );
+	FragColor = vec4( phongLight * attenuation + emission, 1.0f );
 	return;
 }

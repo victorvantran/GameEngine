@@ -12,8 +12,8 @@ uniform mat4 projection;
 
 
 /// Lighting
-uniform vec3 lightPos;
 uniform mat3 normMatrix;
+
 // View Space
 out vec3 vNormal;
 out vec3 vFragPos;
@@ -30,9 +30,6 @@ void main()
 
 	vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
 	vNormal = normMatrix * aNormal;
-	//vNormal = mat3( transpose( inverse( view * model ) ) ) * aNormal;
-
-	vLightPos = vec3( view * vec4( lightPos, 1.0f ) );
 
 	TexCoord = aTexCoord;
 	return;

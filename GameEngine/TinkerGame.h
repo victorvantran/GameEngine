@@ -47,10 +47,10 @@ public:
 	void loadContent()
 	{
 		// Load Textures
-		this->_diffuseTexture.load( "assets/textures/aperture_science_cube.png" );
-		this->_specularTexture.load( "assets/textures/aperture_science_cube.png" );
-		//this->_diffuseTexture.load( "assets/textures/wooden_crate.png" );
-		//this->_specularTexture.load( "assets/textures/crate_specular_borders.png" );
+		//this->_diffuseTexture.load( "assets/textures/aperture_science_cube.png" );
+		//this->_specularTexture.load( "assets/textures/aperture_science_cube.png" );
+		this->_diffuseTexture.load( "assets/textures/wooden_crate.png" );
+		this->_specularTexture.load( "assets/textures/crate_specular_borders.png" );
 		this->_emmisionTexture.load( "assets/textures/aperture_science_cube_emission.png" );
 		
 
@@ -61,11 +61,12 @@ public:
 
 		
 		//this->_lightingShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/directional_light_fragment_shader.glsl" );
-		this->_lightingShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/spot_light_fragment_shader.glsl" );
+		this->_lightingShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/lighting_fragment_shader.glsl" );
 		this->_lightingShader.use();
 		this->_lightingShader.setInt( "material.diffuse", 0 );
 		this->_lightingShader.setInt( "material.specular", 1 );
 		this->_lightingShader.setInt( "material.emission", 2 );
+		this->_lightingShader.setFloat( "material.shininess", 64.0f );
 
 		// Load Meshes
 		/*
@@ -372,25 +373,55 @@ public:
 			this->_lightingShader.setMat4( "model", cubeModel );
 
 
+
+
+			// Prepare lighting in view coordinates
+			glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
+			this->_lightingShader.setMat3( "normMatrix", normMatrix );
+
+
+
+			// Directional Light
+			//this->_lightingShader.setVec3( "directionalLight.lDirection", glm::vec3( -0.2f, -1.0f, -0.3f ) );
+			this->_lightingShader.setVec3( "directionalLight.lDirection", glm::vec3( view * glm::vec4( glm::vec3( -0.2f, -1.0f, -0.3f ), 1.0f ) ) );
+			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
+			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.0f );
+			this->_lightingShader.setVec3( "directionalLight.ambient", ambientColor );
+			this->_lightingShader.setVec3( "directionalLight.diffuse", diffuseColor );
+			this->_lightingShader.setVec3( "directionalLight.specular", glm::vec3( 1.0f ) );
+
+
+
+
+
+
+
+			/*
 			// Light Properties
 			glm::vec3 vLightPos = glm::vec3( view * glm::vec4( lightSourcePos, 1.0f ) );
 			this->_lightingShader.setVec3( "light.wPosition", this->_camera._position ); // Light will be coming from light source origin position
 			this->_lightingShader.setVec3( "light.wDirection", this->_camera._front );
 
 
-			glm::vec3 vSpotLightPos = glm::vec3( view * glm::vec4( this->_camera._position, 1.0f ) );
-			//glm::vec3 vLightDirection = glm::vec3( view * glm::vec4( this->_camera._front, 1.0f ) );
+			// Point light
+			glm::vec3 vSpotLightPos = glm::vec3( view * glm::vec4( lightSourcePos, 1.0f ) );
 			this->_lightingShader.setVec3( "light.vPosition", vSpotLightPos ); // Light will be coming from light source origin position
+
+			//glm::vec3 vSpotLightPos = glm::vec3( view * glm::vec4( this->_camera._position, 1.0f ) );
+			//this->_lightingShader.setVec3( "light.vPosition", vSpotLightPos ); // Light will be coming from light source origin position
+			//glm::vec3 vLightDirection = glm::vec3( view * glm::vec4( this->_camera._front, 1.0f ) );
 			//this->_lightingShader.setVec3( "light.vDirection", vLightDirection );
 
 
 			
 			this->_lightingShader.setFloat( "light.innerCutOff", glm::cos(glm::radians(12.5f)) );
 			this->_lightingShader.setFloat( "light.outerCutOff", glm::cos( glm::radians( 17.5f ) ) );
+			*/
 
 
+			/*
 			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
-			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.2f );
+			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.02f );
 			this->_lightingShader.setVec3( "light.ambient", ambientColor );
 			this->_lightingShader.setVec3( "light.diffuse", diffuseColor );
 			this->_lightingShader.setVec3( "light.specular", glm::vec3( 1.0f ) );
@@ -404,12 +435,12 @@ public:
 			this->_lightingShader.setMat3( "normMatrix", normMatrix );
 			this->_lightingShader.setVec3( "material.specular", glm::vec3( 0.5f ) );
 			this->_lightingShader.setFloat( "material.shininess", 64.0f );
-
+			*/
 
 			// Bind texture
 			this->_diffuseTexture.bind( 0 );
 			this->_specularTexture.bind( 1 );
-			this->_emmisionTexture.bind( 2 );
+			//this->_emmisionTexture.bind( 2 );
 
 			// Draw
 			this->_basicMesh.draw();
@@ -424,6 +455,91 @@ public:
 		return;
 	}
 };
+
+/*
+#version 330 core
+
+
+/// Lighting
+struct Material
+{
+	sampler2D diffuse;
+	sampler2D specular;
+	sampler2D emission;
+	float shininess;
+};
+
+struct Light
+{
+	vec3 wPosition;
+
+	vec3 vPosition;
+
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+
+	float kConstant;
+	float kLinear;
+	float kQuadratic;
+};
+
+uniform Material material;
+uniform Light light;
+
+
+
+
+// World
+in vec3 wFragPos;
+
+// View
+in vec3 vNormal;
+in vec3 vFragPos;
+in vec3 vLightPos;
+
+
+out vec4 FragColor;
+
+
+/// Texture
+in vec2 TexCoord;
+
+
+
+void main()
+{
+	// Ambient light
+	vec3 ambient = light.ambient * ( vec3( texture( material.diffuse, TexCoord ) ) );
+
+	// Diffuse light
+	vec3 norm = normalize( vNormal );
+	//vec3 vLightDir = normalize( light.vPosition - vFragPos );
+	vec3 wLightDir = normalize( light.wPosition - wFragPos );
+
+	float diffImpact = max( dot( norm, wLightDir ), 0.0f );
+	vec3 diffuse = light.diffuse * ( diffImpact * vec3( texture( material.diffuse, TexCoord ) ) );
+
+	// Specular light
+	vec3 viewDir = normalize( -vFragPos );
+	vec3 reflectDir = reflect( -wLightDir, norm );
+	float specImpact = pow( max( dot( viewDir, reflectDir ), 0.0f ), material.shininess );
+	vec3 specular = light.specular * ( specImpact * vec3( texture( material.specular, TexCoord ) ) );
+
+	// Phong Light
+	vec3 phongLight = ( ambient + diffuse + specular );
+
+	// Emission
+	vec3 emission = vec3( 1.0f, 1.0f, 1.0f ) * ( vec3( texture( material.emission, TexCoord ) ) );
+
+	// Attenuate
+	float distance = length( light.vPosition - vFragPos );
+	float attenuation = ( 1.0f / ( light.kConstant + light.kLinear * distance + light.kQuadratic * ( distance * distance ) ) );
+
+	FragColor = vec4( phongLight * attenuation + emission, 1.0f );
+	return;
+}
+*/
 
 
 #endif

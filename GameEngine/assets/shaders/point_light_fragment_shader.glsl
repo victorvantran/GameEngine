@@ -48,6 +48,12 @@ in vec2 TexCoord;
 
 
 
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
+
 void main()
 {
 	// Ambient light
@@ -55,15 +61,17 @@ void main()
 
 	// Diffuse light
 	vec3 norm = normalize( vNormal );
-	//vec3 vLightDir = normalize( light.vPosition - vFragPos ); 
-	vec3 wLightDir = normalize( light.wPosition - wFragPos );
+	vec3 vLightDir = normalize( light.vPosition - vFragPos ); 
+	//vec3 wLightDir = normalize( light.wPosition - wFragPos );
 
-	float diffImpact = max( dot( norm, wLightDir ), 0.0f );
+	//vec3 vLightDir = normalize( vec3( view * model * vec4( ( light.wPosition - wFragPos ), 1.0f ) ) );
+
+	float diffImpact = max( dot( norm, vLightDir ), 0.0f );
 	vec3 diffuse = light.diffuse * ( diffImpact * vec3( texture( material.diffuse, TexCoord ) ) );
 
 	// Specular light
 	vec3 viewDir = normalize( -vFragPos );
-	vec3 reflectDir = reflect( -wLightDir, norm );
+	vec3 reflectDir = reflect( -vLightDir, norm );
 	float specImpact = pow( max( dot( viewDir, reflectDir ), 0.0f ), material.shininess );
 	vec3 specular = light.specular * ( specImpact * vec3( texture( material.specular, TexCoord ) ) );
 

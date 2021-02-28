@@ -23,9 +23,9 @@ out vec3 vNormal;
 out vec3 vFragPos;
 out vec3 vLightPos;
 
-
 /// Texture
 out vec2 TexCoord;
+
 
 
 void main()

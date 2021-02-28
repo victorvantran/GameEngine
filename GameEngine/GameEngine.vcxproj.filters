@@ -87,6 +87,9 @@
     <None Include="assets\shaders\point_light_fragment_shader.glsl">
       <Filter>assets\shaders</Filter>
     </None>
+    <None Include="assets\shaders\spot_light_fragment_shader.glsl">
+      <Filter>assets\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">

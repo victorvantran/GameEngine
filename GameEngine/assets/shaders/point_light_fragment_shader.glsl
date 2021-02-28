@@ -12,6 +12,8 @@ struct Material
 
 struct Light
 {
+	vec3 wPosition;
+
 	vec3 vPosition;
 
 	vec3 ambient;
@@ -25,9 +27,19 @@ struct Light
 
 uniform Material material;
 uniform Light light;
+
+
+
+
+// World
+in vec3 wFragPos;
+
+// View
 in vec3 vNormal;
 in vec3 vFragPos;
 in vec3 vLightPos;
+
+
 out vec4 FragColor;
 
 
@@ -43,13 +55,15 @@ void main()
 
 	// Diffuse light
 	vec3 norm = normalize( vNormal );
-	vec3 lightDir = normalize( light.vPosition - vFragPos );
-	float diffImpact = max( dot( norm, lightDir ), 0.0f );
+	//vec3 lightDir = normalize( light.vPosition - vFragPos ); 
+	vec3 wLightDir = normalize( light.wPosition - wFragPos );
+
+	float diffImpact = max( dot( norm, wLightDir ), 0.0f );
 	vec3 diffuse = light.diffuse * ( diffImpact * vec3( texture( material.diffuse, TexCoord ) ) );
 
 	// Specular light
 	vec3 viewDir = normalize( -vFragPos );
-	vec3 reflectDir = reflect( -lightDir, norm );
+	vec3 reflectDir = reflect( -wLightDir, norm );
 	float specImpact = pow( max( dot( viewDir, reflectDir ), 0.0f ), material.shininess );
 	vec3 specular = light.specular * ( specImpact * vec3( texture( material.specular, TexCoord ) ) );
 

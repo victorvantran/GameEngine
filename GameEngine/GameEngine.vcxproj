@@ -172,6 +172,7 @@
     <None Include="assets\shaders\lightsource_fragment_shader.glsl" />
     <None Include="assets\shaders\basic_vertex_shader.glsl" />
     <None Include="assets\shaders\point_light_fragment_shader.glsl" />
+    <None Include="assets\shaders\spot_light_fragment_shader.glsl" />
     <None Include="assets\shaders\vertex_core.glsl" />
   </ItemGroup>
   <ItemGroup>

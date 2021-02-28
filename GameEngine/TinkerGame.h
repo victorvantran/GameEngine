@@ -61,7 +61,7 @@ public:
 
 		
 		//this->_lightingShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/directional_light_fragment_shader.glsl" );
-		this->_lightingShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/point_light_fragment_shader.glsl" );
+		this->_lightingShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/spot_light_fragment_shader.glsl" );
 		this->_lightingShader.use();
 		this->_lightingShader.setInt( "material.diffuse", 0 );
 		this->_lightingShader.setInt( "material.specular", 1 );
@@ -374,11 +374,21 @@ public:
 
 			// Light Properties
 			glm::vec3 vLightPos = glm::vec3( view * glm::vec4( lightSourcePos, 1.0f ) );
-			this->_lightingShader.setVec3( "light.vPosition", vLightPos ); // Light will be coming from light source origin position
-			this->_lightingShader.setVec3( "light.direction", -0.2f, -1.0f, -0.3f );
+			this->_lightingShader.setVec3( "light.wPosition", this->_camera._position ); // Light will be coming from light source origin position
+			this->_lightingShader.setVec3( "light.wDirection", this->_camera._front );
+
+
+			glm::vec3 vSpotLightPos = glm::vec3( view * glm::vec4( this->_camera._position, 1.0f ) );
+			//glm::vec3 vLightDirection = glm::vec3( view * glm::vec4( this->_camera._front, 1.0f ) );
+			this->_lightingShader.setVec3( "light.vPosition", vSpotLightPos ); // Light will be coming from light source origin position
+			//this->_lightingShader.setVec3( "light.vDirection", vLightDirection );
+
+
+			
+			this->_lightingShader.setFloat( "light.cutOff", glm::cos(glm::radians(12.5f)) );
 
 			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
-			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.01f );
+			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.2f );
 			this->_lightingShader.setVec3( "light.ambient", ambientColor );
 			this->_lightingShader.setVec3( "light.diffuse", diffuseColor );
 			this->_lightingShader.setVec3( "light.specular", glm::vec3( 1.0f ) );

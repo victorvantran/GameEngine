@@ -38,10 +38,11 @@ void main()
 {
 	gl_Position = projection * view * model * vec4( aPosition, 1.0f );
 
-	wFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
+	//vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
+	wFragPos = vec3( model * vec4( aPosition, 1.0f ) );
 	wNormal = mat3( transpose( inverse( view * model ) ) ) * aNormal;
+	//vLightPos = vec3( view * vec4( vec3( 1.2f, 1.0f, 2.0f ), 1.0 ) );
 	wLightPos = vec3( view * vec4( vec3( 1.2f, 1.0f, 2.0f ), 1.0 ) );
-
 
 	vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
 	vNormal = normMatrix * aNormal;

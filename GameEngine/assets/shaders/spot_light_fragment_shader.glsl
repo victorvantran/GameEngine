@@ -17,7 +17,8 @@ struct Light
 
 	vec3 vPosition;
 
-	float cutOff;
+	float innerCutOff;
+	float outerCutOff;
 
 	vec3 ambient;
 	vec3 diffuse;
@@ -66,21 +67,29 @@ void main()
 
 	// Spot light
 	vec3 wLightDir = normalize( light.wPosition - wFragPos );
+	vec3 vLightDir = normalize( light.vPosition - vFragPos );
 
-	float theta = dot( wLightDir, normalize( -light.wDirection ) );
-	if ( theta > light.cutOff )
+	float cosTheta = dot( wLightDir, normalize( -light.wDirection ) ); // negate to achieve vector pointing to light source
+	float cosEpsilon = light.innerCutOff - light.outerCutOff;
+	float spotLightIntensity = clamp( ( cosTheta - light.outerCutOff ) / cosEpsilon, 0.0, 1.0 );
+
+
+
+	if ( cosTheta > light.outerCutOff )
 	{
 
 		// Diffuse light
 		vec3 norm = normalize( vNormal );
-		float diffImpact = max( dot( norm, wLightDir ), 0.0f );
+		float diffImpact = max( dot( norm, vLightDir ), 0.0f );
 		vec3 diffuse = light.diffuse * ( diffImpact * vec3( texture( material.diffuse, TexCoord ) ) );
+		diffuse *= spotLightIntensity;
 
 		// Specular light
 		vec3 viewDir = normalize( -vFragPos );
-		vec3 reflectDir = reflect( -wLightDir, norm );
+		vec3 reflectDir = reflect( -vLightDir, norm );
 		float specImpact = pow( max( dot( viewDir, reflectDir ), 0.0f ), material.shininess );
 		vec3 specular = light.specular * ( specImpact * vec3( texture( material.specular, TexCoord ) ) );
+		specular *= spotLightIntensity;
 
 		// Phong Light
 		vec3 phongLight = ( ambient + diffuse + specular );

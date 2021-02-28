@@ -385,7 +385,9 @@ public:
 
 
 			
-			this->_lightingShader.setFloat( "light.cutOff", glm::cos(glm::radians(12.5f)) );
+			this->_lightingShader.setFloat( "light.innerCutOff", glm::cos(glm::radians(12.5f)) );
+			this->_lightingShader.setFloat( "light.outerCutOff", glm::cos( glm::radians( 12.5f ) ) );
+
 
 			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
 			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.2f );

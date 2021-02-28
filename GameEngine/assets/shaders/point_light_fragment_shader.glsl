@@ -55,7 +55,7 @@ void main()
 
 	// Diffuse light
 	vec3 norm = normalize( vNormal );
-	//vec3 lightDir = normalize( light.vPosition - vFragPos ); 
+	//vec3 vLightDir = normalize( light.vPosition - vFragPos ); 
 	vec3 wLightDir = normalize( light.wPosition - wFragPos );
 
 	float diffImpact = max( dot( norm, wLightDir ), 0.0f );

@@ -80,6 +80,13 @@
     <None Include="assets\shaders\basic_vertex_shader.glsl">
       <Filter>assets\shaders</Filter>
     </None>
+    <None Include="assets\shaders\basic_fragment_shader_v1.glsl" />
+    <None Include="assets\shaders\directional_light_fragment_shader.glsl">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\point_light_fragment_shader.glsl">
+      <Filter>assets\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">

@@ -167,9 +167,11 @@
   <ItemGroup>
     <None Include="assets\shaders\basic_fragment_shader.glsl" />
     <None Include="assets\shaders\basic_fragment_shader_v1.glsl" />
+    <None Include="assets\shaders\directional_light_fragment_shader.glsl" />
     <None Include="assets\shaders\fragment_core.glsl" />
     <None Include="assets\shaders\lightsource_fragment_shader.glsl" />
     <None Include="assets\shaders\basic_vertex_shader.glsl" />
+    <None Include="assets\shaders\point_light_fragment_shader.glsl" />
     <None Include="assets\shaders\vertex_core.glsl" />
   </ItemGroup>
   <ItemGroup>

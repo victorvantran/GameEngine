@@ -30,6 +30,8 @@ void main()
 
 	vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
 	vNormal = normMatrix * aNormal;
+	//vNormal = mat3( transpose( inverse( view * model ) ) ) * aNormal;
+
 	vLightPos = vec3( view * vec4( lightPos, 1.0f ) );
 
 	TexCoord = aTexCoord;

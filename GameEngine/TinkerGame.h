@@ -52,12 +52,16 @@ public:
 		this->_diffuseTexture.load( "assets/textures/wooden_crate.png" );
 		this->_specularTexture.load( "assets/textures/crate_specular_borders.png" );
 		this->_emmisionTexture.load( "assets/textures/aperture_science_cube_emission.png" );
+		
+
 
 		// Load Shader
+		//this->_lightSourceShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/lightsource_fragment_shader.glsl" );
 		this->_lightSourceShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/lightsource_fragment_shader.glsl" );
 
 		
-		this->_lightingShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/basic_fragment_shader.glsl" );
+		//this->_lightingShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/directional_light_fragment_shader.glsl" );
+		this->_lightingShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/point_light_fragment_shader.glsl" );
 		this->_lightingShader.use();
 		this->_lightingShader.setInt( "material.diffuse", 0 );
 		this->_lightingShader.setInt( "material.specular", 1 );
@@ -191,16 +195,9 @@ public:
 			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,	1.0f, 0.0f,
 			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,	1.0f, 0.0f,
 			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,	0.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,	0.0f, 1.0f
 			
-			
-			
-			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,	0.0f, 1.0f,
-			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,	1.0f, 1.0f,
-			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,	1.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f, 0.0f,	1.0f, 0.0f,
-			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f, 0.0f,	0.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f, 0.0f,	0.0f, 1.0f,
+
 		};
 
 		std::uint32_t indices[] =
@@ -387,7 +384,7 @@ public:
 
 			// Material Properties
 			// Calculate norm matrix to account for non-uniform scaling and rotation
-			glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
+			glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( view * cubeModel ) ) );
 			this->_lightingShader.setMat3( "normMatrix", normMatrix );
 			this->_lightingShader.setVec3( "material.specular", glm::vec3( 0.5f ) );
 			this->_lightingShader.setFloat( "material.shininess", 64.0f );
@@ -424,17 +421,21 @@ public:
 
 
 			// Light Properties
-			this->_lightingShader.setVec3( "lightPos", lightSourcePos ); // Light will be coming from light source origin position
+			this->_lightingShader.setVec3( "light.position", lightSourcePos ); // Light will be coming from light source origin position
+			this->_lightingShader.setVec3( "light.direction", -0.2f, -1.0f, -0.3f );
+
 			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
 			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.01f );
 			this->_lightingShader.setVec3( "light.ambient", ambientColor );
 			this->_lightingShader.setVec3( "light.diffuse", diffuseColor );
 			this->_lightingShader.setVec3( "light.specular", glm::vec3( 1.0f ) );
-
+			this->_lightingShader.setFloat( "light.kConstant", 1.0f ); // should always be 1.0f as to not boost light at negative distance
+			this->_lightingShader.setFloat( "light.kLinear", 0.09f );
+			this->_lightingShader.setFloat( "light.kQuadratic", 0.032f );
 
 			// Material Properties
 			// Calculate norm matrix to account for non-uniform scaling and rotation
-			glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
+			glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( view * cubeModel ) ) );
 			this->_lightingShader.setMat3( "normMatrix", normMatrix );
 			this->_lightingShader.setVec3( "material.specular", glm::vec3( 0.5f ) );
 			this->_lightingShader.setFloat( "material.shininess", 64.0f );
@@ -472,7 +473,7 @@ public:
 
 		// Material Properties
 		// Calculate norm matrix to account for non-uniform scaling and rotation
-		glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
+		glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( view * cubeModel ) ) );
 		this->_lightingShader.setMat3( "normMatrix", normMatrix );
 		this->_lightingShader.setVec3( "material.specular", glm::vec3( 0.5f ) );
 		this->_lightingShader.setFloat( "material.shininess", 64.0f );

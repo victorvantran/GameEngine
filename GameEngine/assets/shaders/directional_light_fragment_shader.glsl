@@ -12,7 +12,6 @@ struct Material
 
 struct Light
 {
-	vec3 position;
 	vec3 direction;
 
 	vec3 ambient;
@@ -40,8 +39,7 @@ in vec2 TexCoord;
 void main()
 {
 	// Light
-	float distance = length( light.position - vFragPos );
-	float attenuation = ( 1.0f / ( light.kConstant + light.kLinear * distance + light.kQuadratic * ( distance * distance ) ) );
+
 
 
 	// Ambient light
@@ -49,10 +47,7 @@ void main()
 
 	// Diffuse light
 	vec3 norm = normalize( vNormal );
-	vec3 lightDir = normalize( light.position - vFragPos ); // point light
-	//vec3 lightDir = normalize( vLightPos - vFragPos ); // point light
-
-	//vec3 lightDir = normalize( -light.direction ); // Directional Light, vector pointing TOWARDS light source needed for calculation
+	vec3 lightDir = normalize( -light.direction ); // Directional Light, vector pointing TOWARDS light source needed for calculation
 	float diffImpact = max( dot( norm, lightDir ), 0.0f );
 	vec3 diffuse = light.diffuse * ( diffImpact * vec3( texture( material.diffuse, TexCoord ) ) );
 
@@ -63,7 +58,7 @@ void main()
 	vec3 specular = light.specular * ( specImpact * vec3( texture( material.specular, TexCoord ) ) );
 
 	// Phong Light
-	vec3 phongLight = ( ambient + diffuse + specular ); // *attenuation;
+	vec3 phongLight = ( ambient + diffuse + specular );
 
 
 	// Emission

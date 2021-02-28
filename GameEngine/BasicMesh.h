@@ -41,7 +41,7 @@ public:
 		glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, ( sizeof( rawVertices[0] ) * rawVertexLength ), ( void* )( 3 * sizeof( rawVertices[0] ) ) );
 		glEnableVertexAttribArray( 1 );
 		// Texture vector attribute
-		glVertexAttribPointer( 2, 3, GL_FLOAT, GL_FALSE, ( sizeof( rawVertices[0] ) * rawVertexLength ), ( void* )( 6 * sizeof( rawVertices[0] ) ) );
+		glVertexAttribPointer( 2, 2, GL_FLOAT, GL_FALSE, ( sizeof( rawVertices[0] ) * rawVertexLength ), ( void* )( 6 * sizeof( rawVertices[0] ) ) );
 		glEnableVertexAttribArray( 2 );
 
 		// Bind Element Buffer Object ( EBO ) and fill with indices data

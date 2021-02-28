@@ -67,7 +67,7 @@ public:
 	{
 		glBindVertexArray( this->_vao );
 		glDrawElements( GL_TRIANGLES, this->_elementCount, GL_UNSIGNED_INT, 0 );
-		glBindVertexArray( 0 );
+		//glBindVertexArray( 0 );
 		return;
 	}
 

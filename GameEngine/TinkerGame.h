@@ -376,14 +376,14 @@ public:
 
 
 			// Prepare lighting in view coordinates
-			glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( cubeModel ) ) );
+			glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( view * cubeModel ) ) );
 			this->_lightingShader.setMat3( "normMatrix", normMatrix );
 
 
 
 			// Directional Light
 			//this->_lightingShader.setVec3( "directionalLight.lDirection", glm::vec3( -0.2f, -1.0f, -0.3f ) );
-			this->_lightingShader.setVec3( "directionalLight.lDirection", glm::vec3( view * glm::vec4( glm::vec3( -0.2f, -1.0f, -0.3f ), 1.0f ) ) );
+			this->_lightingShader.setVec3( "directionalLight.vDirection", glm::vec3( view * glm::vec4( glm::vec3( 1.2f, 1.0f, 2.0f ), 1.0f ) ) );
 			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
 			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.0f );
 			this->_lightingShader.setVec3( "directionalLight.ambient", ambientColor );

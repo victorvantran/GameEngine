@@ -2,8 +2,12 @@
 
 
 
+
+
 // World
+in vec3 wNormal;
 in vec3 wFragPos;
+in vec3 wLightPos;
 
 // View
 in vec3 vNormal;
@@ -37,7 +41,7 @@ uniform Material material;
 // Directional Light
 struct DirectionalLight
 {
-	vec3 lDirection;
+	vec3 vDirection;
 
 	vec3 ambient;
 	vec3 diffuse;
@@ -49,18 +53,18 @@ uniform DirectionalLight directionalLight;
 vec3 getDirectionalLight( DirectionalLight directionalLight, vec3 vNormalUnit, vec3 vViewDirUnit )
 {
 	// Light
-	vec3 lLightDirUnit = normalize( -directionalLight.lDirection ); // point TOWARDS light source needed for calculation
-	
+	vec3 lLightDirUnit = normalize( directionalLight.vDirection - vFragPos ); // point TOWARDS light source needed for calculation. Therefore, source - frag
+
 	// Ambient light
 	vec3 ambient = directionalLight.ambient * ( vec3( texture( material.diffuse, TexCoord ) ) );
 
 	// Diffuse light
-	float diffImpact = max( dot( vNormalUnit, lLightDirUnit ), 0.0f );
-	vec3 diffuse = directionalLight.diffuse * ( diffImpact * vec3( texture( material.diffuse, TexCoord ) ) );
+	float diff = max( dot( vNormalUnit, lLightDirUnit ), 0.0 );
+	vec3 diffuse = directionalLight.diffuse * ( diff * vec3( texture( material.diffuse, TexCoord ) ) );;// diff* lightColor;
 
 	// Specular light
-	vec3 lReflectDir = reflect( -lLightDirUnit, vNormalUnit );
-	float specImpact = pow( max( dot( vViewDirUnit, lReflectDir ), 0.0f ), material.shininess );
+	vec3 reflectDir = reflect( -lLightDirUnit, vNormalUnit );
+	float specImpact = pow( max( dot( vViewDirUnit, reflectDir ), 0.0f ), material.shininess );
 	vec3 specular = directionalLight.specular * ( specImpact * vec3( texture( material.specular, TexCoord ) ) );
 
 	return ambient + diffuse + specular;
@@ -87,7 +91,7 @@ struct PointLight
 #define NR_POINT_LIGHTS 4  
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 
-vec3 getPointLight( PointLight pointLight, vec3 vNormalUnit, vec3 vViewDirUnit )
+vec3 getPointLight( PointLight pointLight, vec3 vNormalUnit, vec3 vFragPos, vec3 vViewDirUnit )
 {
 	// Light
 	vec3 vLightDir = normalize( pointLight.vPosition - vFragPos );
@@ -119,15 +123,20 @@ vec3 getPointLight( PointLight pointLight, vec3 vNormalUnit, vec3 vViewDirUnit )
 void main()
 {
 	vec3 vNormalUnit = normalize( vNormal );
-
 	vec3 vViewDirUnit = normalize( -vFragPos );
 
-	
+	vec3 cumulativeLight = vec3( 0.0f, 0.0f, 0.0f );
+
 	// Directional Lighting
-	vec3 cumulativeLight = getDirectionalLight( directionalLight, vNormalUnit, vViewDirUnit );
+	cumulativeLight += getDirectionalLight( directionalLight, vNormalUnit, vViewDirUnit );
 
 	// Point Lighting
-
+	/*
+	for ( int i = 0; i < NR_POINT_LIGHTS; i++ )
+	{
+		cumulativeLight += getPointLight( pointLights[i], vNormalUnit, vFragPos, vViewDirUnit );
+	}
+	*/
 
 	// Spot Lighting
 

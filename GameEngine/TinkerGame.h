@@ -47,11 +47,11 @@ public:
 	void loadContent()
 	{
 		// Load Textures
-		this->_diffuseTexture.load( "assets/textures/aperture_science_cube.png" );
-		this->_specularTexture.load( "assets/textures/aperture_science_cube.png" );
-		//this->_texture0.load( "assets/textures/wooden_crate.png" );
-		//this->_texture1.load( "assets/textures/crate_specular_borders.png" );
-		this->_emmisionTexture.load( "assets/textures/code_emission.jpg" );
+		//this->_diffuseTexture.load( "assets/textures/aperture_science_cube.png" );
+		//this->_specularTexture.load( "assets/textures/aperture_science_cube.png" );
+		this->_diffuseTexture.load( "assets/textures/wooden_crate.png" );
+		this->_specularTexture.load( "assets/textures/crate_specular_borders.png" );
+		this->_emmisionTexture.load( "assets/textures/aperture_science_cube_emission.png" );
 
 		// Load Shader
 		this->_lightSourceShader.load( "assets/shaders/basic_vertex_shader.glsl", "assets/shaders/lightsource_fragment_shader.glsl" );
@@ -321,7 +321,7 @@ public:
 
 
 
-		glm::mat4 projection = glm::perspective( glm::radians( this->_camera._zoom ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 100.0f );
+		glm::mat4 projection = glm::perspective( glm::radians( this->_camera._zoom ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 2000.0f );
 		glm::mat4 view = this->_camera.getViewMatrix();
 
 
@@ -403,8 +403,8 @@ public:
 		*/
 
 
-		/*
-		for ( int i = 0; i < 1000; i++ )
+		
+		for ( int i = 0; i < 2000; i++ )
 		{
 			this->_lightingShader.use();
 
@@ -426,7 +426,7 @@ public:
 			// Light Properties
 			this->_lightingShader.setVec3( "lightPos", lightSourcePos ); // Light will be coming from light source origin position
 			glm::vec3 diffuseColor = lightColor * glm::vec3( 0.8f );
-			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.05f );
+			glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.01f );
 			this->_lightingShader.setVec3( "light.ambient", ambientColor );
 			this->_lightingShader.setVec3( "light.diffuse", diffuseColor );
 			this->_lightingShader.setVec3( "light.specular", glm::vec3( 1.0f ) );
@@ -441,16 +441,17 @@ public:
 
 
 			// Bind texture
-			this->_texture0.bind( 0 );
-			this->_texture1.bind( 1 );
+			this->_diffuseTexture.bind( 0 );
+			this->_specularTexture.bind( 1 );
+			//this->_emmisionTexture.bind( 2 );
 
 			// Draw
 			this->_basicMesh.draw();
 		}
-		*/
+		
 
 
-
+		/*
 		// Draw Cube
 		this->_lightingShader.use();
 
@@ -480,11 +481,11 @@ public:
 		// Bind texture
 		this->_diffuseTexture.bind( 0 );
 		this->_specularTexture.bind( 1 );
-		// this->_emmisionTexture.bind( 2 );
+		//this->_emmisionTexture.bind( 2 );
 
 		// Draw
 		this->_basicMesh.draw();
-
+		*/
 		
 
 		// Swap Buffers

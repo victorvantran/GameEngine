@@ -127,17 +127,20 @@ void main()
 	vec3 cumulativeLight = vec3( 0.0f, 0.0f, 0.0f );
 
 	// Directional Lighting
-	// cumulativeLight += getDirectionalLight( directionalLight, vNormalUnit, vViewDirUnit );
+	cumulativeLight += getDirectionalLight( directionalLight, vNormalUnit, vViewDirUnit );
 
 	// Point Lighting
 	for ( int i = 0; i < NR_POINT_LIGHTS; i++ )
 	{
 		cumulativeLight += getPointLight( pointLights[i], vNormalUnit, vFragPos, vViewDirUnit );
 	}
-	//cumulativeLight += getPointLight( pointLights[1], vNormalUnit, vFragPos, vViewDirUnit );
-	//cumulativeLight = vec3( pointLights[1].kConstant, pointLights[1].kLinear, pointLights[1].kQuadratic );
 
 	// Spot Lighting
+
+
+	// Emmision Lighting
+	vec3 emission = vec3( 1.0f, 1.0f, 1.0f ) * ( vec3( texture( material.emission, TexCoord ) ) );
+	cumulativeLight += emission;
 
 
 	FragColor = vec4( cumulativeLight, 1.0f );

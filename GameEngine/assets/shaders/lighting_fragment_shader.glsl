@@ -420,13 +420,13 @@ vec3 getSpotLight( SpotLight spotLight, vec3 vNormalUnit, vec3 vFragPos, vec3 vV
 		float attenuation = ( 1.0f / ( spotLight.kConstant + spotLight.kLinear * distance + spotLight.kQuadratic * ( distance * distance ) ) );
 
 
-		return diffuse; // ( ambient + diffuse + specular );// *attenuation;
+		return ( ambient + diffuse + specular ) * attenuation; //diffuse; // ( ambient + diffuse + specular );// *attenuation;
 		//return vec3( 1.0f, 1.0f, 0.0f );
 	}
 	else
 	{
 		// Ambient only
-		return ambient;// *attenuation;
+		return ambient * attenuation; //ambient;// *attenuation;
 	}
 }
 
@@ -444,7 +444,7 @@ void main()
 	// Point Lighting
 	for ( int i = 0; i < NR_POINT_LIGHTS; i++ )
 	{
-		//cumulativeLight += getPointLight( pointLights[i], vNormalUnit, vFragPos, vViewDirUnit );
+		cumulativeLight += getPointLight( pointLights[i], vNormalUnit, vFragPos, vViewDirUnit );
 	}
 
 	// Spot Lighting

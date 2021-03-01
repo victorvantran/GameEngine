@@ -358,6 +358,8 @@ struct SpotLight
 	vec3 wDirection;
 
 	vec3 vPosition;
+	//vec3 vDirection;
+
 
 	float innerCutOff;
 	float outerCutOff;
@@ -393,24 +395,21 @@ vec3 getSpotLight( SpotLight spotLight, vec3 vNormalUnit, vec3 vFragPos, vec3 vV
 	vec3 vLightDir = normalize( spotLight.vPosition - vFragPos );
 
 	float cosTheta = dot( wLightDir, normalize( -spotLight.wDirection ) ); // negate to achieve vector pointing to light source
+	//float cosTheta = dot( wLightDir, normalize( -spotLight.vDirection ) ); // negate to achieve vector pointing to light source
 	float cosEpsilon = spotLight.innerCutOff - spotLight.outerCutOff;
 	float spotLightIntensity = clamp( ( cosTheta - spotLight.outerCutOff ) / cosEpsilon, 0.0, 1.0 );
-
-
 
 	if ( cosTheta > spotLight.outerCutOff )
 	{
 
 		// Diffuse light
-		vec3 norm = normalize( vNormal );
-		float diffImpact = max( dot( norm, vLightDir ), 0.0f );
+		float diffImpact = max( dot( vNormalUnit, vLightDir ), 0.0f );
 		vec3 diffuse = spotLight.diffuse * ( diffImpact * vec3( texture( material.diffuse, TexCoord ) ) );
 		diffuse *= spotLightIntensity;
 
 		// Specular light
-		vec3 viewDir = normalize( -vFragPos );
-		vec3 reflectDir = reflect( -vLightDir, norm );
-		float specImpact = pow( max( dot( viewDir, reflectDir ), 0.0f ), material.shininess );
+		vec3 reflectDir = reflect( -vLightDir, vNormalUnit );
+		float specImpact = pow( max( dot( vViewDirUnit, reflectDir ), 0.0f ), material.shininess );
 		vec3 specular = spotLight.specular * ( specImpact * vec3( texture( material.specular, TexCoord ) ) );
 		specular *= spotLightIntensity;
 
@@ -420,13 +419,13 @@ vec3 getSpotLight( SpotLight spotLight, vec3 vNormalUnit, vec3 vFragPos, vec3 vV
 		float attenuation = ( 1.0f / ( spotLight.kConstant + spotLight.kLinear * distance + spotLight.kQuadratic * ( distance * distance ) ) );
 
 
-		return ( ambient + diffuse + specular ) * attenuation; //diffuse; // ( ambient + diffuse + specular );// *attenuation;
+		return ( ambient + diffuse + specular );// *attenuation; //diffuse; // ( ambient + diffuse + specular );// *attenuation;
 		//return vec3( 1.0f, 1.0f, 0.0f );
 	}
 	else
 	{
 		// Ambient only
-		return ambient * attenuation; //ambient;// *attenuation;
+		return ambient;// *attenuation; //ambient;// *attenuation;
 	}
 }
 

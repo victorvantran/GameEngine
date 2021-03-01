@@ -29,6 +29,12 @@ out vec3 vNormal;
 out vec3 vFragPos;
 out vec3 vLightPos;
 
+
+
+
+out vec3 tNormal;
+
+
 /// Texture
 out vec2 TexCoord;
 
@@ -46,6 +52,8 @@ void main()
 
 	vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
 	vNormal = normMatrix * aNormal;
+
+	tNormal = mat3( transpose( inverse( model ) ) ) * aNormal;
 
 	TexCoord = aTexCoord;
 	return;

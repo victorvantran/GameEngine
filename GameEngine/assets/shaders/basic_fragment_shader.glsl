@@ -33,6 +33,11 @@ in vec3 vLightPos;
 out vec4 FragColor;
 
 
+
+
+out tNormal;
+
+
 /// Texture
 in vec2 TexCoord;
 

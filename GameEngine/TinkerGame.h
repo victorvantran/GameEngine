@@ -336,25 +336,28 @@ public:
 		this->_lightingShader.setMat4( "projection", projection );
 		this->_lightingShader.setMat4( "view", view );
 
-		// Caclulate light source color
-		/*
-		glm::vec3 lightColor;
-		lightColor.x = sin( glfwGetTime() * 1.0f );
-		lightColor.y = sin( glfwGetTime() * 0.2f );
-		lightColor.z = sin( glfwGetTime() * 0.3f );
-		*/
 
 
 
-		// Directional Light
+
+		/// Directional Light
 		this->_lightingShader.use();
-		//glm::vec3 directionalLightColor = glm::vec3( 1.0f, 1.0f, 1.0f );
 		glm::vec3 directionalLightColor = glm::vec3( 0.0f, 0.0f, 1.0f );
 		glm::vec3 directionalLightDiffuse = directionalLightColor * glm::vec3( 1.0f );
 		glm::vec3 directionalLightAmbient = directionalLightDiffuse * glm::vec3( 0.0f );
-		//glm::vec3 directionalLightPos = glm::vec3( 1.2f, 1.0f, 2.0f );
-		glm::vec3 directionalLightPos = glm::vec3( 0.0f, 0.0f, -1000.0f ); // [!] add direction as unit and have intensity
-		this->_lightingShader.setVec3( "directionalLight.vDirection", glm::vec3( view * glm::vec4( directionalLightPos, 1.0f ) ) );
+		glm::vec3 directionalLightPos = glm::vec3( 0.0f, 0.0f, -1000.0f );
+
+
+		glm::mat4 directionalLightModel = glm::mat4( 1.0f );
+		directionalLightModel = glm::translate( directionalLightModel, glm::vec3( 0.0f, 0.0f, 0.0f ) );
+		//glm::vec3 vDirectionalLightPos = glm::vec3( view * directionalLightModel * glm::vec4( directionalLightPos, 1.0f ) );
+		glm::vec3 vDirectionalLightPos = directionalLightPos;
+
+
+
+		//this->_lightingShader.setVec3( "directionalLight.vDirection", glm::vec3( view * glm::vec4( directionalLightPos, 1.0f ) ) );
+		this->_lightingShader.setVec3( "directionalLight.vDirection", vDirectionalLightPos );
+
 		this->_lightingShader.setVec3( "directionalLight.ambient", directionalLightAmbient );
 		this->_lightingShader.setVec3( "directionalLight.diffuse", directionalLightDiffuse );
 		this->_lightingShader.setVec3( "directionalLight.specular", glm::vec3( 1.0f ) );
@@ -364,10 +367,7 @@ public:
 
 		/// Point Light 0
 		this->_lightingShader.use();
-		glm::vec3 pointLight0Color = glm::vec3( 1.0f );
-		//pointLight0Color.x = sin( glfwGetTime() * 1.0f );
-		//pointLight0Color.y = sin( glfwGetTime() * 0.2f );
-		//pointLight0Color.z = sin( glfwGetTime() * 0.3f );
+		glm::vec3 pointLight0Color = glm::vec3( 1.0f, 0.0f, 0.0f );
 		glm::vec3 pointLight0Diffuse = pointLight0Color * glm::vec3( 0.8f );
 		glm::vec3 pointLight0Ambient = pointLight0Diffuse * glm::vec3( 0.0f );
 		glm::vec3 pointLight0Pos = glm::vec3( 1.2f, 1.0f, 2.0f );
@@ -381,16 +381,13 @@ public:
 		this->_lightingShader.setFloat( "pointLights[0].kQuadratic", 0.032f );
 
 
+
 		/// Point Light 1
 		this->_lightingShader.use();
-		glm::vec3 pointLight1Color = glm::vec3( 1.0f );
-		//pointLight1Color.x = cos( glfwGetTime() * 0.8f );
-		//pointLight1Color.y = cos( glfwGetTime() * 0.4f );
-		//pointLight1Color.z = cos( glfwGetTime() * 0.2f );
+		glm::vec3 pointLight1Color = glm::vec3( 0.0f, 1.0f, 0.0f );
 		glm::vec3 pointLight1Diffuse = pointLight1Color * glm::vec3( 0.8f );
 		glm::vec3 pointLight1Ambient = pointLight1Diffuse * glm::vec3( 0.0f );
 		glm::vec3 pointLight1Pos = glm::vec3( 7.2f, 7.0f, 7.0f );
-
 		glm::vec3 vPointLight1Pos = glm::vec3( view * glm::vec4( pointLight1Pos, 1.0f ) );
 		this->_lightingShader.setVec3( "pointLights[1].vPosition", vPointLight1Pos );
 		this->_lightingShader.setVec3( "pointLights[1].ambient", pointLight1Ambient );
@@ -403,28 +400,26 @@ public:
 
 		
 
-		// Spot Light 0
-		/*
+		/// Spot Light 0
 		glm::vec3 spotLight0Color = glm::vec3( 1.0f, 1.0f, 0.0f );
 		glm::vec3 spotLight0Diffuse = spotLight0Color * glm::vec3( 1.0f );
 		glm::vec3 spotLight0Ambient = spotLight0Diffuse * glm::vec3( 0.0f );
-		//glm::vec3 spotLight0Pos = glm::vec3( 0.0f, 30.0f, 5.0f );
-		glm::vec3 spotLight0Pos = glm::vec3( 0.0f, 30.0f + 0.0f * std::sinf( glfwGetTime() ), 5.0f );
-		glm::vec3 spotLight0Direction = glm::vec3( 0.0f, 0.0f, 1.0f );
-		//glm::vec3 vSpotLight0Pos = glm::vec3( view * glm::vec4( spotLight0Pos, 1.0f ) );
-
-		glm::mat4 spotLight0Model = glm::mat4( 1.0f );
-		spotLight0Model = glm::rotate( spotLight0Model, glm::radians( 180.0f * std::sinf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
-		
-
-		glm::vec3 vSpotLight0Pos = glm::vec3( view * spotLight0Model * glm::vec4( spotLight0Pos, 1.0f ) );
-		glm::vec3 wSpotLight0Direction = glm::vec3( spotLight0Model * glm::vec4( spotLight0Direction, 1.0f ) );
-
-
-		this->_lightingShader.setVec3( "spotLights[0].wPosition", spotLight0Pos );
-		this->_lightingShader.setVec3( "spotLights[0].wDirection", wSpotLight0Direction );
+		glm::vec3 lSpotLight0Pos = glm::vec3( 0.0f, 0.0f, 0.0f );
+		glm::vec3 lSpotLight0Dir = glm::vec3( 0.0f, 0.0f, 1.0f );
+		// Position
+		glm::mat4 spotLight0PosModel = glm::mat4( 1.0f );
+		spotLight0PosModel = glm::translate( spotLight0PosModel, glm::vec3( 0.0f, 30.0f, 0.0f ) );
+		spotLight0PosModel = glm::rotate( spotLight0PosModel, glm::radians( 180.0f * std::sinf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		glm::vec3 wSpotLight0Pos = glm::vec3( spotLight0PosModel * glm::vec4( lSpotLight0Pos, 1.0f ) );
+		glm::vec3 vSpotLight0Pos = glm::vec3( view * spotLight0PosModel * glm::vec4( lSpotLight0Pos, 1.0f ) );
+		// Direction
+		glm::mat4 spotLight0DirModel = glm::mat4( 1.0f );
+		spotLight0DirModel = glm::rotate( spotLight0DirModel, glm::radians( 180.0f * std::sinf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		glm::vec3 wSpotLight0Direction = glm::vec3( spotLight0DirModel * glm::vec4( lSpotLight0Dir, 1.0f ) );
+		// Set uniform
+		this->_lightingShader.setVec3( "spotLights[0].wPosition", wSpotLight0Pos );
 		this->_lightingShader.setVec3( "spotLights[0].vPosition", vSpotLight0Pos );
-
+		this->_lightingShader.setVec3( "spotLights[0].wDirection", wSpotLight0Direction );
 		this->_lightingShader.setFloat( "spotLights[0].innerCutOff", glm::cos( glm::radians( 12.5f ) ) );
 		this->_lightingShader.setFloat( "spotLights[0].outerCutOff", glm::cos( glm::radians( 12.5f ) ) );
 		this->_lightingShader.setVec3( "spotLights[0].ambient", spotLight0Ambient );
@@ -433,63 +428,33 @@ public:
 		this->_lightingShader.setFloat( "spotLights[0].kConstant", 1.0f );
 		this->_lightingShader.setFloat( "spotLights[0].kLinear", 0.09f );
 		this->_lightingShader.setFloat( "spotLights[0].kQuadratic", 0.032f );
-		*/
-		glm::vec3 spotLight0Color = glm::vec3( 1.0f, 1.0f, 0.0f );
-		glm::vec3 spotLight0Diffuse = spotLight0Color * glm::vec3( 1.0f );
-		glm::vec3 spotLight0Ambient = spotLight0Diffuse * glm::vec3( 0.0f );
-		glm::vec3 spotLight0Pos = glm::vec3( 0.0f, 0.0f, 0.0f );
-		glm::vec3 spotLight0Direction = glm::vec3( 0.0f, 0.0f, 1.0f );
 
-
-
-		// Position
-		glm::mat4 spotLight0Model = glm::mat4( 1.0f );
-		spotLight0Model = glm::translate( spotLight0Model, glm::vec3( 0.0f, -10.0f, 0.0f ) );
-		spotLight0Model = glm::rotate( spotLight0Model, glm::radians( 180.0f * std::sinf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
-		glm::vec3 wSpotLight0Pos = glm::vec3( spotLight0Model * glm::vec4( spotLight0Pos, 1.0f ) );
-		glm::vec3 vSpotLight0Pos = glm::vec3( view * spotLight0Model * glm::vec4( spotLight0Pos, 1.0f ) );
-
-
-
-		// Direction
-		glm::mat4 spotLight0DirModel = glm::mat4( 1.0f );
-		spotLight0DirModel = glm::rotate( spotLight0DirModel, glm::radians( 180.0f * std::sinf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
-		glm::vec3 wSpotLight0Direction = glm::vec3( spotLight0DirModel * glm::vec4( spotLight0Direction, 1.0f ) );
-
-
-		this->_lightingShader.setVec3( "spotLights[0].wPosition", wSpotLight0Pos );
-		this->_lightingShader.setVec3( "spotLights[0].vPosition", vSpotLight0Pos );
-		this->_lightingShader.setVec3( "spotLights[0].wDirection", wSpotLight0Direction );
-		this->_lightingShader.setFloat( "spotLights[0].innerCutOff", glm::cos( glm::radians( 0.0f ) ) );
-		this->_lightingShader.setFloat( "spotLights[0].outerCutOff", glm::cos( glm::radians( 17.5f ) ) );
-		this->_lightingShader.setVec3( "spotLights[0].ambient", spotLight0Ambient );
-		this->_lightingShader.setVec3( "spotLights[0].diffuse", spotLight0Diffuse );
-		this->_lightingShader.setVec3( "spotLights[0].specular", glm::vec3( 1.0f ) );
-		this->_lightingShader.setFloat( "spotLights[0].kConstant", 1.0f );
-		this->_lightingShader.setFloat( "spotLights[0].kLinear", 0.09f );
-		this->_lightingShader.setFloat( "spotLights[0].kQuadratic", 0.032f );
 
 
 
 
 
 		
-		// Spot Light 1
-		glm::vec3 spotLight1Color = glm::vec3( 0.0f, 1.0f, 1.0f );
+		/// Spot Light 1
+		glm::vec3 spotLight1Color = glm::vec3( 1.0f, 0.0f, 1.0f );
 		glm::vec3 spotLight1Diffuse = spotLight1Color * glm::vec3( 1.0f );
 		glm::vec3 spotLight1Ambient = spotLight1Diffuse * glm::vec3( 0.0f );
-		//glm::vec3 spotLight1Pos = glm::vec3( 0.0f, 30.0f, 5.0f );
-		glm::vec3 spotLight1Pos = glm::vec3( 0.0f, 30.0f + 0.0f * -std::sinf( glfwGetTime() ), 5.0f );
-		glm::vec3 spotLight1Direction = glm::vec3( 0.0f, 0.0f, 1.0f );
-		glm::vec3 vSpotLight1Pos = glm::vec3( view * glm::vec4( spotLight1Pos, 1.0f ) );
-
-		glm::mat4 spotLight1Model = glm::mat4( 1.0f );
-		spotLight1Model = glm::rotate( spotLight1Model, glm::radians( -180.0f * std::sinf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
-		glm::vec3 wSpotLight1Direction = glm::vec3( spotLight1Model * glm::vec4( spotLight1Direction, 1.0f ) );
-
-		this->_lightingShader.setVec3( "spotLights[1].wPosition", spotLight1Pos );
-		this->_lightingShader.setVec3( "spotLights[1].wDirection", wSpotLight1Direction );
+		glm::vec3 lSpotLight1Pos = glm::vec3( 0.0f, 0.0f, 0.0f );
+		glm::vec3 lSpotLight1Dir = glm::vec3( 0.0f, 0.0f, 1.0f );
+		// Position
+		glm::mat4 spotLight1PosModel = glm::mat4( 1.0f );
+		spotLight1PosModel = glm::translate( spotLight1PosModel, glm::vec3( 0.0f, -10.0f, 0.0f ) );
+		spotLight1PosModel = glm::rotate( spotLight1PosModel, glm::radians( 180.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		glm::vec3 wSpotLight1Pos = glm::vec3( spotLight1PosModel * glm::vec4( lSpotLight1Pos, 1.0f ) );
+		glm::vec3 vSpotLight1Pos = glm::vec3( view * spotLight1PosModel * glm::vec4( lSpotLight1Pos, 1.0f ) );
+		// Direction
+		glm::mat4 spotLight1DirModel = glm::mat4( 1.0f );
+		spotLight1DirModel = glm::rotate( spotLight1DirModel, glm::radians( 180.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		glm::vec3 wSpotLight1Direction = glm::vec3( spotLight1DirModel * glm::vec4( lSpotLight1Dir, 1.0f ) );
+		// Set uniform
+		this->_lightingShader.setVec3( "spotLights[1].wPosition", wSpotLight1Pos );
 		this->_lightingShader.setVec3( "spotLights[1].vPosition", vSpotLight1Pos );
+		this->_lightingShader.setVec3( "spotLights[1].wDirection", wSpotLight1Direction );
 		this->_lightingShader.setFloat( "spotLights[1].innerCutOff", glm::cos( glm::radians( 12.5f ) ) );
 		this->_lightingShader.setFloat( "spotLights[1].outerCutOff", glm::cos( glm::radians( 12.5f ) ) );
 		this->_lightingShader.setVec3( "spotLights[1].ambient", spotLight1Ambient );
@@ -499,13 +464,15 @@ public:
 		this->_lightingShader.setFloat( "spotLights[1].kLinear", 0.09f );
 		this->_lightingShader.setFloat( "spotLights[1].kQuadratic", 0.032f );
 
+	
+
+
+
+
+
+
 		
-
-
-
-
-		
-		// Draw Point Light 0
+		/// PointLight0 Source
 		this->_lightSourceShader.use();
 		glm::mat4 pointLight0Model = glm::mat4( 1.0f );
 		pointLight0Model = glm::translate( pointLight0Model, pointLight0Pos );
@@ -514,7 +481,8 @@ public:
 		this->_lightSourceShader.setVec3( "lightColor", pointLight0Color );
 		this->_basicMesh.draw();
 
-		// Draw Point Light 1
+
+		/// PointLight1 Source
 		this->_lightSourceShader.use();
 		glm::mat4 pointLight1Model = glm::mat4( 1.0f );
 		pointLight1Model = glm::translate( pointLight1Model, pointLight1Pos );
@@ -524,10 +492,10 @@ public:
 		this->_basicMesh.draw();
 		
 
-		// Draw Spot Light 0
+		/// SpotLight0 Source
 		this->_lightSourceShader.use();
 		glm::mat4 spotLightSource0Model = glm::mat4( 1.0f );
-		spotLightSource0Model = glm::translate( spotLightSource0Model, glm::vec3( 0.0f, -10.0f, 0.0f ) );
+		spotLightSource0Model = glm::translate( spotLightSource0Model, glm::vec3( 0.0f, 30.0f, 0.0f ) );
 		spotLightSource0Model = glm::rotate( spotLightSource0Model, glm::radians( 180.0f * std::sinf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
 		spotLightSource0Model = glm::scale( spotLightSource0Model, glm::vec3( 0.2f ) );
 		this->_lightSourceShader.setMat4( "model", spotLightSource0Model );
@@ -535,17 +503,69 @@ public:
 		this->_basicMesh.draw();
 
 
-		// Draw Spot Light 1
+		/// SpotLight1 Source
 		this->_lightSourceShader.use();
 		glm::mat4 spotLightSource1Model = glm::mat4( 1.0f );
-		spotLightSource1Model = glm::translate( spotLightSource1Model, spotLight1Pos );
-		spotLightSource1Model = glm::rotate( spotLightSource1Model, glm::radians( 180.0f * std::cosf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		spotLightSource1Model = glm::translate( spotLightSource1Model, glm::vec3( 0.0f, -10.0f, 0.0f ) );
+		spotLightSource1Model = glm::rotate( spotLightSource1Model, glm::radians( 180.0f * -std::sinf( glfwGetTime() ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
 		spotLightSource1Model = glm::scale( spotLightSource1Model, glm::vec3( 0.2f ) );
 		this->_lightSourceShader.setMat4( "model", spotLightSource1Model );
 		this->_lightSourceShader.setVec3( "lightColor", spotLight1Color );
 		this->_basicMesh.draw();
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+		this->_diffuseTexture.bind( 0 );
+		this->_specularTexture.bind( 1 );
+		//this->_emmisionTexture.bind( 0 );
+
+
+		// Wall
+		this->_lightingShader.use();
+		glm::vec3 cube1Pos = glm::vec3( 0.0f, 0.0f, 10.0f );
+		glm::mat4 cube1Model = glm::mat4( 1.0f );
+		cube1Model = glm::translate( cube1Model, cube1Pos );
+		cube1Model = glm::scale( cube1Model, glm::vec3( 100.0f, 100.0f, 1.0f ) );
+		this->_lightingShader.setMat4( "model", cube1Model );
+		glm::mat3 normMatrix1 = glm::mat3( glm::transpose( glm::inverse( view * cube1Model ) ) );
+		normMatrix1 = glm::mat3( glm::transpose( glm::inverse( view * cube1Model ) ) );
+		this->_lightingShader.setMat3( "normMatrix", normMatrix1 );
+		this->_basicMesh.draw();
+
+
+		this->_lightingShader.use();
+		glm::vec3 cube2Pos = glm::vec3( 0.0f, 0.0f, -30.0f );
+		glm::mat4 cube2Model = glm::mat4( 1.0f );
+		cube2Model = glm::translate( cube2Model, cube2Pos );
+		cube2Model = glm::scale( cube2Model, glm::vec3( 100.0f, 100.0f, 1.0f ) );
+		this->_lightingShader.setMat4( "model", cube2Model );
+		glm::mat3 normMatrix2 = glm::mat3( glm::transpose( glm::inverse( view * cube2Model ) ) );
+		normMatrix2 = glm::mat3( glm::transpose( glm::inverse( view * cube2Model ) ) );
+		this->_lightingShader.setMat3( "normMatrix", normMatrix2 );
+		this->_basicMesh.draw();
+
+
+		// Cubes
+		this->_lightingShader.use();
+		glm::vec3 cube0Pos = glm::vec3( 0.0f, 0.0f, 0.0f );
+		glm::mat4 cube0Model = glm::mat4( 1.0f );
+		cube0Model = glm::translate( cube0Model, cube0Pos );
+		cube0Model = glm::scale( cube0Model, glm::vec3( 1.0f, 1.0f, 1.0f ) );
+		this->_lightingShader.setMat4( "model", cube0Model );
+		glm::mat3 normMatrix0 = glm::mat3( glm::transpose( glm::inverse( view * cube0Model ) ) );
+		this->_lightingShader.setMat3( "normMatrix", normMatrix0 );
+		this->_basicMesh.draw();
 
 
 		// Draw Cubes
@@ -581,76 +601,6 @@ public:
 			this->_basicMesh.draw();
 		}
 		*/
-
-
-
-
-
-
-		this->_diffuseTexture.bind( 0 );
-		this->_specularTexture.bind( 1 );
-
-		this->_lightingShader.use();
-
-		glm::vec3 cubePos = glm::vec3( 0.0f, 0.0f, 0.0f );
-		glm::mat4 cubeModel = glm::mat4( 1.0f );
-		cubeModel = glm::translate( cubeModel, cubePos );
-		cubeModel = glm::scale( cubeModel, glm::vec3( 1.0f, 1.0f, 1.0f ) );
-		this->_lightingShader.setMat4( "model", cubeModel );
-
-		glm::mat3 normMatrix = glm::mat3( glm::transpose( glm::inverse( view * cubeModel ) ) );
-		this->_lightingShader.setMat3( "normMatrix", normMatrix );
-
-		this->_basicMesh.draw();
-
-
-
-
-		this->_lightingShader.use();
-
-		glm::vec3 cube1Pos = glm::vec3( 0.0f, 0.0f, 10.0f );
-		glm::mat4 cube1Model = glm::mat4( 1.0f );
-		cube1Model = glm::translate( cube1Model, cube1Pos );
-		//cube1Model = glm::rotate( cube1Model, glm::radians( 100.0f * std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
-		cube1Model = glm::scale( cube1Model, glm::vec3( 100.0f, 100.0f, 1.0f ) );
-		this->_lightingShader.setMat4( "model", cube1Model );
-
-
-		normMatrix = glm::mat3( glm::transpose( glm::inverse( view * cube1Model ) ) );
-		this->_lightingShader.setMat3( "normMatrix", normMatrix );
-
-		this->_basicMesh.draw();
-
-
-		
-
-
-
-
-
-
-
-
-
-		this->_lightingShader.use();
-
-		glm::vec3 cube2Pos = glm::vec3( 0.0f, 0.0f, -10.0f );
-		glm::mat4 cube2Model = glm::mat4( 1.0f );
-		cube2Model = glm::translate( cube2Model, cube2Pos );
-		cube2Model = glm::scale( cube2Model, glm::vec3( 100.0f, 100.0f, 1.0f ) );
-		this->_lightingShader.setMat4( "model", cube2Model );
-
-
-		normMatrix = glm::mat3( glm::transpose( glm::inverse( view * cube2Model ) ) );
-		this->_lightingShader.setMat3( "normMatrix", normMatrix );
-
-		this->_basicMesh.draw();
-
-
-
-
-
-
 
 
 

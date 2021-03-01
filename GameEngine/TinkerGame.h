@@ -51,10 +51,12 @@ public:
 		//this->_specularTexture.load( "assets/textures/aperture_science_cube.png" );
 		//this->_diffuseTexture.load( "assets/textures/wooden_crate.png" );
 		//this->_diffuseTexture.load( "assets/textures/wooden_crate_v2.jpg" );
-		this->_diffuseTexture.load( "assets/textures/brick_1.jpg" );
+		//this->_diffuseTexture.load( "assets/textures/brick_1.jpg" );
+		this->_diffuseTexture.load( "assets/textures/white.png" );
 
 		//this->_specularTexture.load( "assets/textures/crate_specular_borders.png" );
-		this->_specularTexture.load( "assets/textures/brick_1_specular.jpg" );
+		//this->_specularTexture.load( "assets/textures/brick_1_specular.jpg" );
+		this->_specularTexture.load( "assets/textures/white.png" );
 		this->_emmisionTexture.load( "assets/textures/aperture_science_cube_emission.png" );
 		
 
@@ -347,11 +349,12 @@ public:
 		// Directional Light
 		this->_lightingShader.use();
 		//glm::vec3 directionalLightColor = glm::vec3( 1.0f, 1.0f, 1.0f );
-		glm::vec3 directionalLightColor = glm::vec3( 1.0f, 0.0f, 0.0f );
-		glm::vec3 directionalLightDiffuse = directionalLightColor * glm::vec3( 0.8f );
-		glm::vec3 directionalLightAmbient = directionalLightDiffuse * glm::vec3( 0.02f );
-		glm::vec3 directionalLightPos = glm::vec3( 1.2f, 1.0f, 2.0f );
-		this->_lightingShader.setVec3( "directionalLight.vDirection", glm::vec3( view * glm::vec4( glm::vec3( 1.2f, 1.0f, 2.0f ), 1.0f ) ) );
+		glm::vec3 directionalLightColor = glm::vec3( 0.0f, 0.0f, 1.0f );
+		glm::vec3 directionalLightDiffuse = directionalLightColor * glm::vec3( 1.0f );
+		glm::vec3 directionalLightAmbient = directionalLightDiffuse * glm::vec3( 0.0f );
+		//glm::vec3 directionalLightPos = glm::vec3( 1.2f, 1.0f, 2.0f );
+		glm::vec3 directionalLightPos = glm::vec3( 0.0f, 0.0f, -1000.0f ); // [!] add direction as unit and have intensity
+		this->_lightingShader.setVec3( "directionalLight.vDirection", glm::vec3( view * glm::vec4( directionalLightPos, 1.0f ) ) );
 		this->_lightingShader.setVec3( "directionalLight.ambient", directionalLightAmbient );
 		this->_lightingShader.setVec3( "directionalLight.diffuse", directionalLightDiffuse );
 		this->_lightingShader.setVec3( "directionalLight.specular", glm::vec3( 1.0f ) );
@@ -370,8 +373,8 @@ public:
 		glm::vec3 pointLight0Pos = glm::vec3( 1.2f, 1.0f, 2.0f );
 		glm::vec3 vPointLight0Pos = glm::vec3( view * glm::vec4( pointLight0Pos, 1.0f ) );
 		this->_lightingShader.setVec3( "pointLights[0].vPosition", vPointLight0Pos );
-		this->_lightingShader.setVec3( "pointLights[0].ambient", pointLight0Diffuse );
-		this->_lightingShader.setVec3( "pointLights[0].diffuse", pointLight0Ambient );
+		this->_lightingShader.setVec3( "pointLights[0].ambient", pointLight0Ambient );
+		this->_lightingShader.setVec3( "pointLights[0].diffuse", pointLight0Diffuse );
 		this->_lightingShader.setVec3( "pointLights[0].specular", glm::vec3( 1.0f ) );
 		this->_lightingShader.setFloat( "pointLights[0].kConstant", 1.0f );
 		this->_lightingShader.setFloat( "pointLights[0].kLinear", 0.09f );
@@ -390,8 +393,8 @@ public:
 
 		glm::vec3 vPointLight1Pos = glm::vec3( view * glm::vec4( pointLight1Pos, 1.0f ) );
 		this->_lightingShader.setVec3( "pointLights[1].vPosition", vPointLight1Pos );
-		this->_lightingShader.setVec3( "pointLights[1].ambient", pointLight1Diffuse );
-		this->_lightingShader.setVec3( "pointLights[1].diffuse", pointLight1Ambient );
+		this->_lightingShader.setVec3( "pointLights[1].ambient", pointLight1Ambient );
+		this->_lightingShader.setVec3( "pointLights[1].diffuse", pointLight1Diffuse );
 		this->_lightingShader.setVec3( "pointLights[1].specular", glm::vec3( 1.0f ) );
 		this->_lightingShader.setFloat( "pointLights[1].kConstant", 1.0f );
 		this->_lightingShader.setFloat( "pointLights[1].kLinear", 0.09f );
@@ -420,7 +423,7 @@ public:
 		this->_lightingShader.setFloat( "spotLight.kQuadratic", 0.032f );
 		*/
 		glm::vec3 spotLight0Color = glm::vec3( 1.0f, 1.0f, 0.0f );
-		glm::vec3 spotLight0Diffuse = spotLight0Color * glm::vec3( 0.8f );
+		glm::vec3 spotLight0Diffuse = spotLight0Color * glm::vec3( 1.0f );
 		glm::vec3 spotLight0Ambient = spotLight0Diffuse * glm::vec3( 0.0f );
 		glm::vec3 spotLight0Pos = glm::vec3( 7.2f, 30.0f, -10.0f );
 		glm::vec3 vSpotLight0Pos = glm::vec3( view * glm::vec4( this->_camera._position, 1.0f ) );
@@ -537,8 +540,10 @@ public:
 		glm::vec3 cube1Pos = glm::vec3( 0.0f, 0.0f, 10.0f );
 		glm::mat4 cube1Model = glm::mat4( 1.0f );
 		cube1Model = glm::translate( cube1Model, cube1Pos );
+		cube1Model = glm::rotate( cube1Model, glm::radians( 100.0f * std::sinf( glfwGetTime() ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
 		cube1Model = glm::scale( cube1Model, glm::vec3( 100.0f, 100.0f, 1.0f ) );
 		this->_lightingShader.setMat4( "model", cube1Model );
+
 
 		normMatrix = glm::mat3( glm::transpose( glm::inverse( view * cube1Model ) ) );
 		this->_lightingShader.setMat3( "normMatrix", normMatrix );

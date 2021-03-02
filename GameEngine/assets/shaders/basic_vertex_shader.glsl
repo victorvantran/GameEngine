@@ -32,10 +32,6 @@ out vec3 vLightPos;
 
 
 
-out vec3 tNormal;
-
-out vec3 ANormal;
-out vec3 AFragPos;
 
 
 /// Texture
@@ -47,19 +43,14 @@ void main()
 {
 	gl_Position = projection * view * model * vec4( aPosition, 1.0f );
 
-	vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
-	//vFragPos = vec3( view * vec4( aPosition, 1.0f ) );
 
+	wNormal = mat3( transpose( inverse( model ) ) ) * aNormal;
 	wFragPos = vec3( model * vec4( aPosition, 1.0f ) );
-	wNormal = mat3( transpose( inverse( view * model ) ) ) * aNormal;
-	//vLightPos = vec3( view * vec4( vec3( 1.2f, 1.0f, 2.0f ), 1.0 ) );
-	wLightPos = vec3( view * vec4( vec3( 1.2f, 1.0f, 2.0f ), 1.0 ) );
 
 	vNormal = normMatrix * aNormal;
+	vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
 
-	tNormal = mat3( transpose( inverse( model ) ) ) * aNormal;
-	ANormal = aNormal;
-	AFragPos = aPosition;
+
 	TexCoord = aTexCoord;
 	return;
 }

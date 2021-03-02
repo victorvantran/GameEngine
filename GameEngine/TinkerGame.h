@@ -336,6 +336,7 @@ public:
 		this->_lightingShader.setMat4( "projection", projection );
 		this->_lightingShader.setMat4( "view", view );
 
+		this->_lightingShader.setVec3( "viewPos", this->_camera._position );
 
 
 
@@ -344,20 +345,19 @@ public:
 		this->_lightingShader.use();
 		glm::vec3 directionalLightColor = glm::vec3( 0.0f, 0.0f, 1.0f );
 		glm::vec3 directionalLightDiffuse = directionalLightColor * glm::vec3( 1.0f );
-		glm::vec3 directionalLightAmbient = directionalLightDiffuse * glm::vec3( 0.0f );
-		glm::vec3 directionalLightPos = glm::vec3( 0.0f, 0.0f, -1.0f );
+		glm::vec3 directionalLightAmbient = directionalLightDiffuse * glm::vec3( 0.3f );
+		glm::vec3 directionalLightDir = glm::vec3( 0.0f, 0.0f, -1.0f );
 
 
 		glm::mat4 directionalLightModel = glm::mat4( 1.0f );
 		directionalLightModel = glm::translate( directionalLightModel, glm::vec3( 0.0f, 0.0f, 0.0f ) );
-		//glm::vec3 vDirectionalLightPos = glm::vec3( view * directionalLightModel * glm::vec4( directionalLightPos, 1.0f ) );
-		glm::vec3 vDirectionalLightPos = directionalLightPos;
+		glm::vec3 vDirectionalLightPos = glm::vec3( view * directionalLightModel * glm::vec4( directionalLightDir, 1.0f ) );
+		//glm::vec3 vDirectionalLightPos = directionalLightDir;
 
 
 		//this->_lightingShader.setVec3( "directionalLight.vDirection", glm::vec3( view * glm::vec4( directionalLightPos, 1.0f ) ) );
 		this->_lightingShader.setVec3( "directionalLight.vDirection", vDirectionalLightPos );
-		this->_lightingShader.setVec3( "directionalLight.wDirection", directionalLightPos );
-
+		this->_lightingShader.setVec3( "directionalLight.wDirection", directionalLightDir );
 		this->_lightingShader.setVec3( "directionalLight.ambient", directionalLightAmbient );
 		this->_lightingShader.setVec3( "directionalLight.diffuse", directionalLightDiffuse );
 		this->_lightingShader.setVec3( "directionalLight.specular", glm::vec3( 1.0f ) );
@@ -534,7 +534,7 @@ public:
 		//this->_emmisionTexture.bind( 0 );
 
 
-		// Wall
+		// Walls
 		this->_lightingShader.use();
 		glm::vec3 cube1Pos = glm::vec3( 0.0f, 0.0f, 10.0f );
 		glm::mat4 cube1Model = glm::mat4( 1.0f );
@@ -548,15 +548,17 @@ public:
 
 
 		this->_lightingShader.use();
-		glm::vec3 cube2Pos = glm::vec3( 0.0f, 0.0f, -40.0f );
+		glm::vec3 cube2Pos = glm::vec3( 0.0f, 0.0f, -60.0f );
 		glm::mat4 cube2Model = glm::mat4( 1.0f );
 		cube2Model = glm::translate( cube2Model, cube2Pos );
-		cube2Model = glm::scale( cube2Model, glm::vec3( 100.0f, 100.0f, 1.0f ) );
+		cube2Model = glm::scale( cube2Model, glm::vec3( 100.0f, 100.0f, 100.0f ) );
 		this->_lightingShader.setMat4( "model", cube2Model );
 		glm::mat3 normMatrix2 = glm::mat3( glm::transpose( glm::inverse( view * cube2Model ) ) );
 		normMatrix2 = glm::mat3( glm::transpose( glm::inverse( view * cube2Model ) ) );
 		this->_lightingShader.setMat3( "normMatrix", normMatrix2 );
 		this->_basicMesh.draw();
+
+
 
 
 		// Cubes

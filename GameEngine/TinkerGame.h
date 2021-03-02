@@ -343,7 +343,7 @@ public:
 
 		/// Directional Light
 		this->_lightingShader.use();
-		glm::vec3 directionalLightColor = glm::vec3( 0.0f, 0.0f, 1.0f );
+		glm::vec3 directionalLightColor = glm::vec3( 1.0f, 1.0f, 1.0f );
 		glm::vec3 directionalLightDiffuse = directionalLightColor * glm::vec3( 1.0f );
 		glm::vec3 directionalLightAmbient = directionalLightDiffuse * glm::vec3( 0.3f );
 		glm::vec3 directionalLightDir = glm::vec3( 0.0f, 0.0f, -1.0f );
@@ -370,7 +370,7 @@ public:
 		glm::vec3 pointLight0Color = glm::vec3( 1.0f, 0.0f, 0.0f );
 		glm::vec3 pointLight0Diffuse = pointLight0Color * glm::vec3( 0.8f );
 		glm::vec3 pointLight0Ambient = pointLight0Diffuse * glm::vec3( 0.0f );
-		glm::vec3 pointLight0Pos = glm::vec3( 1.2f, 1.0f, 2.0f );
+		glm::vec3 pointLight0Pos = glm::vec3( 2.2f, 7.0f, 7.0f );
 		//glm::vec3 pointLight0Pos = glm::vec3( 0.0f, 0.0f, 0.0f );
 		glm::vec3 vPointLight0Pos = glm::vec3( view * glm::vec4( pointLight0Pos, 1.0f ) );
 		this->_lightingShader.setVec3( "pointLights[0].vPosition", vPointLight0Pos );
@@ -385,10 +385,10 @@ public:
 
 		/// Point Light 1
 		this->_lightingShader.use();
-		glm::vec3 pointLight1Color = glm::vec3( 0.0f, 1.0f, 0.0f );
+		glm::vec3 pointLight1Color = glm::vec3( 0.0f, 1.0f, 1.0f );
 		glm::vec3 pointLight1Diffuse = pointLight1Color * glm::vec3( 0.8f );
 		glm::vec3 pointLight1Ambient = pointLight1Diffuse * glm::vec3( 0.0f );
-		glm::vec3 pointLight1Pos = glm::vec3( 7.2f, 7.0f, 7.0f );
+		glm::vec3 pointLight1Pos = glm::vec3( 1.2f, 7.0f, 7.0f );
 		//glm::vec3 pointLight1Pos = glm::vec3( 0.0f, 0.0f, 0.0f );
 
 		glm::vec3 vPointLight1Pos = glm::vec3( view * glm::vec4( pointLight1Pos, 1.0f ) );

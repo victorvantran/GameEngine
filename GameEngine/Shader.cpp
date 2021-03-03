@@ -1,6 +1,15 @@
 #include "Shader.h"
 
-Shader::Shader() : _id( 0 ) {}
+
+Shader::Shader() : _id( 0 )
+{
+}
+
+
+Shader::Shader( const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath ) : _id( 0 )
+{
+	this->load( vertexShaderFilePath, fragmentShaderFilePath );
+}
 
 
 Shader::~Shader()
@@ -100,7 +109,7 @@ void Shader::setMat4( const std::string& name, const glm::mat4& mat ) const
 void Shader::load( const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath )
 {
 	// Compile Vertex and Fragment Shaders. Create ShaderProgram by linking the shaders.
-
+	std::cout << "SHADER LOADED" << std::endl;
 	// Load Shader Code
 	std::string vertexShaderString = Shader::loadShaderSourceCode( vertexShaderFilePath.c_str() );
 	const char* vertexShaderSourceCode = vertexShaderString.c_str();
@@ -109,15 +118,17 @@ void Shader::load( const std::string& vertexShaderFilePath, const std::string& f
 
 	// Create Vertex Shader
 	GLuint vertexShader = Shader::createShader( GL_VERTEX_SHADER, vertexShaderFilePath );
+	std::cout << "SHADER LOADED Vertex" << std::endl;
 
 	// Compile FragmentShader
 	GLuint fragmentShader = Shader::createShader( GL_FRAGMENT_SHADER, fragmentShaderFilePath );
+	std::cout << "SHADER LOADED Fragment" << std::endl;
 
 	// Create ShaderProgram
 	this->_id = glCreateProgram();
 	glAttachShader( this->_id, vertexShader );
 	glAttachShader( this->_id, fragmentShader );
-	glBindAttribLocation( this->_id, 0, "position" ); // tells openGL what part of the data to read in your pipeline
+	//glBindAttribLocation( this->_id, 0, "position" ); // tells openGL what part of the data to read in your pipeline
 	glLinkProgram( this->_id );
 	Shader::checkShaderError( this->_id, GL_LINK_STATUS );
 	glValidateProgram( this->_id );

@@ -57,30 +57,17 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\shaders\fragment_core.glsl">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\vertex_core.glsl">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\basic_fragment_shader.glsl">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\lightsource_fragment_shader.glsl">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\basic_vertex_shader.glsl">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\basic_fragment_shader_v1.glsl" />
     <None Include="assets\shaders\directional_light_fragment_shader.glsl">
       <Filter>assets\shaders</Filter>
     </None>
@@ -90,7 +77,16 @@
     <None Include="assets\shaders\spot_light_fragment_shader.glsl">
       <Filter>assets\shaders</Filter>
     </None>
-    <None Include="assets\shaders\lighting_fragment_shader.glsl">
+    <None Include="assets\shaders\basic_object_fs.shader">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\basic_object_vs.shader">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\light_source_fs.shader">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\object_fs.shader">
       <Filter>assets\shaders</Filter>
     </None>
   </ItemGroup>
@@ -110,13 +106,7 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TestMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
@@ -131,7 +121,10 @@
     <ClInclude Include="Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BasicMesh.h">
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

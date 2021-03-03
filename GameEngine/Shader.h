@@ -24,6 +24,8 @@ private:
 
 public:
 	Shader();
+	Shader( const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath );
+
 
 
 	virtual ~Shader();

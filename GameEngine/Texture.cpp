@@ -1,57 +1,77 @@
 #include "Texture.h"
 
 
-Texture::Texture() : _texture( 0 ) {}
 
 
-Texture::Texture( const char* filepath ) : _texture( 0 ) {}
+
+
+Texture::Texture( std::string dir, std::string path, aiTextureType type ) :
+	id( 0 ), directory( dir ), path( path ), type( type )
+{
+	this->generate();
+}
 
 
 Texture::~Texture()
 {
-	glDeleteTextures( 1, &this->_texture );
+
 }
 
 
-void Texture::load( const char* filepath )
+
+void Texture::generate()
 {
-	// Load a texture image and relay data to GPU
-	stbi_set_flip_vertically_on_load( true );
+	glGenTextures( 1, &this->id );
+}
 
-	std::int32_t width, height, nrChannels;
-	unsigned char* imageData = nullptr;
 
-	imageData = stbi_load( filepath, &width, &height, &nrChannels, STBI_rgb_alpha );
-	if ( imageData == nullptr )
+
+
+void Texture::load( bool flip = false )
+{
+	stbi_set_flip_vertically_on_load( flip );
+
+
+	int width, height, nChannels;
+
+	unsigned char* data = stbi_load( (this->directory + "/" + this->path).c_str(), &width, &height, &nChannels, 0 );
+
+	GLenum colorMode = GL_RGB;
+	switch ( nChannels )
 	{
-		std::cout << "Failed to load texture: " << filepath << std::endl;
+	case 1:
+		colorMode = GL_RED;
+		break;
+	case 4:
+		colorMode = GL_RGBA;
+		break;
 	}
 
-	// Texture0
-	glGenTextures( 1, &this->_texture ); // Buffer for texture
-	glBindTexture( GL_TEXTURE_2D, this->_texture );
+	if ( data != nullptr )
+	{
+		glBindTexture( GL_TEXTURE_2D, this->id );
+		glTexImage2D( GL_TEXTURE_2D, 0, colorMode, width, height, 0, colorMode, GL_UNSIGNED_BYTE, data );
+		glGenerateMipmap( GL_TEXTURE_2D );
 
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT ); // texture width wrap
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); // texture height wrap
-	//glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-	//glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData ); // Send imageData to buffer
-	glGenerateMipmap( GL_TEXTURE_2D );
-
-	// Done generating texture and mipmaps, so free the image memory
-	stbi_image_free( imageData );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	}
+	else
+	{
+		std::cout << "Image not loaded at: " << this->path << std::endl;
+	}
+	
+	stbi_image_free( data );
 
 	return;
 }
 
 
-void Texture::bind( std::uint8_t unit )
+
+void Texture::bind()
 {
-	assert( unit >= 0 && unit <= 31 );
-	glActiveTexture( GL_TEXTURE0 + unit );
-	glBindTexture( GL_TEXTURE_2D, this->_texture );
+	glBindTexture( GL_TEXTURE_2D, this->id );
 	return;
 }

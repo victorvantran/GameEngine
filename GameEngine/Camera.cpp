@@ -18,6 +18,67 @@ Camera::Camera( glm::vec3 position, glm::vec3 up, float yaw, float pitch ) :
 Camera::~Camera() {}
 
 
+
+glm::vec3 Camera::getPosition() const
+{
+	return this->_position;
+}
+
+
+glm::vec3 Camera::getFront() const
+{
+	return this->_front;
+}
+
+
+glm::vec3 Camera::getUp() const
+{
+	return this->_up;
+}
+
+
+glm::vec3 Camera::getRight() const
+{
+	return this->_right;
+}
+
+
+glm::vec3 Camera::getWorldUp() const
+{
+	return this->_worldUp;
+}
+
+
+float Camera::getYaw() const
+{
+	return this->_yaw;
+}
+
+
+float Camera::getPitch() const
+{
+	return this->_pitch;
+}
+
+
+float Camera::getPanSpeed() const
+{
+	return this->_panSpeed;
+}
+
+
+float Camera::getTiltSensitivity() const
+{
+	return this->_tiltSensitivity;
+}
+
+
+float Camera::getZoom() const
+{
+	return this->_zoom;
+}
+
+
 glm::mat4 Camera::getViewMatrix()
 {
 	return glm::lookAt( this->_position, this->_position + this->_front, this->_up );

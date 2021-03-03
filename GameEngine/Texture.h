@@ -3,39 +3,48 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 #include <cassert>
 #include <cstdint>
 #include <iostream>
+
+
+
+#include <assimp/scene.h>
+
 #include "stb/stb_image.h"
 
-class Texture
+#include <string>
+
+
+
+
+struct Texture
 {
-private:
-	GLuint _texture;
 public:
-	Texture();
+	std::uint32_t id;
+	aiTextureType type;
+	std::string directory;
+	std::string path;
+public:
+
+	Texture( std::string dir, std::string path, aiTextureType type );
 
 
-	Texture( const char* filepath );
+	~Texture();
 
 
-	virtual ~Texture();
+	void generate();
+	void load( bool flip );
+	void bind();
 
-	/**
-	 * Create a texture given a filepath to an image.
-	 *
-	 * @return void
-	 */
-	void load( const char* filepath );
-
-
-	/**
-	 * Activate and bind to a pre-made texture.
-	 *
-	 * @return void
-	 */
-	void bind( std::uint8_t unit );
 };
+
 
 
 #endif

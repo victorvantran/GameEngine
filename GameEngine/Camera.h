@@ -40,6 +40,19 @@ public:
 	~Camera();
 
 
+	// Getters
+	glm::vec3 getPosition() const;
+	glm::vec3 getFront() const;
+	glm::vec3 getUp() const;
+	glm::vec3 getRight() const;
+	glm::vec3 getWorldUp() const;
+
+	float getYaw() const;
+	float getPitch() const;
+	float getPanSpeed() const;
+	float getTiltSensitivity() const;
+	float getZoom() const;
+
 	glm::mat4 getViewMatrix();
 
 

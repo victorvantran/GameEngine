@@ -4,45 +4,50 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "stb/stb_image.h"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <cstdint>
+#include <vector>
+#include <string>
+#include <iostream>
+
+#include "Shader.h"
 #include "Vertex.h"
+#include "Texture.h"
+
 
 class Mesh
 {
 private:
+	std::vector<Vertex>			_vertices;
+	std::vector<std::uint32_t>	_indices;
+	std::vector<Texture>		_textures;
 
-protected:
-	enum class VBO
-	{
-		Position,
-		count
-	};
-
-	enum class EBO
-	{
-		Position,
-		count
-	};
-
+private:
 	GLuint _vao;
-	GLuint _vbo[( std::size_t )VBO::count];
-	GLuint _ebo[( std::size_t )EBO::count];
-	std::uint64_t _vertexCount;
-	std::uint64_t _elementCount;
+	GLuint _vbo;
+	GLuint _ebo;
 
-	bool _loaded;
+	void load();
 public:
-	Mesh();
-	virtual ~Mesh() = 0;
+	// Give mesh all necessary data
+	Mesh( std::vector<Vertex>& vertices, std::vector<std::uint32_t>& indices, std::vector<Texture>& textures );
+	~Mesh();
 
 
-	/**
-	 * Binds to the Vertex Array Object (VAO) of the mesh and calls openGL draw method
-	 *
-	 * @return void
-	 */
-	virtual void draw() = 0;
+
+	// Initialize buffers
+	void render( Shader& shader );
+	//void draw( Shader& shader );
+
+
+	void cleanup();
 };
+
+
 
 
 #endif

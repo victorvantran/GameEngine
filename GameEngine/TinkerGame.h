@@ -56,11 +56,14 @@ public:
 		stbi_set_flip_vertically_on_load( true );
 		glEnable( GL_DEPTH_TEST );
 
-		this->_backpackShader.load( "assets/shaders/basic_object_vs.shader", "assets/shaders/object_fs.shader" );
+		//this->_backpackShader.load( "assets/shaders/basic_object_vs.shader", "assets/shaders/object_fs.shader" );
+		this->_backpackShader.load( "assets/shaders/new_object_vs.shader", "assets/shaders/new_object_fs.shader" );
+
 		//this->_backpackModel.load( "assets/models/backpack/backpack.obj" );
 		//this->_backpackModel.load( "assets/models/pony_cartoon/scene.gltf" );
 		//this->_backpackModel.load( "assets/models/banana_plant/banana_plant.obj" );
-		this->_backpackModel.load( "assets/models/ufo/Low_poly_UFO.obj" );
+		//this->_backpackModel.load( "assets/models/ufo/Low_poly_UFO.obj" );
+		this->_backpackModel.load( "assets/models/companion_cube/scene.gltf" );
 		//this->_quint.load( "assets/models/people/00208_Quint009.obj" );
 		//this->_paul.load( "assets/models/people/00218_Jon005.obj" );
 		//this->_paul.load( "assets/models/people/00219_Paul008.obj" );

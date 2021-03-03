@@ -15,7 +15,7 @@ namespace settings
 
 		constexpr float DEFAULT_YAW = -90.0f;
 		constexpr float DEFAULT_PITCH = 0.0f;
-		constexpr float DEFAULT_PAN_SPEED = 20.5f; // 2.5f;
+		constexpr float DEFAULT_PAN_SPEED = 2.5f; // 2.5f;
 		constexpr float DEFAULT_TILT_SENSITIVITY = 0.02f;
 		constexpr float DEFAULT_ZOOM = 45.0f;
 	}

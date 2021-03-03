@@ -171,6 +171,8 @@
     <None Include="assets\shaders\basic_object_vs.shader" />
     <None Include="assets\shaders\directional_light_fragment_shader.glsl" />
     <None Include="assets\shaders\light_source_fs.shader" />
+    <None Include="assets\shaders\new_object_fs.shader" />
+    <None Include="assets\shaders\new_object_vs.shader" />
     <None Include="assets\shaders\object_fs.shader" />
     <None Include="assets\shaders\point_light_fragment_shader.glsl" />
     <None Include="assets\shaders\spot_light_fragment_shader.glsl" />

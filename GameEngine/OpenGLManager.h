@@ -42,7 +42,7 @@ public:
 	 * @parmeter vSynch a boolean toggle for double buffering on or off
 	 * @return void
 	 */
-	void createWindow( std::uint16_t width = 800, std::uint16_t height = 640, const std::string& title = "untitled", bool resizable = true, bool vSynch = true );
+	void createWindow( std::uint16_t width = 800, std::uint16_t height = 640, const std::string& title = "untitled", bool resizable = true, bool vSynch = false );
 
 
 	/**

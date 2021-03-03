@@ -15,7 +15,6 @@
 #include "TinkerGame.h"
 
 
-
 int main()
 {
 	Game* game = new TinkerGame( 1920, 1080, "tinker" );

@@ -1,11 +1,11 @@
 #include "Game.h"
 
 
-Game::Game() : _gameTime(), _renderManager(), _camera(),
+Game::Game() : _gameTime(), _openGLManager(), _camera(),
 _windowWidth( 800 ), _windowHeight( 640 ), _windowTitle( "untitled" ) {}
 
 
-Game::Game( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) : _gameTime(), _renderManager(), _camera(),
+Game::Game( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) : _gameTime(), _openGLManager(), _camera(),
 _windowWidth( windowWidth ), _windowHeight( windowHeight ), _windowTitle( windowTitle ) {}
 
 
@@ -16,11 +16,11 @@ void Game::run()
 {
 	this->initialize();
 
-	this->_renderManager.createWindow( this->_windowWidth, this->_windowHeight, this->_windowTitle );
+	this->_openGLManager.createWindow( this->_windowWidth, this->_windowHeight, this->_windowTitle );
 
 	this->loadContent();
 
-	while ( !glfwWindowShouldClose( this->_renderManager.getWindow() ) )
+	while ( !glfwWindowShouldClose( this->_openGLManager.getWindow() ) )
 	{
 		// Update time
 		this->_gameTime.setDeltaTime( ( float )( glfwGetTime() - this->_gameTime.getTotalElapsedSeconds() ) );
@@ -36,7 +36,7 @@ void Game::run()
 		this->render();
 	}
 
-	this->_renderManager.destroyWindow();
+	this->_openGLManager.destroyWindow();
 }
 
 
@@ -46,6 +46,9 @@ void Game::processInput( GLFWwindow* window )
 
 	// Process Mouse
 	// Mouse Movement
+
+
+
 	double mouseX, mouseY;
 	glfwGetCursorPos( window, &mouseX, &mouseY );
 	float xOffset = mouseX - this->_prevMouseX;
@@ -62,40 +65,43 @@ void Game::processInput( GLFWwindow* window )
 
 
 	// Process Keys
-	if ( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
+	if ( Keyboard::getKey( GLFW_KEY_ESCAPE ) )
 	{
 		glfwSetWindowShouldClose( window, true );
 	}
 
-	if ( glfwGetKey( window, GLFW_KEY_W ) == GLFW_PRESS )
+	if ( Keyboard::getKey( GLFW_KEY_W ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::FORWARD, deltaTime );
 	}
-	if ( glfwGetKey( window, GLFW_KEY_S ) == GLFW_PRESS )
+
+	if ( Keyboard::getKey( GLFW_KEY_S ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::BACKWARD, deltaTime );
 	}
 
-	if ( glfwGetKey( window, GLFW_KEY_A ) == GLFW_PRESS )
+	if ( Keyboard::getKey( GLFW_KEY_A ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::LEFT, deltaTime );
-
 	}
-	if ( glfwGetKey( window, GLFW_KEY_D ) == GLFW_PRESS )
+
+	if ( Keyboard::getKey( GLFW_KEY_D ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::RIGHT, deltaTime );
 	}
 
-	if ( glfwGetKey( window, GLFW_KEY_Q ) == GLFW_PRESS )
+
+	if ( Keyboard::getKey( GLFW_KEY_Q ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::UP, deltaTime );
 
 	}
-	if ( glfwGetKey( window, GLFW_KEY_E ) == GLFW_PRESS )
+	if ( Keyboard::getKey( GLFW_KEY_E ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::DOWN, deltaTime );
 
 	}
+
 
 
 

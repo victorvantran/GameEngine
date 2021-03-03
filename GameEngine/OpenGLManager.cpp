@@ -1,20 +1,19 @@
-#include "RenderManager.h"
-#include "InputsManager.h"
+#include "OpenGLManager.h"
 
 
 ///
-RenderManager::RenderManager() 
+OpenGLManager::OpenGLManager()
 {
 }
 
 
-RenderManager::~RenderManager()
+OpenGLManager::~OpenGLManager()
 {
 	this->destroyWindow();
 }
 
 
-void RenderManager::createWindow( std::uint16_t width, std::uint16_t height, const std::string& title,
+void OpenGLManager::createWindow( std::uint16_t width, std::uint16_t height, const std::string& title,
 	bool resizable, bool vSynch )
 {
 	// Initialize the framework with the correct version (3.3) and using CORE_PROFILE mode
@@ -69,40 +68,31 @@ void RenderManager::createWindow( std::uint16_t width, std::uint16_t height, con
 
 	// Callback Handling
 	glfwSetWindowUserPointer( this->_window, reinterpret_cast< void* >( this ) );
-	//glfwSetCursorPosCallback( this->_window, InputsManager::mouse_callback );
-	//glfwSetFramebufferSizeCallback( this->_window, InputsManager::resize_window_callback );
-	//glfwSetKeyCallback( this->_window, InputsManager::keyfun_callback );
+
+	glfwSetFramebufferSizeCallback( this->_window, OpenGLManager::resize_window_callback );
+	glfwSetCursorPosCallback( this->_window, Mouse::cursorPosCallback );
+	glfwSetMouseButtonCallback( this->_window, Mouse::mouseButtonCallback );
+	glfwSetScrollCallback( this->_window, Mouse::scrollCallback );
+	glfwSetKeyCallback( this->_window, Keyboard::keyCallback );
 	return;
 }
 
 
-void RenderManager::destroyWindow()
+void OpenGLManager::destroyWindow()
 {
 	glfwTerminate();
 	return;
 }
 
 
-GLFWwindow* RenderManager::getWindow()
+GLFWwindow* OpenGLManager::getWindow()
 {
 	return this->_window;
 }
 
 
-void RenderManager::resize_window_callback( GLint width, GLint height )
+void OpenGLManager::resize_window_callback( GLFWwindow* window, GLint width, GLint height )
 {
 	glViewport( 0, 0, width, height );
-	return;
-}
-
-
-void RenderManager::mouse_callback( GLdouble x, GLdouble y )
-{
-	return;
-}
-
-
-void RenderManager::keyfun_callback( GLint key, GLint scancode, GLint action, GLint mods )
-{
 	return;
 }

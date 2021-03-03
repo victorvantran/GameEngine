@@ -101,6 +101,22 @@ public:
 	 */
 	void updateCameraOrientation();
 
+
+
+
+
+
+
+		/**
+	 * To be called every time the mouse is moved. Perform subsequent tasks.
+	 *
+	 * Update the camera.
+	 *
+	 * @param width an int of the current working area width
+	 * @param height an int of the current the working area height
+	 * @return void
+	 */
+
 };
 
 

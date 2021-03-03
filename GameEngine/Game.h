@@ -7,8 +7,10 @@
 
 #include "Settings.h"
 #include "GameTime.h"
-#include "RenderManager.h"
+#include "OpenGLManager.h"
 #include "Camera.h"
+
+
 
 
 
@@ -16,7 +18,7 @@ class Game
 {
 protected:
 	GameTime _gameTime;
-	RenderManager _renderManager;
+	OpenGLManager _openGLManager;
 	Camera _camera;
 
 	std::uint16_t _windowWidth;

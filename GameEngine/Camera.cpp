@@ -109,7 +109,7 @@ void Camera::processTiltInput( float xOffset, float yOffset, GLboolean constrain
 	this->_yaw += xOffset;
 	this->_yaw = glm::mod( this->_yaw + xOffset, 360.0f );
 
-	this->_pitch += yOffset;
+	this->_pitch -= yOffset;
 
 	if ( constrainPitch )
 	{

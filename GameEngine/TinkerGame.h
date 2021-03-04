@@ -63,7 +63,8 @@ public:
 		//this->_backpackModel.load( "assets/models/pony_cartoon/scene.gltf" );
 		//this->_backpackModel.load( "assets/models/banana_plant/banana_plant.obj" );
 		//this->_backpackModel.load( "assets/models/ufo/Low_poly_UFO.obj" );
-		this->_backpackModel.load( "assets/models/companion_cube/scene.gltf" );
+		this->_backpackModel.load( "assets/models/cube/scene.gltf" );
+		//this->_backpackModel.load( "assets/models/companion_cube/scene.gltf" );
 		//this->_quint.load( "assets/models/people/00208_Quint009.obj" );
 		//this->_paul.load( "assets/models/people/00218_Jon005.obj" );
 		//this->_paul.load( "assets/models/people/00219_Paul008.obj" );
@@ -93,21 +94,27 @@ public:
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 
-		glm::mat4 projection = glm::perspective( glm::radians( this->_camera._zoom ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 2000.0f );
-		glm::mat4 view = this->_camera.getViewMatrix();
 
+
+
+
+
+
+		glm::mat4 view = this->_camera.getViewMatrix();
+		glm::mat4 projection = glm::perspective( glm::radians( this->_camera._zoom ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 2000.0f );
 
 		this->_backpackShader.use();
-		this->_backpackShader.setMat4( "projection", projection );
 		this->_backpackShader.setMat4( "view", view );
+		this->_backpackShader.setMat4( "projection", projection );
+
 		this->_backpackShader.setVec3( "viewPos", this->_camera.getPosition() );
 
 		
 		// Directional Light
 		this->_backpackShader.use();
-		glm::vec3 directionalLightColor = glm::vec3( 1.0f, 1.0f, 1.0f );
+		glm::vec3 directionalLightColor = glm::vec3( 1.0f, 0.0f, 0.0f );
 		glm::vec3 directionalLightDiffuse = directionalLightColor * glm::vec3( 0.8f );
-		glm::vec3 directionalLightAmbient = directionalLightDiffuse * glm::vec3( 0.1f );
+		glm::vec3 directionalLightAmbient = directionalLightDiffuse * glm::vec3( 0.0f );
 		//glm::vec3 directionalLightDir = glm::vec3( 0.0f, 0.0f, -1.0f );
 		//glm::vec3 directionalLightDir = glm::vec3( 0.0f, -1.0f, 0.0f );
 		glm::vec3 directionalLightDir = glm::vec3( -1.0f, 0.0f, 0.0f );
@@ -120,6 +127,16 @@ public:
 		this->_backpackShader.setVec3( "directionalLight.ambient", directionalLightAmbient );
 		this->_backpackShader.setVec3( "directionalLight.diffuse", directionalLightDiffuse );
 		this->_backpackShader.setVec3( "directionalLight.specular", glm::vec3( 1.0f ) );
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -178,7 +195,6 @@ public:
 			this->_daud.render( this->_backpackShader );
 		}
 		*/
-
 
 		this->_backpackModel.render( this->_backpackShader );
 

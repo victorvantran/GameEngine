@@ -44,68 +44,44 @@ void Game::processInput( GLFWwindow* window )
 {
 	float deltaTime = this->_gameTime.getDeltaTime();
 
-	// Process Mouse
-	// Mouse Movement
 
-
-
-	double mouseX, mouseY;
-	glfwGetCursorPos( window, &mouseX, &mouseY );
-	float xOffset = mouseX - this->_prevMouseX;
-	float yOffset = mouseY - this->_prevMouseY;
-	this->_prevMouseX = mouseX;
-	this->_prevMouseY = mouseY;
-	if ( xOffset != 0.0f || yOffset != 0.0f )
-	{
-		this->_camera.processTiltInput( xOffset, -yOffset );
-	}
-
-	// Mouse Scroll
-	//this->_camera.processZoom( 0.0f * deltaTime );
-
-
-	// Process Keys
+	// Close Window
 	if ( Keyboard::getKey( GLFW_KEY_ESCAPE ) )
 	{
 		glfwSetWindowShouldClose( window, true );
 	}
 
+
+	// Camera
+	this->_camera.processTiltInput( Mouse::getDeltaX(), Mouse::getDeltaY() );
+	this->_camera.processZoom( Mouse::getScrollDeltaY() );
 	if ( Keyboard::getKey( GLFW_KEY_W ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::FORWARD, deltaTime );
 	}
-
 	if ( Keyboard::getKey( GLFW_KEY_S ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::BACKWARD, deltaTime );
 	}
-
 	if ( Keyboard::getKey( GLFW_KEY_A ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::LEFT, deltaTime );
 	}
-
 	if ( Keyboard::getKey( GLFW_KEY_D ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::RIGHT, deltaTime );
 	}
-
-
 	if ( Keyboard::getKey( GLFW_KEY_Q ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::UP, deltaTime );
-
 	}
 	if ( Keyboard::getKey( GLFW_KEY_E ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::DOWN, deltaTime );
-
 	}
 
 
-
-
-
+	return;
 }
 
 

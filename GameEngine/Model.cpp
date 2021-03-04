@@ -170,12 +170,23 @@ std::vector<Texture> Model::loadMaterialTextures( aiMaterial* material, aiTextur
 
 void Model::render( Shader& shader )
 {
+	/*
 	glm::mat4 model = glm::mat4( 1.0f );
 	model = glm::translate( model, this->_position );
 	model = glm::scale( model, this->_scale );
 	model = glm::rotate( model, glm::radians( 90.0f ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
 	shader.setMat4( "model", model );
 	shader.setFloat( "material.shininess", 0.5f );
+	*/
+
+
+	glm::mat4 model = glm::mat4( 1.0f );
+	model = glm::translate( model, this->_position );
+	model = glm::scale( model, this->_scale );
+	//model = glm::rotate( model, std::sinf( ( float )glfwGetTime() ) * 5.0f, glm::vec3( 0.0f, 1.0f, 0.0f ) );
+	shader.setMat4( "model", model );
+	shader.setFloat( "material.shininess", 32.0f );
+
 	
 	for ( Mesh& mesh : this->_meshes )
 	{

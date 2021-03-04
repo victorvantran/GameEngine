@@ -94,5 +94,6 @@ GLFWwindow* OpenGLManager::getWindow()
 void OpenGLManager::resize_window_callback( GLFWwindow* window, GLint width, GLint height )
 {
 	glViewport( 0, 0, width, height );
+	// [!] reupdate Game Screen width and height
 	return;
 }

@@ -95,13 +95,8 @@ public:
 
 
 
-
-
-
-
-
 		glm::mat4 view = this->_camera.getViewMatrix();
-		glm::mat4 projection = glm::perspective( glm::radians( this->_camera._zoom ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 2000.0f );
+		glm::mat4 projection = glm::perspective( glm::radians( this->_camera.getZoom() ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 2000.0f );
 
 		this->_backpackShader.use();
 		this->_backpackShader.setMat4( "view", view );
@@ -115,9 +110,9 @@ public:
 		glm::vec3 directionalLightColor = glm::vec3( 1.0f, 0.0f, 0.0f );
 		glm::vec3 directionalLightDiffuse = directionalLightColor * glm::vec3( 0.8f );
 		glm::vec3 directionalLightAmbient = directionalLightDiffuse * glm::vec3( 0.0f );
-		//glm::vec3 directionalLightDir = glm::vec3( 0.0f, 0.0f, -1.0f );
+		glm::vec3 directionalLightDir = glm::vec3( 0.0f, 0.0f, -1.0f );
 		//glm::vec3 directionalLightDir = glm::vec3( 0.0f, -1.0f, 0.0f );
-		glm::vec3 directionalLightDir = glm::vec3( -1.0f, 0.0f, 0.0f );
+		//glm::vec3 directionalLightDir = glm::vec3( -1.0f, 0.0f, 0.0f );
 
 		glm::mat4 directionalLightModel = glm::mat4( 1.0f );
 		directionalLightModel = glm::translate( directionalLightModel, glm::vec3( 0.0f, 0.0f, 0.0f ) );

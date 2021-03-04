@@ -33,11 +33,10 @@ bool Mouse::_buttonsChanged[GLFW_MOUSE_BUTTON_LAST] = { false };
      }
 
      Mouse::_deltaX = x - Mouse::_prevX;
-     Mouse::_deltaY = y - Mouse::_prevY;
+     Mouse::_deltaY = Mouse::_prevY - y;
 
      Mouse::_prevX = x;
      Mouse::_prevY = y;
-
      return;
 }
 

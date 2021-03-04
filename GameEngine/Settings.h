@@ -1,12 +1,21 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <cstdint>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace settings
 {
+	namespace screen
+	{
+		constexpr std::uint32_t DEFAULT_WIDTH = 1920;
+		constexpr std::uint32_t DEFAULT_HEIGHT = 1080;
+
+	}
+
 	namespace camera
 	{
 		constexpr glm::vec3 DEFAULT_POSITION = glm::vec3( 0.0f, 0.0f, 5.0f );

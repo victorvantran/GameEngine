@@ -22,13 +22,44 @@ class Shader
 private:
 	std::uint32_t _id;
 
+private:
+	/**
+	 * Helper function to load in source code from a shader file path
+	 *
+	 * @return void
+	 */
+	static std::string loadShaderSourceCode( const char* filepath );
+
+
+	/**
+	 * Generalized error checking for the compilization and linking process
+	 *
+	 * @return void
+	 */
+	static void checkShaderError( GLuint alias, GLenum buildFlag );
+
+
+	/**
+	 * Create the shader program
+	 *
+	 * @return void
+	 */
+	static GLuint createShader( GLenum shaderType, const std::string& filePath );
 public:
 	Shader();
+
 	Shader( const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath );
 
-
-
 	virtual ~Shader();
+
+
+
+	/**
+	 * Given paths to a vertex shader and a fragment shader, create a shader program
+	 *
+	 * @return void
+	 */
+	void load( const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath );
 
 
 	/// Getters
@@ -77,42 +108,11 @@ public:
 
 
 	/**
-	 * Given paths to a vertex shader and a fragment shader, create a shader program
-	 *
-	 * @return void
-	 */
-	void load( const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath );
-
-
-	/**
 	 * Use this shader program
 	 *
 	 * @return void
 	 */
 	void use();
-private:
-	/**
-	 * Helper function to load in source code from a shader file path
-	 *
-	 * @return void
-	 */
-	static std::string loadShaderSourceCode( const char* filepath );
-
-
-	/**
-	 * Generalized error checking for the compilization and linking process
-	 *
-	 * @return void
-	 */
-	static void checkShaderError( GLuint alias, GLenum buildFlag );
-
-
-	/**
-	 * Create the shader program
-	 *
-	 * @return void
-	 */
-	static GLuint createShader( GLenum shaderType, const std::string& filePath );
 };
 
 #endif

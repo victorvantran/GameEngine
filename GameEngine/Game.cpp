@@ -53,8 +53,17 @@ void Game::processInput( GLFWwindow* window )
 
 
 	// Camera
-	this->_camera.processTiltInput( Mouse::getDeltaX(), Mouse::getDeltaY() );
-	this->_camera.processZoom( Mouse::getScrollDeltaY() );
+	double mouseDeltaX = Mouse::getDeltaX();
+	double mouseDeltaY = Mouse::getDeltaY();
+	if ( mouseDeltaX != 0.0 || mouseDeltaY != 0.0 )
+	{
+		this->_camera.processTiltInput( mouseDeltaX, mouseDeltaY );
+	}
+	double mouseScrollDeltaY = Mouse::getScrollDeltaY();
+	if ( mouseScrollDeltaY != 0.0 )
+	{
+		this->_camera.processZoom( mouseScrollDeltaY );
+	}
 	if ( Keyboard::getKey( GLFW_KEY_W ) )
 	{
 		this->_camera.processPanInput( Camera::PanDirection::FORWARD, deltaTime );

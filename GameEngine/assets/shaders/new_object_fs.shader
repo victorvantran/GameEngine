@@ -65,7 +65,8 @@ uniform DirectionalLight directionalLight;
 vec3 getDirectionalLight( DirectionalLight directionalLight, vec3 vNormalUnit, vec3 vViewDirUnit )
 {
 	// Ambient light
-	vec3 ambient = directionalLight.ambient * ( vec3( texture( material.diffuse1, TexCoord ) ) );
+	//vec3 ambient = directionalLight.ambient * ( vec3( texture( material.diffuse1, TexCoord ) ) );
+	vec3 ambient = directionalLight.ambient;
 
 	// Diffuse light
 	float diff = max( dot( vNormalUnit, directionalLight.vDirection ), 0.0 );
@@ -96,7 +97,7 @@ struct PointLight
 	vec3 specular;
 };
 
-#define NR_POINT_LIGHTS 2
+#define NR_POINT_LIGHTS 1
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 vec3 getPointLight( PointLight pointLight, vec3 vNormalUnit, vec3 vFragPos, vec3 vViewDirUnit )
@@ -105,16 +106,16 @@ vec3 getPointLight( PointLight pointLight, vec3 vNormalUnit, vec3 vFragPos, vec3
 	vec3 vLightDirUnit = normalize( pointLight.vPosition - vFragPos );
 
 	// Ambient light
-	vec3 ambient = pointLight.ambient * ( vec3( texture( material.diffuse0, TexCoord ) ) );
+	vec3 ambient = pointLight.ambient;
 
 	// Diffuse light
 	float diffImpact = max( dot( vNormalUnit, vLightDirUnit ), 0.0f );
-	vec3 diffuse = pointLight.diffuse * ( diffImpact * vec3( texture( material.diffuse0, TexCoord ) ) );
+	vec3 diffuse = pointLight.diffuse * diffImpact;
 
 	// Specular light
 	vec3 vReflectDir = reflect( -vLightDirUnit, vNormalUnit );
 	float specImpact = pow( max( dot( vViewDirUnit, vReflectDir ), 0.0f ), material.shininess );
-	vec3 specular = pointLight.specular * ( specImpact * vec3( texture( material.specular0, TexCoord ) ) );
+	vec3 specular = pointLight.specular * specImpact;
 
 	// Attenuate
 	float distance = length( pointLight.vPosition - vFragPos );
@@ -203,15 +204,13 @@ void main()
 	// Directional Lighting
 	cumulativeLight += getDirectionalLight( directionalLight, vNormalUnit, vViewDirUnit );
 
-
-
-	/*
 	// Point Lighting
 	for ( int i = 0; i < NR_POINT_LIGHTS; i++ )
 	{
 		cumulativeLight += getPointLight( pointLights[i], vNormalUnit, vFragPos, vViewDirUnit );
 	}
 
+	/*
 	// Spot Lighting
 	for ( int i = 0; i < NR_SPOT_LIGHTS; i++ )
 	{

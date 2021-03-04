@@ -11,9 +11,12 @@
 class TinkerGame : public Game
 {
 private:
+	Shader _lightSourceShader;
 	Shader _backpackShader;
-	Model _backpackModel = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
-	
+
+	Model _testModel = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+	Model _testModel2 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+
 	/*
 	Model _quint = Model( glm::vec3( 0.0f, 0.0f, 100.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
 	Model _jon = Model( glm::vec3( 100.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
@@ -24,13 +27,16 @@ private:
 public:
 	TinkerGame() : 
 		Game(), 
+		_lightSourceShader(),
 		_backpackShader()
+
 		//_backpackModel("assets/models/backpack/backpack.obj")
 		{}
 
 	~TinkerGame() 
 	{
-		this->_backpackModel.cleanup();
+		this->_testModel.cleanup();
+		this->_testModel2.cleanup();
 		/*
 		_quint.cleanup();
 		_jon.cleanup();
@@ -49,14 +55,26 @@ public:
 		stbi_set_flip_vertically_on_load( true );
 		glEnable( GL_DEPTH_TEST );
 
+
+		this->_lightSourceShader.load( "assets/shaders/new_object_vs.shader", "assets/shaders/light_source_fs.shader" );
+		//this->_lightSourceShader.load( "assets/shaders/new_object_vs.shader", "assets/shaders/new_object_fs.shader" );
+
+
+
+
+
 		//this->_backpackShader.load( "assets/shaders/basic_object_vs.shader", "assets/shaders/object_fs.shader" );
 		this->_backpackShader.load( "assets/shaders/new_object_vs.shader", "assets/shaders/new_object_fs.shader" );
+		//this->_backpackShader.load( "assets/shaders/new_object_vs.shader", "assets/shaders/light_source_fs.shader" );
+
 
 		//this->_backpackModel.load( "assets/models/backpack/backpack.obj" );
 		//this->_backpackModel.load( "assets/models/pony_cartoon/scene.gltf" );
 		//this->_backpackModel.load( "assets/models/banana_plant/banana_plant.obj" );
 		//this->_backpackModel.load( "assets/models/ufo/Low_poly_UFO.obj" );
-		this->_backpackModel.load( "assets/models/cube/scene.gltf" );
+		this->_testModel.load( "assets/models/cube/scene.gltf" );
+		this->_testModel2.load( "assets/models/cube/scene.gltf" );
+
 		//this->_backpackModel.load( "assets/models/companion_cube/scene.gltf" );
 		//this->_quint.load( "assets/models/people/00208_Quint009.obj" );
 		//this->_paul.load( "assets/models/people/00218_Jon005.obj" );
@@ -83,7 +101,8 @@ public:
 	void render()
 	{
 		// Clear the colorbuffer
-		glClearColor( 0.8f, 0.8f, 0.8f, 1.0f );
+		//glClearColor( 0.8f, 0.8f, 0.8f, 1.0f );
+		glClearColor( 0.3f, 0.3f, 0.3f, 1.0f );
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 
@@ -95,22 +114,38 @@ public:
 		this->_backpackShader.setMat4( "projection", projection );
 		this->_backpackShader.setVec3( "viewPos", this->_camera.getPosition() );
 
+		this->_lightSourceShader.use();
+		this->_lightSourceShader.setMat4( "view", view );
+		this->_lightSourceShader.setMat4( "projection", projection );
+		this->_lightSourceShader.setVec3( "viewPos", this->_camera.getPosition() );
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+		//// TestModel0
+		this->_backpackShader.use();
 		glm::mat4 model = glm::mat4( 1.0f );
-		model = glm::translate( model, this->_backpackModel.getPosition() );
-		model = glm::scale( model, this->_backpackModel.getScale() );
+		model = glm::translate( model, this->_testModel.getPosition() );
+		model = glm::scale( model, this->_testModel.getScale() );
 		this->_backpackShader.setMat4( "model", model );
 
-
-		//glm::vec3 vDirectionalLightDirUnit = normalize( vec3( view * model * vec4( normalize( -directionalLight.wDirection ), 0.0f ) ) );
+		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_backpackShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_backpackShader.setFloat( "material.shininess", 32.0f );
 
 		
-		// Directional Light
+		/// Directional Light
 		this->_backpackShader.use();
 		glm::vec3 directionalLightColor = glm::vec3( 1.0f, 0.0f, 0.0f );
 		glm::vec3 directionalLightDiffuse = directionalLightColor * glm::vec3( 0.8f );
@@ -118,7 +153,6 @@ public:
 		glm::vec3 directionalLightDir = glm::vec3( 0.0f, 0.0f, -1.0f );
 		//glm::vec3 directionalLightDir = glm::vec3( 0.0f, -1.0f, 0.0f );
 		//glm::vec3 directionalLightDir = glm::vec3( -1.0f, 0.0f, 0.0f );
-
 		glm::mat4 directionalLightModel = glm::mat4( 1.0f );
 		directionalLightModel = glm::translate( directionalLightModel, glm::vec3( 0.0f, 0.0f, 0.0f ) );
 		glm::vec3 vDirectionalLightDirUnit = glm::normalize( glm::vec3( view * model * glm::vec4( glm::normalize( -directionalLightDir ), 0.0f ) ) );
@@ -129,15 +163,21 @@ public:
 		this->_backpackShader.setVec3( "directionalLight.specular", glm::vec3( 1.0f ) );
 
 
-
-
-
-
-
-
-
-
-
+		/// Point Light 0
+		this->_backpackShader.use();
+		glm::vec3 pointLight0Color = glm::vec3( 0.0f, 1.0f, 0.0f );
+		glm::vec3 pointLight0Diffuse = pointLight0Color * glm::vec3( 0.8f );
+		glm::vec3 pointLight0Ambient = pointLight0Diffuse * glm::vec3( 0.0f );
+		glm::vec3 pointLight0Pos = glm::vec3( 0.0f, 2.0f, 0.0f );
+		//glm::vec3 pointLight0Pos = glm::vec3( 0.0f, 0.0f, 0.0f );
+		glm::vec3 vPointLight0Pos = glm::vec3( view * glm::vec4( pointLight0Pos, 1.0f ) );
+		this->_backpackShader.setVec3( "pointLights[0].vPosition", vPointLight0Pos );
+		this->_backpackShader.setVec3( "pointLights[0].ambient", pointLight0Ambient );
+		this->_backpackShader.setVec3( "pointLights[0].diffuse", pointLight0Diffuse );
+		this->_backpackShader.setVec3( "pointLights[0].specular", glm::vec3( 1.0f ) );
+		this->_backpackShader.setFloat( "pointLights[0].kConstant", 1.0f );
+		this->_backpackShader.setFloat( "pointLights[0].kLinear", 0.09f );
+		this->_backpackShader.setFloat( "pointLights[0].kQuadratic", 0.032f );
 
 
 		/*
@@ -173,6 +213,42 @@ public:
 
 
 
+		this->_testModel.render( this->_backpackShader );
+		
+
+
+
+
+
+
+
+		//// LightSourceModel
+		this->_lightSourceShader.use();
+		glm::vec3 pointLightSource0Pos = pointLight0Pos;
+		glm::mat4 pointLightSource0Model = glm::mat4( 1.0f );
+		pointLightSource0Model = glm::translate( pointLightSource0Model, pointLightSource0Pos );
+		pointLightSource0Model = glm::scale( pointLightSource0Model, glm::vec3( 0.2f ) );
+		this->_lightSourceShader.setMat4( "model", pointLightSource0Model );
+
+		vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * pointLightSource0Model ) ) );
+		this->_lightSourceShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_lightSourceShader.setFloat( "material.shininess", 32.0f );
+
+
+		this->_lightSourceShader.setVec3( "lightColor", pointLight0Color );
+
+		this->_testModel.render( _lightSourceShader );
+
+
+
+
+
+
+
+
+
+
 
 		/*
 		glm::vec3 offset;
@@ -180,7 +256,7 @@ public:
 		for ( int i = -100; i < 100; i++ )
 		{
 			offset = glm::vec3( std::sinf( glfwGetTime() ) * 100.0f + i * 20, 0.0f, std::cosf( glfwGetTime() ) * 100.0f + i * 20 );
-			
+
 			this->_quint._position = glm::vec3( 0.0f, 0.0f, 100.0f ) + offset;
 			this->_jon._position = glm::vec3( 100.0f, 0.0f, 0.0f ) + offset;
 			this->_paul._position = glm::vec3( 0.0f, 0.0f, -100.0f ) + offset;
@@ -197,26 +273,9 @@ public:
 		*/
 
 
-		this->_backpackShader.use();
 
 
-		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
-		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
-		this->_backpackShader.setMat3( "vNormMatrix", vNormMatrix );
 
-		this->_backpackShader.setFloat( "material.shininess", 32.0f );
-
-		this->_backpackModel.render( this->_backpackShader );
-
-	
-
-		/*
-		// render the loaded model
-		glm::mat4 model = glm::mat4( 1.0f );
-		model = glm::translate( model, glm::vec3( 0.0f, 0.0f, 0.0f ) ); // translate it down so it's at the center of the scene
-		model = glm::scale( model, glm::vec3( 1.0f, 1.0f, 1.0f ) );	// it's a bit too big for our scene, so scale it down
-		this->_backpackShader.setMat4( "model", model );
-		*/
 
 
 		// Swap Buffers

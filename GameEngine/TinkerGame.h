@@ -97,6 +97,18 @@ public:
 
 
 
+
+
+
+
+		glm::mat4 model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_backpackModel.getPosition() );
+		model = glm::scale( model, this->_backpackModel.getScale() );
+		this->_backpackShader.setMat4( "model", model );
+
+
+		//glm::vec3 vDirectionalLightDirUnit = normalize( vec3( view * model * vec4( normalize( -directionalLight.wDirection ), 0.0f ) ) );
+
 		
 		// Directional Light
 		this->_backpackShader.use();
@@ -109,8 +121,8 @@ public:
 
 		glm::mat4 directionalLightModel = glm::mat4( 1.0f );
 		directionalLightModel = glm::translate( directionalLightModel, glm::vec3( 0.0f, 0.0f, 0.0f ) );
-		glm::vec3 vDirectionalLightPos = glm::vec3( view * directionalLightModel * glm::vec4( directionalLightDir, 1.0f ) );
-		this->_backpackShader.setVec3( "directionalLight.vDirection", vDirectionalLightPos );
+		glm::vec3 vDirectionalLightDirUnit = glm::normalize( glm::vec3( view * model * glm::vec4( glm::normalize( -directionalLightDir ), 0.0f ) ) );
+		this->_backpackShader.setVec3( "directionalLight.vDirection", vDirectionalLightDirUnit );
 		this->_backpackShader.setVec3( "directionalLight.wDirection", directionalLightDir );
 		this->_backpackShader.setVec3( "directionalLight.ambient", directionalLightAmbient );
 		this->_backpackShader.setVec3( "directionalLight.diffuse", directionalLightDiffuse );
@@ -187,10 +199,6 @@ public:
 
 		this->_backpackShader.use();
 
-		glm::mat4 model = glm::mat4( 1.0f );
-		model = glm::translate( model, this->_backpackModel.getPosition() );
-		model = glm::scale( model, this->_backpackModel.getScale() );
-		this->_backpackShader.setMat4( "model", model );
 
 		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
 		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );

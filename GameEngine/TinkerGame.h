@@ -27,11 +27,7 @@ public:
 		_backpackShader()
 		//_backpackModel("assets/models/backpack/backpack.obj")
 		{}
-	TinkerGame( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) :
-		Game( windowWidth, windowHeight, windowTitle ), 
-		_backpackShader()
-		//_backpackModel( "assets/models/backpack/backpack.obj" )
-		{}
+
 	~TinkerGame() 
 	{
 		this->_backpackModel.cleanup();
@@ -45,10 +41,7 @@ public:
 	}
 
 
-	void initialize()
-	{
 
-	}
 
 
 	void loadContent()
@@ -80,7 +73,7 @@ public:
 
 	void update()
 	{
-		this->processInput( this->_openGLManager.getWindow() );
+		this->processInput();
 
 		return;
 	}
@@ -94,9 +87,8 @@ public:
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 
-
 		glm::mat4 view = this->_camera.getViewMatrix();
-		glm::mat4 projection = glm::perspective( glm::radians( this->_camera.getZoom() ), ( float )this->_windowWidth / ( float )this->_windowHeight, 0.1f, 2000.0f );
+		glm::mat4 projection = glm::perspective( glm::radians( this->_camera.getZoom() ), ( float )this->_screen.getWidth() / ( float )this->_screen.getHeight(), 0.1f, 2000.0f );
 
 		this->_backpackShader.use();
 		this->_backpackShader.setMat4( "view", view );
@@ -205,7 +197,8 @@ public:
 
 
 		// Swap Buffers
-		glfwSwapBuffers( this->_openGLManager.getWindow() );
+		this->_screen.newFrame();
+		//glfwSwapBuffers( this->_openGLManager.getWindow() );
 		return;
 	}
 

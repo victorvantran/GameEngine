@@ -7,7 +7,7 @@
 
 #include "Settings.h"
 #include "GameTime.h"
-#include "OpenGLManager.h"
+#include "Screen.h"
 #include "Camera.h"
 
 
@@ -18,24 +18,15 @@ class Game
 {
 protected:
 	GameTime _gameTime;
-	OpenGLManager _openGLManager;
+	Screen _screen;
 	Camera _camera;
 
-	std::uint16_t _windowWidth;
-	std::uint16_t _windowHeight;
-	std::string _windowTitle;
-
-
-	double _prevMouseX;
-	double _prevMouseY;
 public:
+	//Game( std::uint16_t width = settings::screen::DEFAULT_WIDTH, std::uint16_t height = settings::screen::DEFAULT_HEIGHT, std::string title = "untitled", bool resizable = false, bool vSynch = true );
+
 	Game();
-
-
-	Game( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle );
-
-
 	~Game();
+
 
 	/**
 	 * The first function to be called after successful construction. Run the game.
@@ -50,15 +41,15 @@ public:
 	 *
 	 * @return void
 	 */
-	void processInput( GLFWwindow* window );
+	void processInput();
 
 
 	/**
-	 * To be called immediately when running. Initialize game logics.
+	 * To be called immediately when running. Sets up the screen, input, and outputs
 	 *
 	 * @return void
 	 */
-	virtual void initialize() = 0;
+	virtual void initialize();
 
 
 	/**

@@ -30,7 +30,6 @@ bool Screen::initiate( std::string title, bool resizable )
 	glfwWindowHint( GLFW_RESIZABLE, resizable );
 	glfwWindowHint( GLFW_FOCUSED, true );
 
-
 	this->_window = glfwCreateWindow( Screen::_width, Screen::_height, title.c_str(), NULL, NULL );
 	if ( this->_window == NULL )
 	{
@@ -40,14 +39,6 @@ bool Screen::initiate( std::string title, bool resizable )
 
 	// Tell GLFW to make the context of the window the main context on the current thread
 	glfwMakeContextCurrent( this->_window );
-
-
-	// Initalize GLAD to have more compatibiltiy in our framework
-	if ( !gladLoadGLLoader( ( GLADloadproc )glfwGetProcAddress ) )
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return false;
-	}
 
 	// Initial Window Work Area
 	// Set window to be in the center of the monitor
@@ -67,7 +58,6 @@ void Screen::setAttributes( bool vSynch )
 {
 	glViewport( 0, 0, Screen::_width, Screen::_height );
 
-
 	// Vsynch toggle
 	glfwSwapInterval( vSynch ? 1 : 0 );
 
@@ -77,9 +67,12 @@ void Screen::setAttributes( bool vSynch )
 	// Mouse
 	glfwSetInputMode( this->_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED );
 
+	return;
+}
 
 
-
+void Screen::setCallbacks()
+{
 	// Window callbacks
 	glfwSetFramebufferSizeCallback( this->_window, Screen::frameBufferSizeCallback );
 
@@ -91,16 +84,9 @@ void Screen::setAttributes( bool vSynch )
 	// Keyboard callbacks
 	glfwSetKeyCallback( this->_window, Keyboard::keyCallback );
 
-
-
-
 	return;
 }
 
-void Screen::setCallbacks()
-{
-
-}
 
 void Screen::clear()
 {

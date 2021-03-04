@@ -1,12 +1,9 @@
 #include "Game.h"
 
 
-Game::Game() : _gameTime(), _openGLManager(), _camera(),
-_windowWidth( 800 ), _windowHeight( 640 ), _windowTitle( "untitled" ) {}
+Game::Game() :
+	_gameTime(), _screen(), _camera() {}
 
-
-Game::Game( std::uint16_t windowWidth, std::uint16_t windowHeight, std::string windowTitle ) : _gameTime(), _openGLManager(), _camera(),
-_windowWidth( windowWidth ), _windowHeight( windowHeight ), _windowTitle( windowTitle ) {}
 
 
 Game::~Game() {}
@@ -16,11 +13,9 @@ void Game::run()
 {
 	this->initialize();
 
-	this->_openGLManager.createWindow( this->_windowWidth, this->_windowHeight, this->_windowTitle );
-
 	this->loadContent();
 
-	while ( !glfwWindowShouldClose( this->_openGLManager.getWindow() ) )
+	while ( !this->_screen.getShouldClose() )
 	{
 		// Update time
 		this->_gameTime.setDeltaTime( ( float )( glfwGetTime() - this->_gameTime.getTotalElapsedSeconds() ) );
@@ -36,11 +31,43 @@ void Game::run()
 		this->render();
 	}
 
-	this->_openGLManager.destroyWindow();
+	//this->_openGLManager.destroyWindow();
 }
 
 
-void Game::processInput( GLFWwindow* window )
+void Game::initialize()
+{
+	// Initialize the framework with the correct version (3.3) and using CORE_PROFILE mode
+	glfwInit();
+	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+	glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+
+#ifdef __APPLE__
+	glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
+#endif
+
+	if ( !this->_screen.initiate() )
+	{
+		glfwTerminate();
+		return;
+	}
+
+	// Initalize GLAD to have more compatibiltiy in our framework
+	if ( !gladLoadGLLoader( ( GLADloadproc )glfwGetProcAddress ) )
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		glfwTerminate();
+		return;
+	}
+
+	this->_screen.setAttributes();
+	this->_screen.setCallbacks();
+	return;
+}
+
+
+void Game::processInput()
 {
 	float deltaTime = this->_gameTime.getDeltaTime();
 
@@ -48,7 +75,7 @@ void Game::processInput( GLFWwindow* window )
 	// Close Window
 	if ( Keyboard::getKey( GLFW_KEY_ESCAPE ) )
 	{
-		glfwSetWindowShouldClose( window, true );
+		this->_screen.setShouldClose( true );
 	}
 
 

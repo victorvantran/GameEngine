@@ -51,7 +51,7 @@ public:
 	/**
 	 * Set the attributes of the window
 	 *
-	 * Attributes: viewport, vSynch, zBuffering, etc.
+	 * Attributes: viewport, vSynch, etc.
 	 *
 	 * @parmeter vSynch a boolean toggle for double buffering on or off
 	 * @return void

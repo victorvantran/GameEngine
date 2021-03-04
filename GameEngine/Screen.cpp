@@ -61,9 +61,6 @@ void Screen::setAttributes( bool vSynch )
 	// Vsynch toggle
 	glfwSwapInterval( vSynch ? 1 : 0 );
 
-	// Z-buffering
-	glEnable( GL_DEPTH_TEST );
-
 	// Mouse
 	glfwSetInputMode( this->_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED );
 

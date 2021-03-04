@@ -180,12 +180,16 @@ void Model::render( Shader& shader )
 	*/
 
 
+	/*
 	glm::mat4 model = glm::mat4( 1.0f );
 	model = glm::translate( model, this->_position );
 	model = glm::scale( model, this->_scale );
 	//model = glm::rotate( model, std::sinf( ( float )glfwGetTime() ) * 5.0f, glm::vec3( 0.0f, 1.0f, 0.0f ) );
 	shader.setMat4( "model", model );
+
 	shader.setFloat( "material.shininess", 32.0f );
+	*/
+
 
 	
 	for ( Mesh& mesh : this->_meshes )
@@ -199,6 +203,7 @@ void Model::render( Shader& shader )
 	return;
 }
 
+
 void Model::cleanup() // [!]
 {
 
@@ -206,4 +211,29 @@ void Model::cleanup() // [!]
 
 
 
+/// Getters
+glm::vec3 Model::getPosition() const
+{
+	return this->_position;
+}
 
+glm::vec3 Model::getScale() const
+{
+	return this->_scale;
+}
+
+
+
+/// Setters
+void Model::setPosition( glm::vec3 position )
+{
+	this->_position = position;
+	return;
+}
+
+
+void Model::setScale( glm::vec3 scale )
+{
+	this->_scale = scale;
+	return;
+}

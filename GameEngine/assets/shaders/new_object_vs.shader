@@ -12,7 +12,7 @@ uniform mat4 projection;
 
 
 /// Lighting
-uniform mat3 normMatrix;
+uniform mat3 vNormMatrix;
 
 
 // World Space
@@ -41,7 +41,10 @@ void main()
 	wNormal = mat3( transpose( inverse( model ) ) ) * aNormal;
 	wFragPos = vec3( model * vec4( aPosition, 1.0f ) );
 
-	vNormal = normMatrix * aNormal;
+	//vNormal = normMatrix * aNormal;
+	//vNormal = vNormMatrix * aNormal;
+	vNormal = mat3( transpose( inverse( view * model ) ) ) * aNormal;
+
 	vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
 
 

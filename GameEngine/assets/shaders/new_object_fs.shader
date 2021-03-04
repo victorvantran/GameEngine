@@ -16,6 +16,9 @@ in vec3 vFragPos;
 out vec4 FragColor;
 
 
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 
 
@@ -65,24 +68,37 @@ vec3 getDirectionalLight( DirectionalLight directionalLight, vec3 vNormalUnit, v
 	vec3 ambient = directionalLight.ambient * ( vec3( texture( material.diffuse1, TexCoord ) ) );
 
 
+	/*
 	// Diffuse light
 	vec3 wNormalUnit = normalize( wNormal );
 	vec3 wLightDirUnit = normalize( -directionalLight.wDirection );
 	float diff = max( dot( wNormalUnit, wLightDirUnit ), 0.0 );
 	//vec3 diffuse = directionalLight.diffuse * ( diff * vec3( texture( material.diffuse1, TexCoord ) ) ); // diff* lightColor;
 	vec3 diffuse = directionalLight.diffuse * diff ; 
+	*/
 
 
+	// Diffuse light
+	//vec3 vLightDirUnit = normalize( -directionalLight.vDirection );
+
+	//vec3 vLightDirUnit = normalize( vec3( view * vec4( normalize( -directionalLight.vDirection ), 0.0f ) ) );
+	vec3 vLightDirUnit = normalize( vec3( view * model * vec4( normalize( -directionalLight.wDirection ), 0.0f ) ) );
+	float diff = max( dot( vNormalUnit, vLightDirUnit ), 0.0 );
+	//vec3 diffuse = directionalLight.diffuse * ( diff * vec3( texture( material.diffuse1, TexCoord ) ) ); // diff* lightColor;
+	vec3 diffuse = directionalLight.diffuse * diff;
+
+
+	/*
 	// Specular light
 	vec3 wViewDirUnit = normalize( viewPos - wFragPos );
 	vec3 wReflectDir = reflect( -wLightDirUnit, wNormalUnit );
 	float specImpact = pow( max( dot( wViewDirUnit, wReflectDir ), 0.0 ), material.shininess );
 	//vec3 specular = directionalLight.specular * ( specImpact * vec3( texture( material.specular0, TexCoord ) ) );
 	vec3 specular = directionalLight.specular * specImpact;
+	*/
 
 
-
-	return ambient + diffuse + specular;
+	return ambient + diffuse /*+ specular*/;
 }
 
 

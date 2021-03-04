@@ -116,6 +116,16 @@ public:
 
 	void cleanup();
 
+
+	/// Getters
+	glm::vec3 getPosition() const;
+
+	glm::vec3 getScale() const;
+
+	/// Setters
+	void setPosition( glm::vec3 position );
+
+	void setScale( glm::vec3 scale );
 };
 
 

@@ -93,8 +93,9 @@ public:
 		this->_backpackShader.use();
 		this->_backpackShader.setMat4( "view", view );
 		this->_backpackShader.setMat4( "projection", projection );
-
 		this->_backpackShader.setVec3( "viewPos", this->_camera.getPosition() );
+
+
 
 		
 		// Directional Light
@@ -183,9 +184,23 @@ public:
 		}
 		*/
 
+
+		this->_backpackShader.use();
+
+		glm::mat4 model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_backpackModel.getPosition() );
+		model = glm::scale( model, this->_backpackModel.getScale() );
+		this->_backpackShader.setMat4( "model", model );
+
+		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_backpackShader.setMat3( "vNormMatrix", vNormMatrix );
+
+		this->_backpackShader.setFloat( "material.shininess", 32.0f );
+
 		this->_backpackModel.render( this->_backpackShader );
 
-
+	
 
 		/*
 		// render the loaded model

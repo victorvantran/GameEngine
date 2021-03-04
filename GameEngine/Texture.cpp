@@ -1,10 +1,6 @@
 #include "Texture.h"
 
 
-
-
-
-
 Texture::Texture( std::string dir, std::string path, aiTextureType type ) :
 	id( 0 ), directory( dir ), path( path ), type( type )
 {
@@ -18,19 +14,15 @@ Texture::~Texture()
 }
 
 
-
 void Texture::generate()
 {
 	glGenTextures( 1, &this->id );
 }
 
 
-
-
 void Texture::load( bool flip = false )
 {
 	stbi_set_flip_vertically_on_load( flip );
-
 
 	int width, height, nChannels;
 

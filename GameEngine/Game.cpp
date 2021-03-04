@@ -63,6 +63,9 @@ void Game::initialize()
 
 	this->_screen.setAttributes();
 	this->_screen.setCallbacks();
+
+	// Z-buffering
+	glEnable( GL_DEPTH_TEST );
 	return;
 }
 

@@ -1,0 +1,77 @@
+# Blender MTL File: 'Pizza_BLEND.blend'
+# Material Count: 6
+
+newmtl Cheese
+Ns 174.391612
+Ka 1.000000 1.000000 1.000000
+Kd 0.037469 0.037469 0.037469
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.800000 Textures\\Cheese_norm.png
+map_Kd Textures\\Cheese_diff.png
+map_Ns Textures\\Cheese_rough.png
+
+newmtl Deck
+Ns 31.999996
+Ka 1.000000 1.000000 1.000000
+Kd 0.008018 0.004919 0.008779
+Ks 0.350000 0.350000 0.350000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.500000 -s 2.000000 2.000000 2.000000 Textures\\Wood_norm.png
+map_Kd -s 2.000000 2.000000 2.000000 Textures\\Wood_diff.png
+map_Ns -s 2.000000 2.000000 2.000000 Textures\\Wood_rough.png
+
+newmtl Leaf
+Ns 506.250000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Pizza
+Ns 31.999996
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.350000 0.350000 0.350000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.500000 Textures\\Pizza_norm.png
+map_Kd Textures\\Pizza_diff.png
+map_Ns Textures\\Pizza_rough.png
+
+newmtl Salami
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.500000 Textures\\Salami_norm.png
+map_Kd Textures\\Salami_diff.png
+map_Ns Textures\\Salami_rough.png
+
+newmtl Tomato
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.413998 0.413998 0.413998
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.650000 Textures\\Tom_norm.png
+map_Kd Textures\\Tom_diff.png
+map_Ns Textures\\Tom_rough.png

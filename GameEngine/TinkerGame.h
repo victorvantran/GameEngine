@@ -70,7 +70,7 @@ public:
 
 		this->_testModel1.load( "assets/models/cube/scene.obj" );
 
-		this->_testModel2.load( "assets/models/window_cube/scene.obj" );
+		this->_testModel2.load( "assets/models/cube/scene.obj" );
 		return;
 	}
 
@@ -118,7 +118,7 @@ public:
 		/// Directional Light
 		this->_objectShader.use();
 		glm::vec4 directionalLightColor = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
-		glm::vec4 directionalLightDiffuse = directionalLightColor * glm::vec4( 0.8f );
+		glm::vec4 directionalLightDiffuse = directionalLightColor * glm::vec4( 1.0f );
 		glm::vec4 directionalLightAmbient = directionalLightDiffuse * glm::vec4( 0.0f );
 		glm::vec4 directionalLightSpecular = glm::vec4( 1.0f );
 		glm::vec3 directionalLightDir = glm::vec3( 0.0f, -1.0f, -1.0f );

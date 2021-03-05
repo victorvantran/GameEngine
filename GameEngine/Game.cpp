@@ -67,18 +67,23 @@ void Game::initialize()
 
 
 
-	// Initial enables
+	/// Initial enables
+	// Depth Testing
 	glEnable( GL_DEPTH_TEST );
 	glDepthFunc( GL_LESS );
 
-
+	// Stencil Testing
 	glEnable( GL_STENCIL_TEST );
 	glStencilFunc( GL_NOTEQUAL, 1, 0xFF );
 	glStencilOp( GL_KEEP, GL_KEEP, GL_REPLACE );
 
-
+	// Blending
 	glEnable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	//glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+	// Face Culling
+	glEnable( GL_CULL_FACE );
+	glCullFace( GL_BACK );
 
 	return;
 }

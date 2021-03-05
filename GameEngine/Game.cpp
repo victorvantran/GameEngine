@@ -64,8 +64,27 @@ void Game::initialize()
 	this->_screen.setAttributes();
 	this->_screen.setCallbacks();
 
+
+	/*
 	// Z-buffering
 	glEnable( GL_DEPTH_TEST );
+	glDepthFunc( GL_LESS );
+
+
+	// Stencil-buffering
+	glEnable( GL_STENCIL_TEST );
+	*/
+
+
+	glEnable( GL_DEPTH_TEST );
+	glDepthFunc( GL_LESS );
+
+
+	glEnable( GL_STENCIL_TEST );
+	glStencilFunc( GL_NOTEQUAL, 1, 0xFF );
+	glStencilOp( GL_KEEP, GL_KEEP, GL_REPLACE );
+
+
 	return;
 }
 

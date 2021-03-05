@@ -13,6 +13,8 @@ class TinkerGame : public Game
 private:
 	Shader _lightSourceShader;
 	Shader _lightingShader;
+	Shader _outlineShader;
+
 
 	Model _testModel0 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
 	Model _testModel1 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
@@ -28,7 +30,8 @@ public:
 	TinkerGame() : 
 		Game(), 
 		_lightSourceShader(),
-		_lightingShader()
+		_lightingShader(),
+		_outlineShader()
 
 		//_backpackModel("assets/models/backpack/backpack.obj")
 		{}
@@ -58,16 +61,18 @@ public:
 
 		this->_lightSourceShader.load( "assets/shaders/new_object_vs.shader", "assets/shaders/light_source_fs.shader" );
 		this->_lightingShader.load( "assets/shaders/new_object_vs.shader", "assets/shaders/new_object_fs.shader" );
+		//this->_outlineShader.load( "assets/shaders/new_object_vs.shader", "assets/shaders/single_color_fs.shader" );
+		this->_outlineShader.load( "assets/shaders/single_color_vs.shader", "assets/shaders/single_color_fs.shader" );
 
 
-		//this->_testModel0.load( "assets/models/backpack/backpack.obj" );
+		this->_testModel0.load( "assets/models/backpack/backpack.obj" );
 		//this->_testModel0.load( "assets/models/pony_cartoon/scene.gltf" );
 		//this->_testModel0.load( "assets/models/banana_plant/banana_plant.obj" );
 		//this->_testModel0.load( "assets/models/ufo/Low_poly_UFO.obj" );
 		//this->_testModel0.load( "assets/models/pizza/scene.obj" );
 		//this->_testModel0.load( "assets/models/cube/scene.gltf" );
 		//this->_testModel0.load( "assets/models/wooden_crate/scene.obj" );
-		this->_testModel0.load( "assets/models/dice/scene.obj" );
+		//this->_testModel0.load( "assets/models/dice/scene.obj" );
 
 		//this->_testModel0.load( "assets/models/suited/scene.obj" );
 		//this->_testModel0.load( "assets/models/tree/scene.obj" );
@@ -97,12 +102,20 @@ public:
 	{
 		// Clear the colorbuffer
 		//glClearColor( 0.8f, 0.8f, 0.8f, 1.0f );
+
+
+
 		glClearColor( 0.3f, 0.3f, 0.3f, 1.0f );
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
+
+		//glStencilMask( 0x00 );
 
 
 		glm::mat4 view = this->_camera.getViewMatrix();
 		glm::mat4 projection = glm::perspective( glm::radians( this->_camera.getZoom() ), ( float )this->_screen.getWidth() / ( float )this->_screen.getHeight(), 0.1f, 2000.0f );
+		
+		glStencilFunc( GL_ALWAYS, 1, 0xFF );
+		glStencilMask( 0xFF );
 
 		this->_lightingShader.use();
 		this->_lightingShader.setMat4( "view", view );
@@ -115,6 +128,9 @@ public:
 		this->_lightSourceShader.setVec3( "viewPos", this->_camera.getPosition() );
 
 
+		this->_outlineShader.use();
+		this->_outlineShader.setMat4( "view", view );
+		this->_outlineShader.setMat4( "projection", projection );
 
 
 
@@ -198,6 +214,46 @@ public:
 
 		this->_testModel0.render( this->_lightingShader );
 		
+
+
+
+
+
+
+		// Upscaled TestModel0
+		glStencilFunc( GL_NOTEQUAL, 1, 0xFF );
+		glStencilMask( 0x00 );
+		glDisable( GL_DEPTH_TEST );
+
+
+
+
+		// Render UpScaledTestModel0
+
+		this->_outlineShader.use();
+		model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_testModel0.getPosition() );
+		model = glm::scale( model, this->_testModel0.getScale() );
+		this->_outlineShader.setMat4( "model", model );
+		this->_outlineShader.setFloat( "scale", 0.02f );
+		this->_outlineShader.setVec3( "color", glm::vec3( 0.0f, 0.0f, 1.0f ) );
+
+		this->_testModel0.render( this->_outlineShader );
+
+
+
+
+
+
+
+
+
+
+
+		glStencilMask( 0xFF );
+		glStencilFunc( GL_ALWAYS, 0, 0xFF );
+		glEnable( GL_DEPTH_TEST );
+
 
 
 		//// LightSourceModel

@@ -67,7 +67,24 @@ public:
 	void setCallbacks();
 
 
+
+	/**
+	 * Clears the screen
+	 *
+	 * Clears both color and z buffers
+	 * Clears both color and z buffers
+	 *
+	 * @return void
+	 */
 	void clear();
+
+
+
+	/**
+	 * Swaps buffers
+	 *
+	 * @return void
+	 */
 	void newFrame();
 
 

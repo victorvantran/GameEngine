@@ -50,7 +50,6 @@ public:
 	void loadContent()
 	{
 		stbi_set_flip_vertically_on_load( true );
-		glEnable( GL_DEPTH_TEST );
 
 
 		this->_lightSourceShader.load( "assets/shaders/object_vs.shader", "assets/shaders/light_source_fs.shader" );
@@ -152,17 +151,17 @@ public:
 		glm::vec4 spotLight0Diffuse = spotLight0Color * glm::vec4( 1.0f );
 		glm::vec4 spotLight0Ambient = spotLight0Diffuse * glm::vec4( 0.0f );
 		glm::vec4 spotLight0Specular = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
-		glm::vec3 lSpotLight0Pos = glm::vec3( 0.0f, 0.0f, 0.0f ); // glm::vec3( 2.0f, 0.0f, 2.0f + 0.0f * std::sinf( glfwGetTime() ) );
-		glm::vec3 lSpotLight0Dir = glm::vec3( 0.0f, 0.0f, -1.0f );
+		glm::vec3 spotLight0Pos = glm::vec3( 0.0f, 0.0f, 0.0f ); // glm::vec3( 2.0f, 0.0f, 2.0f + 0.0f * std::sinf( glfwGetTime() ) );
+		glm::vec3 spotLight0Dir = glm::vec3( 0.0f, 0.0f, -1.0f );
 		// Position
 		glm::mat4 spotLight0PosModel = glm::mat4( 1.0f );
 		spotLight0PosModel = glm::translate( spotLight0PosModel, glm::vec3( 1.5f, 0.0f, 1.5f + 0.0f * std::sinf( glfwGetTime() ) ) );
 		spotLight0PosModel = glm::rotate( spotLight0PosModel, glm::radians( 45.0f + 45.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
-		glm::vec3 vSpotLight0Pos = glm::vec3( view * spotLight0PosModel * glm::vec4( lSpotLight0Pos, 1.0f ) );
+		glm::vec3 vSpotLight0Pos = glm::vec3( view * spotLight0PosModel * glm::vec4( spotLight0Pos, 1.0f ) );
 		// Direction
 		glm::mat4 spotLight0DirModel = glm::mat4( 1.0f );
 		spotLight0DirModel = glm::rotate( spotLight0DirModel, glm::radians( 45.0f + 45.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
-		glm::vec3 vSpotLight0Direction = glm::vec3( view * spotLight0DirModel * glm::vec4( lSpotLight0Dir, 0.0f ) );
+		glm::vec3 vSpotLight0Direction = glm::vec3( view * spotLight0DirModel * glm::vec4( spotLight0Dir, 0.0f ) );
 		// Set uniform
 		this->_objectShader.setVec3( "spotLights[0].vPosition", vSpotLight0Pos );
 		this->_objectShader.setVec3( "spotLights[0].vDirection", vSpotLight0Direction );
@@ -182,22 +181,10 @@ public:
 
 
 
-
-
-
-		//// Renders before outline
+		//// Renders before outlining (covered by outline)
 		glStencilMask( 0x00 );
 
 		//// Render Floor
-		/*
-		this->_lightSourceShader.use();
-		glm::mat4 floorModel = glm::mat4( 1.0f );
-		floorModel = glm::translate( floorModel, glm::vec3( 2.0f, -10.0f, 2.0f ) );
-		floorModel = glm::scale( floorModel, glm::vec3( 50.0f, 1.0f, 50.0f ) );
-		this->_lightSourceShader.setMat4( "model", floorModel );
-		this->_lightSourceShader.setVec4( "lightColor", glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-		this->_testModel2.render( this->_lightSourceShader );
-		*/
 		this->_objectShader.use();
 		glm::mat4 floorModel = glm::mat4( 1.0f );
 		floorModel = glm::translate( floorModel, glm::vec3( 2.0f, -10.0f, 2.0f ) );
@@ -211,13 +198,16 @@ public:
 
 
 
-		//// Renders during outline
+
+
+
+
+		//// Renders with outlining
 		// Discriminate in passing all stencil bits for the upcoming fragments, passing it's origin value by masking with 0xFF
 		// Updates the stencil buffer with 1s wherever the object's fragments are rendered
 		glStencilFunc( GL_ALWAYS, 1, 0xFF );
 		// Enable writes to the stencil buffer
 		glStencilMask( 0xFF );
-
 
 		//// Render Dice
 		this->_objectShader.use();
@@ -230,26 +220,27 @@ public:
 		this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
 		this->_objectShader.setFloat( "material.shininess", 32.0f );
 		this->_testModel0.render( this->_objectShader );
-		
 
 
 
 
 
 
-		//// Render Dice Outline
+
+
+
+		//// Render outlines
 		// Discriminate in passing the stencil values that do not equal 1, passing it's origin value by masking with 0xFF
 		glStencilFunc( GL_NOTEQUAL, 1, 0xFF );
 		// Disable stencil buffer writing
 		glStencilMask( 0x00 );
 		// Ignore depth test for outline to not allow the "outline effect" to discriminate other fragments in depth testings
 		glDisable( GL_DEPTH_TEST );
+
+		//// Render PointLightSourceModel Outline
 		this->_outlineShader.use();
-		model = glm::mat4( 1.0f );
-		model = glm::translate( model, this->_testModel0.getPosition() );
-		model = glm::scale( model, this->_testModel0.getScale() );
 		this->_outlineShader.setMat4( "model", model );
-		this->_outlineShader.setFloat( "scale", 0.52f );
+		this->_outlineShader.setFloat( "scale", 0.1f );
 		this->_outlineShader.setVec4( "color", glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) );
 		this->_testModel0.render( this->_outlineShader );
 
@@ -257,8 +248,7 @@ public:
 
 
 
-
-		//// Renders after outlining
+		//// Renders after outlining (not covered by outline)
 		// Return to stencil normalcy (Enable stencil buffer writing, pass through all values with no modifying, allow for depth testing)
 		glStencilMask( 0xFF );
 		glStencilFunc( GL_ALWAYS, 0, 0xFF );
@@ -275,8 +265,6 @@ public:
 		this->_lightSourceShader.setVec4( "lightColor", pointLight0Color );
 		this->_testModel1.render( _lightSourceShader );
 
-
-
 		//// Render SpotLightSourceModel
 		this->_lightSourceShader.use();
 		glm::mat4 spotLightSource0Model = glm::mat4( 1.0f );
@@ -286,6 +274,11 @@ public:
 		this->_lightSourceShader.setMat4( "model", spotLightSource0Model );
 		this->_lightSourceShader.setVec4( "lightColor", spotLight0Color );
 		this->_testModel1.render( _lightSourceShader );
+
+
+
+
+
 
 
 		this->_screen.newFrame();

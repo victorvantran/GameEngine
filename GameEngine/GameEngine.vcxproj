@@ -172,6 +172,8 @@
     <None Include="assets\shaders\object_vs.shader" />
     <None Include="assets\shaders\outline_fs.shader" />
     <None Include="assets\shaders\outline_vs.shader" />
+    <None Include="assets\shaders\skybox_fs.shader" />
+    <None Include="assets\shaders\skybox_vs.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />

@@ -14,6 +14,7 @@ private:
 	Shader _objectShader;
 	Shader _lightSourceShader;
 	Shader _outlineShader;
+	Shader _skyboxShader;
 
 	Model _testModel0 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
 	Model _testModel1 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
@@ -29,8 +30,6 @@ public:
 		_lightSourceShader(),
 		_outlineShader(),
 		_cubeMapTextureId( 0 )
-
-		//_backpackModel("assets/models/backpack/backpack.obj")
 		{}
 
 	~TinkerGame() 
@@ -38,15 +37,7 @@ public:
 		this->_testModel0.cleanup();
 		this->_testModel1.cleanup();
 		this->_testModel2.cleanup();
-
-
-		/*
-		_quint.cleanup();
-		_jon.cleanup();
-		_paul.cleanup();
-		_zeef.cleanup();
-		_daud.cleanup();
-		*/
+		glDeleteTextures( 1, &this->_cubeMapTextureId );
 	}
 
 
@@ -61,6 +52,9 @@ public:
 		this->_lightSourceShader.load( "assets/shaders/object_vs.shader", "assets/shaders/light_source_fs.shader" );
 		this->_objectShader.load( "assets/shaders/object_vs.shader", "assets/shaders/object_fs.shader" );
 		this->_outlineShader.load( "assets/shaders/outline_vs.shader", "assets/shaders/outline_fs.shader" );
+		this->_skyboxShader.load( "assets/shaders/skybox_vs.shader", "assets/shaders/skybox_fs.shader" );
+
+
 
 		//this->_testModel0.load( "assets/models/backpack/backpack.obj" );
 		//this->_testModel0.load( "assets/models/pony_cartoon/scene.gltf" );
@@ -82,11 +76,28 @@ public:
 
 
 
+
+
+
+
+		
+
 		glGenTextures( 1, &this->_cubeMapTextureId );
 		glBindTexture( GL_TEXTURE_CUBE_MAP, this->_cubeMapTextureId );
 
 
+		
+		std::vector<std::string> textures_faces = std::vector<std::string>{
+			"assets/textures/skybox/right.png",
+			"assets/textures/skybox/left.png",
+			"assets/textures/skybox/top.png",
+			"assets/textures/skybox/bottom.png",
+			"assets/textures/skybox/front.png",
+			"assets/textures/skybox/back.png",
+		};
+		
 
+		/*
 		std::vector<std::string> textures_faces = std::vector<std::string>{
 			"assets/textures/skybox/right.jpg",
 			"assets/textures/skybox/left.jpg",
@@ -95,17 +106,32 @@ public:
 			"assets/textures/skybox/front.jpg",
 			"assets/textures/skybox/back.jpg",
 		};
+		*/
 
-		GLint width, height, nrChannels;
+
+		GLint width, height, nChannels;
 		unsigned char* data;
 		for ( unsigned int i = 0; i < textures_faces.size(); i++ )
 		{
-			data = stbi_load( textures_faces[i].c_str(), &width, &height, &nrChannels, 0 );
+			data = stbi_load( textures_faces[i].c_str(), &width, &height, &nChannels, 0 );
 			if ( data != nullptr )
 			{
+
+				GLenum colorMode = GL_RGB;
+				switch ( nChannels )
+				{
+				case 1:
+					colorMode = GL_RED;
+					break;
+				case 4:
+					colorMode = GL_RGBA;
+					break;
+				}
+
+
 				glTexImage2D(
 					GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-					0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+					0, colorMode, width, height, 0, colorMode, GL_UNSIGNED_BYTE, data
 				);
 			}
 			else
@@ -123,9 +149,9 @@ public:
 		glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 		glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE );
 
-		glBindTexture( GL_TEXTURE_2D, this->_cubeMapTextureId );
 
-		//glDeleteTextures( 1, &this->_cubeMapTextureId );
+				
+
 		return;
 	}
 
@@ -163,6 +189,13 @@ public:
 
 
 
+		glm::mat4 omniscientView = glm::mat4( glm::mat3( this->_camera.getViewMatrix() ) );
+		this->_skyboxShader.use();
+		this->_skyboxShader.setMat4( "view", omniscientView );
+		//this->_skyboxShader.setMat4( "view", view );
+		this->_skyboxShader.setMat4( "projection", projection );
+
+
 
 
 
@@ -174,9 +207,9 @@ public:
 		this->_objectShader.use();
 		glm::vec4 directionalLightColor = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
 		glm::vec4 directionalLightDiffuse = directionalLightColor * glm::vec4( 1.0f );
-		glm::vec4 directionalLightAmbient = directionalLightDiffuse * glm::vec4( 0.0f );
+		glm::vec4 directionalLightAmbient = directionalLightDiffuse * glm::vec4( 0.025f );
 		glm::vec4 directionalLightSpecular = glm::vec4( 1.0f );
-		glm::vec3 directionalLightDir = glm::vec3( 0.0f, -1.0f, -1.0f );
+		glm::vec3 directionalLightDir = glm::vec3( 0.0f, -1.0f, 1.0f );
 		glm::mat4 directionalLightModel = glm::mat4( 1.0f );
 		directionalLightModel = glm::translate( directionalLightModel, glm::vec3( 0.0f, 0.0f, 0.0f ) );
 		glm::vec3 vDirectionalLightDirUnit = glm::normalize( glm::vec3( view * directionalLightModel * glm::vec4( glm::normalize( -directionalLightDir ), 0.0f ) ) );
@@ -234,10 +267,20 @@ public:
 
 
 
-
-
 		//// Renders before outlining (covered by outline)
 		glStencilMask( 0x00 );
+
+
+
+		//// Skybox
+		glDepthMask( GL_FALSE );
+		glCullFace( GL_FRONT );
+		this->_skyboxShader.use();
+		glBindTexture( GL_TEXTURE_CUBE_MAP, this->_cubeMapTextureId );
+		this->_testModel0.render( this->_skyboxShader );
+		glDepthMask( GL_TRUE );
+		glCullFace( GL_BACK );
+
 
 		//// Render Floor
 		this->_objectShader.use();
@@ -284,7 +327,7 @@ public:
 
 
 
-		/*
+		
 		//// Render outlines
 		// Discriminate in passing the stencil values that do not equal 1, passing it's origin value by masking with 0xFF
 		glStencilFunc( GL_NOTEQUAL, 1, 0xFF );
@@ -299,7 +342,7 @@ public:
 		this->_outlineShader.setFloat( "scale", 0.1f );
 		this->_outlineShader.setVec4( "color", glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) );
 		this->_testModel0.render( this->_outlineShader );
-		*/
+		
 
 
 
@@ -329,11 +372,25 @@ public:
 		spotLightSource0Model = glm::scale( spotLightSource0Model, glm::vec3( 0.2f ) );
 		this->_lightSourceShader.setMat4( "model", spotLightSource0Model );
 		this->_lightSourceShader.setVec4( "lightColor", spotLight0Color );
-		this->_testModel1.render( _lightSourceShader );
+		this->_testModel1.render( this->_lightSourceShader );
 
 
 
 
+
+
+
+		/*
+		//// Skybox
+		glDepthMask( GL_FALSE );
+		glCullFace( GL_FRONT );
+		this->_skyboxShader.use();
+		glBindTexture( GL_TEXTURE_2D, this->_cubeMapTextureId );
+
+		this->_testModel0.render( this->_skyboxShader );
+		glDepthMask( GL_TRUE );
+		glCullFace( GL_BACK );
+		*/
 
 
 

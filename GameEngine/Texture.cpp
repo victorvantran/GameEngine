@@ -67,3 +67,11 @@ void Texture::bind()
 	glBindTexture( GL_TEXTURE_2D, this->id );
 	return;
 }
+
+
+
+void Texture::cleanup()
+{
+	glDeleteTextures( 1, &this->id );
+	return;
+}

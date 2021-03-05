@@ -204,9 +204,19 @@ void Model::render( Shader& shader )
 }
 
 
-void Model::cleanup() // [!]
+void Model::cleanup()
 {
+	for ( Mesh& mesh : this->_meshes )
+	{
+		mesh.cleanup();
+	}
 
+	for ( Texture& texture : this->_textures_loaded )
+	{
+		texture.cleanup();
+	}
+
+	return;
 }
 
 

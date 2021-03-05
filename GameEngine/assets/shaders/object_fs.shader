@@ -200,6 +200,12 @@ void main()
 	FragColor = cumulativeLight;
 	//FragColor = vec4( vec3(cumulativeLight), 0.4f );
 
+
+	//float average = ( FragColor.r + FragColor.g + FragColor.b ) / 3.0;
+	//FragColor = vec4( average, average, average, 1.0 );
+
+
+	const float offset = 1.0 / 300.0;
 	return;
 
 }

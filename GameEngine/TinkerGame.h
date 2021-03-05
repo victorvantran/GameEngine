@@ -19,12 +19,16 @@ private:
 	Model _testModel1 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
 	Model _testModel2 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
 
+
+	GLuint _cubeMapTextureId;
+
 public:
 	TinkerGame() : 
 		Game(), 
 		_objectShader(),
 		_lightSourceShader(),
-		_outlineShader()
+		_outlineShader(),
+		_cubeMapTextureId( 0 )
 
 		//_backpackModel("assets/models/backpack/backpack.obj")
 		{}
@@ -34,6 +38,8 @@ public:
 		this->_testModel0.cleanup();
 		this->_testModel1.cleanup();
 		this->_testModel2.cleanup();
+
+
 		/*
 		_quint.cleanup();
 		_jon.cleanup();
@@ -64,13 +70,62 @@ public:
 		//this->_testModel0.load( "assets/models/cube/scene.gltf" );
 		//this->_testModel0.load( "assets/models/wooden_crate/scene.obj" );
 		this->_testModel0.load( "assets/models/dice/scene.obj" );
-		//this->_testModel0.load( "assets/models/suited/scene.obj" );
-		//this->_testModel0.load( "assets/models/tree/scene.obj" );
+		//this->_testModel0.load( "assets/models/apple/scene.gltf" );
 
 
 		this->_testModel1.load( "assets/models/cube/scene.obj" );
 
 		this->_testModel2.load( "assets/models/cube/scene.obj" );
+
+
+
+
+
+
+		glGenTextures( 1, &this->_cubeMapTextureId );
+		glBindTexture( GL_TEXTURE_CUBE_MAP, this->_cubeMapTextureId );
+
+
+
+		std::vector<std::string> textures_faces = std::vector<std::string>{
+			"assets/textures/skybox/right.jpg",
+			"assets/textures/skybox/left.jpg",
+			"assets/textures/skybox/top.jpg",
+			"assets/textures/skybox/bottom.jpg",
+			"assets/textures/skybox/front.jpg",
+			"assets/textures/skybox/back.jpg",
+		};
+
+		GLint width, height, nrChannels;
+		unsigned char* data;
+		for ( unsigned int i = 0; i < textures_faces.size(); i++ )
+		{
+			data = stbi_load( textures_faces[i].c_str(), &width, &height, &nrChannels, 0 );
+			if ( data != nullptr )
+			{
+				glTexImage2D(
+					GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+					0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+				);
+			}
+			else
+			{
+				std::cout << "Cubemap failed to load at path: " << textures_faces[i] << std::endl;
+			}
+
+
+			stbi_image_free( data );
+		}
+
+		glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+		glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+		glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE );
+
+		glBindTexture( GL_TEXTURE_2D, this->_cubeMapTextureId );
+
+		//glDeleteTextures( 1, &this->_cubeMapTextureId );
 		return;
 	}
 
@@ -132,7 +187,7 @@ public:
 
 		/// Point Light 0
 		this->_objectShader.use();
-		glm::vec4 pointLight0Color = glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f );
+		glm::vec4 pointLight0Color = glm::vec4( 0.5f, 0.0f, 0.5f, 1.0f );
 		glm::vec4 pointLight0Diffuse = pointLight0Color * glm::vec4( 1.0f );
 		glm::vec4 pointLight0Ambient = pointLight0Diffuse * glm::vec4( 0.0f );
 		glm::vec4 pointLight0Specular = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
@@ -209,10 +264,11 @@ public:
 		// Enable writes to the stencil buffer
 		glStencilMask( 0xFF );
 
-		//// Render Dice
+		//// Render TestModel0
 		this->_objectShader.use();
 		glm::mat4 model = glm::mat4( 1.0f );
 		model = glm::translate( model, this->_testModel0.getPosition() );
+		model = glm::rotate( model, glm::radians( 180.0f ), glm::vec3( 1.0f, 0.0f, 0.0f ) );
 		model = glm::scale( model, this->_testModel0.getScale() );
 		this->_objectShader.setMat4( "model", model );
 		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
@@ -228,7 +284,7 @@ public:
 
 
 
-
+		/*
 		//// Render outlines
 		// Discriminate in passing the stencil values that do not equal 1, passing it's origin value by masking with 0xFF
 		glStencilFunc( GL_NOTEQUAL, 1, 0xFF );
@@ -243,7 +299,7 @@ public:
 		this->_outlineShader.setFloat( "scale", 0.1f );
 		this->_outlineShader.setVec4( "color", glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) );
 		this->_testModel0.render( this->_outlineShader );
-
+		*/
 
 
 

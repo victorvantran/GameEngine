@@ -43,6 +43,9 @@ public:
 	void load( bool flip = false );
 	void bind();
 
+
+	void cleanup();
+
 };
 
 

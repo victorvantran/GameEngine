@@ -14,8 +14,6 @@ uniform float scale;
 
 void main()
 {
-	gl_Position = projection * view * model * vec4( aPosition + aNormal * scale, 1.0 );
-
-
+	gl_Position = projection * view * model * vec4( aPosition + ( aNormal * scale ), 1.0 );
 	return;
 }

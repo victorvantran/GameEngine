@@ -70,7 +70,7 @@ public:
 
 		this->_testModel1.load( "assets/models/cube/scene.obj" );
 
-		this->_testModel2.load( "assets/models/cube/scene.obj" );
+		this->_testModel2.load( "assets/models/window_cube/scene.obj" );
 		return;
 	}
 

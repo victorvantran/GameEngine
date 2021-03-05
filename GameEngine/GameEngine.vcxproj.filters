@@ -71,37 +71,19 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\shaders\directional_light_fragment_shader.glsl">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\point_light_fragment_shader.glsl">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\spot_light_fragment_shader.glsl">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\basic_object_fs.shader">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\basic_object_vs.shader">
-      <Filter>assets\shaders</Filter>
-    </None>
     <None Include="assets\shaders\light_source_fs.shader">
       <Filter>assets\shaders</Filter>
     </None>
+    <None Include="assets\shaders\outline_vs.shader">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\outline_fs.shader">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\object_vs.shader">
+      <Filter>assets\shaders</Filter>
+    </None>
     <None Include="assets\shaders\object_fs.shader">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\new_object_vs.shader">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\new_object_fs.shader">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\single_color_fs.shader">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\single_color_vs.shader">
       <Filter>assets\shaders</Filter>
     </None>
   </ItemGroup>

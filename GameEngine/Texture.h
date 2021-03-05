@@ -40,7 +40,7 @@ public:
 
 
 	void generate();
-	void load( bool flip );
+	void load( bool flip = false );
 	void bind();
 
 };

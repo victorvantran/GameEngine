@@ -142,7 +142,7 @@ std::vector<Texture> Model::loadMaterialTextures( aiMaterial* material, aiTextur
 	{
 		aiString str;
 		material->GetTexture( type, i, &str );
-		std::cout << str.C_Str() << std::endl;
+		//std::cout << str.C_Str() << std::endl;
 
 		bool alreadyLoaded = false;
 		for ( std::size_t j = 0; j < this->_textures_loaded.size(); j++ )
@@ -158,7 +158,7 @@ std::vector<Texture> Model::loadMaterialTextures( aiMaterial* material, aiTextur
 		if ( alreadyLoaded == false )
 		{
 			Texture texture( this->_directory, str.C_Str(), type );
-			texture.load( false );
+			texture.load();
 			textures.push_back( texture );
 			this->_textures_loaded.push_back( texture );
 		}

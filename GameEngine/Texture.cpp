@@ -20,7 +20,7 @@ void Texture::generate()
 }
 
 
-void Texture::load( bool flip = false )
+void Texture::load( bool flip )
 {
 	stbi_set_flip_vertically_on_load( flip );
 

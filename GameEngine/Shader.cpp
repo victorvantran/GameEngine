@@ -118,11 +118,9 @@ void Shader::load( const std::string& vertexShaderFilePath, const std::string& f
 
 	// Create Vertex Shader
 	GLuint vertexShader = Shader::createShader( GL_VERTEX_SHADER, vertexShaderFilePath );
-	std::cout << "SHADER LOADED Vertex" << std::endl;
 
 	// Compile FragmentShader
 	GLuint fragmentShader = Shader::createShader( GL_FRAGMENT_SHADER, fragmentShaderFilePath );
-	std::cout << "SHADER LOADED Fragment" << std::endl;
 
 	// Create ShaderProgram
 	this->_id = glCreateProgram();
@@ -174,6 +172,8 @@ std::string Shader::loadShaderSourceCode( const char* filepath )
 		shaderFile.close();
 
 		contents = shaderContentBuffer.str();
+
+		if ( contents.size() == 0 ) std::cout << "ERROR::SHADER::NO_CONTENT\n" << filepath << std::endl;
 	}
 	catch ( std::ifstream::failure& e )
 	{

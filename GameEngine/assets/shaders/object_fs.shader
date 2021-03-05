@@ -80,7 +80,11 @@ uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 vec4 getPointLight( PointLight pointLight, vec3 vNormalUnit, vec3 vFragPos, vec3 vViewDirUnit )
 {
-	// Light
+	// Attenuation
+	float distance = length( pointLight.vPosition - vFragPos );
+	float attenuation = ( 1.0f / ( pointLight.kConstant + pointLight.kLinear * distance + pointLight.kQuadratic * ( distance * distance ) ) );
+
+	// Light Ray
 	vec3 vLightDirUnit = normalize( pointLight.vPosition - vFragPos );
 
 	// Ambient light
@@ -94,10 +98,6 @@ vec4 getPointLight( PointLight pointLight, vec3 vNormalUnit, vec3 vFragPos, vec3
 	vec3 vReflectDir = reflect( -vLightDirUnit, vNormalUnit );
 	float specImpact = pow( max( dot( vViewDirUnit, vReflectDir ), 0.0f ), material.shininess );
 	vec4 specular = pointLight.specular * ( specImpact * ( texture( material.diffuse0, TexCoord ) ) );
-
-	// Attenuate
-	float distance = length( pointLight.vPosition - vFragPos );
-	float attenuation = ( 1.0f / ( pointLight.kConstant + pointLight.kLinear * distance + pointLight.kQuadratic * ( distance * distance ) ) );
 
 	return ( ambient + diffuse + specular ) * attenuation;
 }
@@ -127,15 +127,15 @@ uniform SpotLight spotLights[NR_SPOT_LIGHTS];
 
 vec4 getSpotLight( SpotLight spotLight, vec3 vNormalUnit, vec3 vFragPos, vec3 vViewDirUnit )
 {
-	// Ambient light
-	vec4 ambient = spotLight.ambient * ( texture( material.diffuse0, TexCoord ) );
-
-	// Attenuate
+	// Attenuation
 	float distance = length( spotLight.vPosition - vFragPos );
 	float attenuation = ( 1.0f / ( spotLight.kConstant + spotLight.kLinear * distance + spotLight.kQuadratic * ( distance * distance ) ) );
 
-	// Spot light
+	// Light Ray
 	vec3 vLightDirUnit = normalize( spotLight.vPosition - vFragPos );
+
+	// Ambient light
+	vec4 ambient = spotLight.ambient * ( texture( material.diffuse0, TexCoord ) );
 
 	float cosTheta = dot( vLightDirUnit, normalize( -spotLight.vDirection ) ); // negate to achieve vector pointing to light source
 	float cosEpsilon = spotLight.innerCutOff - spotLight.outerCutOff;
@@ -146,14 +146,12 @@ vec4 getSpotLight( SpotLight spotLight, vec3 vNormalUnit, vec3 vFragPos, vec3 vV
 		// Diffuse light
 		float diffImpact = max( dot( vNormalUnit, vLightDirUnit ), 0.0f );
 		vec4 diffuse = spotLight.diffuse * ( diffImpact * texture( material.diffuse0, TexCoord ) );
-		//vec3 diffuse = spotLight.diffuse * diffImpact;
 		diffuse *= spotLightIntensity;
 
 		// Specular light
 		vec3 vReflectDir = reflect( -vLightDirUnit, vNormalUnit );
 		float specImpact = pow( max( dot( vViewDirUnit, vReflectDir ), 0.0f ), material.shininess );
 		vec4 specular = spotLight.specular * ( specImpact * texture( material.specular0, TexCoord ) );
-		//vec3 specular = spotLight.specular * specImpact;
 
 		specular *= spotLightIntensity;
 
@@ -200,7 +198,7 @@ void main()
 
 
 	FragColor = cumulativeLight;
-	//FragColor = vec4( cumulativeLight, 1.0f );
+	//FragColor = vec4( vec3(cumulativeLight), 0.4f );
 
 	return;
 

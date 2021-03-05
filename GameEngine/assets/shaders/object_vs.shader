@@ -15,12 +15,6 @@ uniform mat4 projection;
 uniform mat3 vNormMatrix;
 
 
-// World Space
-out vec3 wNormal;
-out vec3 wFragPos;
-out vec3 wLightPos;
-
-
 // View Space
 out vec3 vNormal;
 out vec3 vFragPos;
@@ -34,21 +28,12 @@ out vec2 TexCoord;
 
 void main()
 {
-	
 	gl_Position = projection * view * model * vec4( aPosition, 1.0f );
 
-
-	wNormal = mat3( transpose( inverse( model ) ) ) * aNormal;
-	wFragPos = vec3( model * vec4( aPosition, 1.0f ) );
-
-	//vNormal = normMatrix * aNormal;
-	//vNormal = vNormMatrix * aNormal;
-	vNormal = mat3( transpose( inverse( view * model ) ) ) * aNormal;
-
+	vNormal = vNormMatrix * aNormal;
 	vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
 
-
 	TexCoord = aTexCoord;
-	
+
 	return;
 }

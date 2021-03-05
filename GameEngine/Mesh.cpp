@@ -63,6 +63,8 @@ void Mesh::render( Shader& shader )
 
 	std::int8_t diffuseMapNumber = 0;
 	std::int8_t specularMapNumber = 0;
+	std::int8_t normalsMapNumber = 0;
+	std::int8_t heightMapNumber = 0;
 
 	for ( std::uint16_t i = 0; i < this->_textures.size(); i++ )
 	{
@@ -80,9 +82,15 @@ void Mesh::render( Shader& shader )
 		case aiTextureType_SPECULAR:
 			name = "material.specular" + std::to_string( specularMapNumber++ );
 			break;
+		case aiTextureType_NORMALS:
+			name = "material.normals" + std::to_string( normalsMapNumber++ );
+			break;
+		case aiTextureType_HEIGHT:
+			name = "material.height" + std::to_string( heightMapNumber++ );
+			break;
 		}
 
-		// Set the shader value
+		// Set the respective texture unit
 		shader.setInt( name, i );
 		this->_textures[i].bind();
 	}

@@ -17,6 +17,8 @@ private:
 
 	Model _testModel0 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
 	Model _testModel1 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+	Model _testModel2 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+
 public:
 	TinkerGame() : 
 		Game(), 
@@ -31,6 +33,7 @@ public:
 	{
 		this->_testModel0.cleanup();
 		this->_testModel1.cleanup();
+		this->_testModel2.cleanup();
 		/*
 		_quint.cleanup();
 		_jon.cleanup();
@@ -66,8 +69,9 @@ public:
 		//this->_testModel0.load( "assets/models/tree/scene.obj" );
 
 
-		this->_testModel1.load( "assets/models/cube/scene.gltf" );
+		this->_testModel1.load( "assets/models/cube/scene.obj" );
 
+		this->_testModel2.load( "assets/models/cube/scene.obj" );
 		return;
 	}
 
@@ -87,7 +91,7 @@ public:
 	{
 		this->_screen.clear();
 
-		//// Set up constant matrix projections
+		//// Set up constant matrix projections for shaders
 		glm::mat4 view = this->_camera.getViewMatrix();
 		glm::mat4 projection = glm::perspective( glm::radians( this->_camera.getZoom() ), ( float )this->_screen.getWidth() / ( float )this->_screen.getHeight(), 0.1f, 2000.0f );
 
@@ -105,38 +109,12 @@ public:
 
 
 
-		//// Renders before outline
-		glStencilMask( 0x00 );
-
-		//// Render SpotLightSourceModel
-		this->_lightSourceShader.use();
-		glm::mat4 test = glm::mat4( 1.0f );
-		test = glm::translate( test, glm::vec3( 2.0f, -10.0f, 2.0f + 0.0f * std::sinf( glfwGetTime() ) ) );
-		//test = glm::rotate( test, glm::radians( 45.0f + 45.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
-		test = glm::scale( test, glm::vec3( 50.0f, 0.1f, 50.0f ) );
-		this->_lightSourceShader.setMat4( "model", test );
-		this->_lightSourceShader.setVec4( "lightColor", glm::vec4(0.2f, 0.2f, 0.2f, 1.0f) );
-		this->_testModel1.render( _lightSourceShader );
 
 
 
-		//// Renders during outline
-		// Discriminate in passing all stencil bits for the upcoming fragments, passing it's origin value by masking with 0xFF
-		// Updates the stencil buffer with 1s wherever the object's fragments are rendered
-		glStencilFunc( GL_ALWAYS, 1, 0xFF );
-		// Enable writes to the stencil buffer
-		glStencilMask( 0xFF );
+		
 
-		//// Render TestModel0
-		this->_objectShader.use();
-		glm::mat4 model = glm::mat4( 1.0f );
-		model = glm::translate( model, this->_testModel0.getPosition() );
-		model = glm::scale( model, this->_testModel0.getScale() );
-		this->_objectShader.setMat4( "model", model );
-		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
-		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
-		this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
-		this->_objectShader.setFloat( "material.shininess", 32.0f );
+		//// ObjectShader
 
 		/// Directional Light
 		this->_objectShader.use();
@@ -144,12 +122,10 @@ public:
 		glm::vec4 directionalLightDiffuse = directionalLightColor * glm::vec4( 0.8f );
 		glm::vec4 directionalLightAmbient = directionalLightDiffuse * glm::vec4( 0.0f );
 		glm::vec4 directionalLightSpecular = glm::vec4( 1.0f );
-		glm::vec3 directionalLightDir = glm::vec3( 0.0f, 0.0f, -1.0f );
-		//glm::vec3 directionalLightDir = glm::vec3( 0.0f, -1.0f, 0.0f );
-		//glm::vec3 directionalLightDir = glm::vec3( -1.0f, 0.0f, 0.0f );
+		glm::vec3 directionalLightDir = glm::vec3( 0.0f, -1.0f, -1.0f );
 		glm::mat4 directionalLightModel = glm::mat4( 1.0f );
 		directionalLightModel = glm::translate( directionalLightModel, glm::vec3( 0.0f, 0.0f, 0.0f ) );
-		glm::vec3 vDirectionalLightDirUnit = glm::normalize( glm::vec3( view * model * glm::vec4( glm::normalize( -directionalLightDir ), 0.0f ) ) );
+		glm::vec3 vDirectionalLightDirUnit = glm::normalize( glm::vec3( view * directionalLightModel * glm::vec4( glm::normalize( -directionalLightDir ), 0.0f ) ) );
 		this->_objectShader.setVec3( "directionalLight.vDirection", vDirectionalLightDirUnit );
 		this->_objectShader.setVec4( "directionalLight.ambient", directionalLightAmbient );
 		this->_objectShader.setVec4( "directionalLight.diffuse", directionalLightDiffuse );
@@ -157,7 +133,7 @@ public:
 
 		/// Point Light 0
 		this->_objectShader.use();
-		glm::vec4 pointLight0Color = glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f );
+		glm::vec4 pointLight0Color = glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f );
 		glm::vec4 pointLight0Diffuse = pointLight0Color * glm::vec4( 1.0f );
 		glm::vec4 pointLight0Ambient = pointLight0Diffuse * glm::vec4( 0.0f );
 		glm::vec4 pointLight0Specular = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
@@ -199,6 +175,60 @@ public:
 		this->_objectShader.setFloat( "spotLights[0].kLinear", 0.09f );
 		this->_objectShader.setFloat( "spotLights[0].kQuadratic", 0.032f );
 
+
+
+
+
+
+
+
+
+
+
+		//// Renders before outline
+		glStencilMask( 0x00 );
+
+		//// Render Floor
+		/*
+		this->_lightSourceShader.use();
+		glm::mat4 floorModel = glm::mat4( 1.0f );
+		floorModel = glm::translate( floorModel, glm::vec3( 2.0f, -10.0f, 2.0f ) );
+		floorModel = glm::scale( floorModel, glm::vec3( 50.0f, 1.0f, 50.0f ) );
+		this->_lightSourceShader.setMat4( "model", floorModel );
+		this->_lightSourceShader.setVec4( "lightColor", glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
+		this->_testModel2.render( this->_lightSourceShader );
+		*/
+		this->_objectShader.use();
+		glm::mat4 floorModel = glm::mat4( 1.0f );
+		floorModel = glm::translate( floorModel, glm::vec3( 2.0f, -10.0f, 2.0f ) );
+		floorModel = glm::scale( floorModel, glm::vec3( 50.0f, 1.0f, 50.0f ) );
+		this->_objectShader.setMat4( "model", floorModel );
+		glm::mat3 vNormMatrixFloor = glm::mat3( 1.0f );
+		vNormMatrixFloor = glm::mat3( glm::transpose( glm::inverse( view * floorModel ) ) );
+		this->_objectShader.setMat3( "vNormMatrix", vNormMatrixFloor );
+		this->_objectShader.setFloat( "material.shininess", 32.0f );
+		this->_testModel2.render( this->_objectShader );
+
+
+
+		//// Renders during outline
+		// Discriminate in passing all stencil bits for the upcoming fragments, passing it's origin value by masking with 0xFF
+		// Updates the stencil buffer with 1s wherever the object's fragments are rendered
+		glStencilFunc( GL_ALWAYS, 1, 0xFF );
+		// Enable writes to the stencil buffer
+		glStencilMask( 0xFF );
+
+
+		//// Render Dice
+		this->_objectShader.use();
+		glm::mat4 model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_testModel0.getPosition() );
+		model = glm::scale( model, this->_testModel0.getScale() );
+		this->_objectShader.setMat4( "model", model );
+		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_objectShader.setFloat( "material.shininess", 32.0f );
 		this->_testModel0.render( this->_objectShader );
 		
 
@@ -207,7 +237,7 @@ public:
 
 
 
-		//// Render TestModel0 Outline
+		//// Render Dice Outline
 		// Discriminate in passing the stencil values that do not equal 1, passing it's origin value by masking with 0xFF
 		glStencilFunc( GL_NOTEQUAL, 1, 0xFF );
 		// Disable stencil buffer writing
@@ -235,17 +265,13 @@ public:
 		glEnable( GL_DEPTH_TEST );
 
 
-		//// Render LightSourceModel
+		//// Render PointLightSourceModel
 		this->_lightSourceShader.use();
 		glm::vec3 pointLightSource0Pos = pointLight0Pos;
 		glm::mat4 pointLightSource0Model = glm::mat4( 1.0f );
 		pointLightSource0Model = glm::translate( pointLightSource0Model, pointLightSource0Pos );
 		pointLightSource0Model = glm::scale( pointLightSource0Model, glm::vec3( 0.2f ) );
 		this->_lightSourceShader.setMat4( "model", pointLightSource0Model );
-		vNormMatrix = glm::mat3( 1.0f );
-		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * pointLightSource0Model ) ) );
-		this->_lightSourceShader.setMat3( "vNormMatrix", vNormMatrix );
-		this->_lightSourceShader.setFloat( "material.shininess", 32.0f );
 		this->_lightSourceShader.setVec4( "lightColor", pointLight0Color );
 		this->_testModel1.render( _lightSourceShader );
 
@@ -260,7 +286,6 @@ public:
 		this->_lightSourceShader.setMat4( "model", spotLightSource0Model );
 		this->_lightSourceShader.setVec4( "lightColor", spotLight0Color );
 		this->_testModel1.render( _lightSourceShader );
-
 
 
 		this->_screen.newFrame();

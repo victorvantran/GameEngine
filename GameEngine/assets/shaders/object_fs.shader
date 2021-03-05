@@ -197,6 +197,7 @@ void main()
 	//cumulativeLight += emission;
 
 
+
 	FragColor = cumulativeLight;
 	//FragColor = vec4( vec3(cumulativeLight), 0.4f );
 

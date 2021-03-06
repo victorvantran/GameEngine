@@ -20,9 +20,36 @@ protected:
 	GameTime _gameTime;
 	Screen _screen;
 	Camera _camera;
+
+
+
 private:
-	// Initalize GLAD to abstract function pointer management of GLFW
-	void initializeGlad();
+	/**
+	 * Initalize GLAD to abstract function pointer management of GLFW
+	 *
+	 * @return bool to indicate a successful GLAD library initialization
+	 */
+	bool initializeGlad();
+
+
+	/**
+	 * Initiate the screen
+	 *
+	 * Creates the openGL context, the window, and sets said window as the target of said context
+	 *
+	 * @return bool to indicate a successful OpenGL context initialization
+	 */
+	bool initializeScreen();
+
+
+	/**
+	 * Set frame buffer default configurations
+	 *
+	 * @return void
+	 */
+	void initializeBufferConfigurations();
+
+
 
 public:
 	//Game( std::uint16_t width = settings::screen::DEFAULT_WIDTH, std::uint16_t height = settings::screen::DEFAULT_HEIGHT, std::string title = "untitled", bool resizable = false, bool vSynch = true );
@@ -40,19 +67,19 @@ public:
 
 
 	/**
-	 * Handles input every frame.
-	 *
-	 * @return void
-	 */
-	void processInput();
-
-
-	/**
 	 * To be called immediately when running. Sets up the screen, input, and outputs
 	 *
 	 * @return void
 	 */
 	virtual void initialize();
+
+	
+	/**
+	 * Handles input every frame.
+	 *
+	 * @return void
+	 */
+	void processInputs();
 
 
 	/**
@@ -69,6 +96,7 @@ public:
 	 * @return void
 	 */
 	virtual void update() = 0;
+
 
 	/**
 	 * To be called every frame. Use the proper shaders and draw the proper meshes.

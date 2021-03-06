@@ -5,7 +5,7 @@ std::uint32_t Screen::_width = settings::screen::DEFAULT_WIDTH;
 std::uint32_t Screen::_height = settings::screen::DEFAULT_HEIGHT;
 
 
-void Screen::frameBufferSizeCallback( GLFWwindow* window, std::int32_t width, std::int32_t height )
+void Screen::frameBufferSizeCallback( GLFWwindow* window, GLint width, GLint height )
 {
 	glViewport( 0, 0, width, height );
 	Screen::_width = width;
@@ -13,24 +13,42 @@ void Screen::frameBufferSizeCallback( GLFWwindow* window, std::int32_t width, st
 	return;
 }
 
+
+
 Screen::Screen() 
 	: _window( nullptr )
 {
 
 }
 
+
+
 Screen::~Screen()
 {
-	glfwTerminate();
 }
 
-bool Screen::initiate( std::string title, bool resizable )
+
+
+bool Screen::initiate( std::string title, GLboolean fullscreen, GLboolean resizable )
 {
-	glfwWindowHint( GLFW_RESIZABLE, resizable );
+	glfwWindowHint( GLFW_RESIZABLE, resizable && !fullscreen );
 	glfwWindowHint( GLFW_FOCUSED, true );
 
 	// Create a window object
-	this->_window = glfwCreateWindow( Screen::_width, Screen::_height, title.c_str(), NULL, NULL );
+	if ( fullscreen )
+	{
+		glfwWindowHint( GLFW_DECORATED, NULL );
+		GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* videoMode = glfwGetVideoMode( primaryMonitor );
+		Screen::_width = videoMode->width;
+		Screen::_height = videoMode->height;
+		this->_window = glfwCreateWindow( Screen::_width, Screen::_height, title.c_str(), glfwGetPrimaryMonitor(), NULL );
+	}
+	else
+	{
+		this->_window = glfwCreateWindow( Screen::_width, Screen::_height, title.c_str(), NULL, NULL );
+	}
+
 	if ( this->_window == NULL )
 	{
 		std::cout << "Failed to create GLFWWindow" << std::endl;
@@ -54,6 +72,8 @@ bool Screen::initiate( std::string title, bool resizable )
 	return true;
 }
 
+
+
 void Screen::setAttributes( bool vSynch )
 {
 	glViewport( 0, 0, Screen::_width, Screen::_height );
@@ -68,13 +88,14 @@ void Screen::setAttributes( bool vSynch )
 }
 
 
+
 void Screen::setCallbacks()
 {
 	// Window callbacks
 	glfwSetFramebufferSizeCallback( this->_window, Screen::frameBufferSizeCallback );
 
 	// Mouse callbacks
-	glfwSetCursorPosCallback( this->_window, Mouse::cursorPosCallback );
+	// glfwSetCursorPosCallback( this->_window, Mouse::cursorPosCallback );
 	glfwSetMouseButtonCallback( this->_window, Mouse::mouseButtonCallback );
 	glfwSetScrollCallback( this->_window, Mouse::scrollCallback );
 
@@ -85,12 +106,14 @@ void Screen::setCallbacks()
 }
 
 
+
 void Screen::clear()
 {
 	glClearColor( 0.3f, 0.3f, 0.3f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 	return;
 }
+
 
 
 void Screen::newFrame()
@@ -100,26 +123,34 @@ void Screen::newFrame()
 }
 
 
+
 // Getters 
 std::uint32_t Screen::getWidth()
 {
 	return Screen::_width;
 }
 
+
+
 std::uint32_t Screen::getHeight()
 {
 	return Screen::_height;
 }
+
+
 
 GLFWwindow* Screen::getWindow()
 {
 	return this->_window;
 }
 
+
+
 bool Screen::getShouldClose() const
 {
 	return glfwWindowShouldClose( this->_window );
 }
+
 
 
 // Setters

@@ -49,10 +49,10 @@ public:
 		stbi_set_flip_vertically_on_load( true );
 
 
-		this->_lightSourceShader.load( "assets/shaders/object_vs.shader", "assets/shaders/light_source_fs.shader" );
-		this->_objectShader.load( "assets/shaders/object_vs.shader", "assets/shaders/object_fs.shader" );
-		this->_outlineShader.load( "assets/shaders/outline_vs.shader", "assets/shaders/outline_fs.shader" );
-		this->_skyboxShader.load( "assets/shaders/skybox_vs.shader", "assets/shaders/skybox_fs.shader" );
+		this->_lightSourceShader.createShaderProgram( "assets/shaders/object_vs.shader", "assets/shaders/light_source_fs.shader" );
+		this->_objectShader.createShaderProgram( "assets/shaders/object_vs.shader", "assets/shaders/object_fs.shader" );
+		this->_outlineShader.createShaderProgram( "assets/shaders/outline_vs.shader", "assets/shaders/outline_fs.shader" );
+		this->_skyboxShader.createShaderProgram( "assets/shaders/skybox_vs.shader", "assets/shaders/skybox_fs.shader" );
 
 
 
@@ -160,7 +160,7 @@ public:
 
 	void update()
 	{
-		this->processInput();
+		this->processInputs();
 
 		return;
 	}

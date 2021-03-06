@@ -19,7 +19,7 @@ public:
 		BACKWARD,
 	};
 
-private:
+//private:
 	glm::vec3 _position;
 	glm::vec3 _front;
 	glm::vec3 _up;

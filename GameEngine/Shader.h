@@ -20,7 +20,7 @@
 class Shader
 {
 private:
-	std::uint32_t _id;
+	std::uint32_t _shaderProgramId;
 
 private:
 	/**
@@ -40,11 +40,11 @@ private:
 
 
 	/**
-	 * Create the shader program
+	 * Creates and returns an alias to a shader object
 	 *
-	 * @return void
+	 * @return GLuint a reference number to the shader object
 	 */
-	static GLuint createShader( GLenum shaderType, const std::string& filePath );
+	static GLuint createShaderObject( GLenum shaderType, const std::string& filePath );
 public:
 	Shader();
 
@@ -55,19 +55,18 @@ public:
 
 
 	/**
-	 * Given paths to a vertex shader and a fragment shader, create a shader program
+	 * Given paths to a vertex shader and a fragment shader, ultimately create a shader program
+	 *
+	 * Creates and compiles a vertex and fragment shader object. Attaches these shader objects to a shader program.
+	 * Link the entire shader program to be used.
 	 *
 	 * @return void
 	 */
-	void load( const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath );
+	void createShaderProgram( const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath );
 
 
 	/// Getters
-	GLuint getProgramId() const;
-
-
-	/// Setters
-	void setProgramId( std::uint32_t programId );
+	GLuint getShaderProgramId() const;
 
 
 	/// Utility Uniform Functions

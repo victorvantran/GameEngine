@@ -8,7 +8,8 @@
 
 class Mouse
 {
-private:
+public:
+//private:
 	static double _x;
 	static double _y;
 	static double _prevX;

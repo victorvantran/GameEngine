@@ -30,7 +30,7 @@ private:
 	 *
 	 * @return void
 	 */
-	static void frameBufferSizeCallback( GLFWwindow* window, std::int32_t width, std::int32_t height );
+	static void frameBufferSizeCallback( GLFWwindow* window, GLint width, GLint height );
 public:
 	Screen();
 	~Screen();
@@ -43,22 +43,22 @@ public:
 	 * @parameter resizable a boolean toggle for working area resizability
 	 * @return void
 	 */
-	bool initiate( std::string title = "untitled", bool resizable = false );
+	bool initiate( std::string title = "untitled", GLboolean fullscreen = GL_TRUE, GLboolean resizable = GL_FALSE );
 
 
 	/**
-	 * Set the attributes of the window
+	 * Set the attributes of the window before rendering can begin
 	 *
 	 * Attributes: viewport, vSynch, etc.
 	 *
 	 * @parmeter vSynch a boolean toggle for double buffering on or off
 	 * @return void
 	 */
-	void setAttributes( bool vSynch = false );
+	void setAttributes( bool vSynch = GL_TRUE );
 
 
 	/**
-	 * Set the io callbacks
+	 * Set the framebuffersize and io callbacks
 	 *
 	 * @return void
 	 */

@@ -20,6 +20,9 @@ protected:
 	GameTime _gameTime;
 	Screen _screen;
 	Camera _camera;
+private:
+	// Initalize GLAD to abstract function pointer management of GLFW
+	void initializeGlad();
 
 public:
 	//Game( std::uint16_t width = settings::screen::DEFAULT_WIDTH, std::uint16_t height = settings::screen::DEFAULT_HEIGHT, std::string title = "untitled", bool resizable = false, bool vSynch = true );

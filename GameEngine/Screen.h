@@ -37,9 +37,7 @@ public:
 
 
 	/**
-	 * Create the GLFWwindow
-	 *
-	 * Set proper callback functions for io management
+	 * Create the GLFWwindow object
 	 *
 	 * @parameter title a string for the title of the window
 	 * @parameter resizable a boolean toggle for working area resizability

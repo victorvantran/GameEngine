@@ -26,10 +26,10 @@ Screen::~Screen()
 
 bool Screen::initiate( std::string title, bool resizable )
 {
-	// Create a window object
 	glfwWindowHint( GLFW_RESIZABLE, resizable );
 	glfwWindowHint( GLFW_FOCUSED, true );
 
+	// Create a window object
 	this->_window = glfwCreateWindow( Screen::_width, Screen::_height, title.c_str(), NULL, NULL );
 	if ( this->_window == NULL )
 	{

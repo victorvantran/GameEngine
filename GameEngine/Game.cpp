@@ -27,11 +27,27 @@ void Game::run()
 		this->update();
 
 		glfwPollEvents();
+		// glfwWaitEvents();
 
 		this->render();
 	}
 
 	//this->_openGLManager.destroyWindow();
+}
+
+
+
+void Game::initializeGlad()
+{
+	if ( !gladLoadGLLoader( ( GLADloadproc )glfwGetProcAddress ) )
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		glfwTerminate();
+		return;
+	}
+	void initializeGlad();
+
+	return;
 }
 
 
@@ -53,21 +69,13 @@ void Game::initialize()
 		return;
 	}
 
-	// Initalize GLAD to have more compatibiltiy in our framework
-	if ( !gladLoadGLLoader( ( GLADloadproc )glfwGetProcAddress ) )
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		glfwTerminate();
-		return;
-	}
+	this->initializeGlad();
 
 	this->_screen.setAttributes();
 	this->_screen.setCallbacks();
 
 
-
-
-	/// Initial enables
+	/// Initial Buffer Configurations
 	// Depth Testing
 	glEnable( GL_DEPTH_TEST );
 	glDepthFunc( GL_LESS );
@@ -93,13 +101,11 @@ void Game::processInput()
 {
 	float deltaTime = this->_gameTime.getDeltaTime();
 
-
 	// Close Window
 	if ( Keyboard::getKey( GLFW_KEY_ESCAPE ) )
 	{
 		this->_screen.setShouldClose( true );
 	}
-
 
 	// Camera
 	double mouseDeltaX = Mouse::getDeltaX();

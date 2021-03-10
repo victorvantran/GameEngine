@@ -16,7 +16,8 @@ private:
 	Shader _outlineShader;
 	Shader _skyboxShader;
 
-	Model _testModel0 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+	Model _skyModel0 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+	Model _testModel0 = Model( glm::vec3( 0.0f, 10.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
 	Model _testModel1 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
 	Model _testModel2 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
 
@@ -34,6 +35,7 @@ public:
 
 	~TinkerGame() 
 	{
+		this->_skyModel0.cleanup();
 		this->_testModel0.cleanup();
 		this->_testModel1.cleanup();
 		this->_testModel2.cleanup();
@@ -55,6 +57,8 @@ public:
 		this->_skyboxShader.createShaderProgram( "assets/shaders/skybox_vs.shader", "assets/shaders/skybox_fs.shader" );
 
 
+		this->_skyModel0.load( "assets/models/dice/scene.obj" );
+
 
 		//this->_testModel0.load( "assets/models/backpack/backpack.obj" );
 		//this->_testModel0.load( "assets/models/pony_cartoon/scene.gltf" );
@@ -63,8 +67,8 @@ public:
 		//this->_testModel0.load( "assets/models/pizza/scene.obj" );
 		//this->_testModel0.load( "assets/models/cube/scene.gltf" );
 		//this->_testModel0.load( "assets/models/wooden_crate/scene.obj" );
-		this->_testModel0.load( "assets/models/dice/scene.obj" );
-		//this->_testModel0.load( "assets/models/apple/scene.gltf" );
+		//this->_testModel0.load( "assets/models/dice/scene.obj" );
+		this->_testModel0.load( "assets/models/apple/scene.gltf" );
 
 
 		this->_testModel1.load( "assets/models/cube/scene.obj" );
@@ -192,7 +196,6 @@ public:
 		glm::mat4 omniscientView = glm::mat4( glm::mat3( this->_camera.getViewMatrix() ) );
 		this->_skyboxShader.use();
 		this->_skyboxShader.setMat4( "view", omniscientView );
-		//this->_skyboxShader.setMat4( "view", view );
 		this->_skyboxShader.setMat4( "projection", projection );
 
 
@@ -224,7 +227,7 @@ public:
 		glm::vec4 pointLight0Diffuse = pointLight0Color * glm::vec4( 1.0f );
 		glm::vec4 pointLight0Ambient = pointLight0Diffuse * glm::vec4( 0.0f );
 		glm::vec4 pointLight0Specular = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
-		glm::vec3 pointLight0Pos = glm::vec3( 0.0f, 2.0f, 0.0f );
+		glm::vec3 pointLight0Pos = glm::vec3( 0.0f, 15.0f, 0.0f );
 		glm::vec3 vPointLight0Pos = glm::vec3( view * glm::vec4( pointLight0Pos, 1.0f ) ); // [!] model
 		this->_objectShader.setVec3( "pointLights[0].vPosition", vPointLight0Pos );
 		this->_objectShader.setVec4( "pointLights[0].ambient", pointLight0Ambient );
@@ -243,7 +246,8 @@ public:
 		glm::vec3 spotLight0Dir = glm::vec3( 0.0f, 0.0f, -1.0f );
 		// Position
 		glm::mat4 spotLight0PosModel = glm::mat4( 1.0f );
-		spotLight0PosModel = glm::translate( spotLight0PosModel, glm::vec3( 1.5f, 0.0f, 1.5f + 0.0f * std::sinf( glfwGetTime() ) ) );
+		//spotLight0PosModel = glm::translate( spotLight0PosModel, glm::vec3( 1.5f, 0.0f, 1.5f + 0.0f * std::sinf( glfwGetTime() ) ) );
+		spotLight0PosModel = glm::translate( spotLight0PosModel, spotLight0Pos );
 		spotLight0PosModel = glm::rotate( spotLight0PosModel, glm::radians( 45.0f + 45.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
 		glm::vec3 vSpotLight0Pos = glm::vec3( view * spotLight0PosModel * glm::vec4( spotLight0Pos, 1.0f ) );
 		// Direction
@@ -277,7 +281,7 @@ public:
 		glCullFace( GL_FRONT );
 		this->_skyboxShader.use();
 		glBindTexture( GL_TEXTURE_CUBE_MAP, this->_cubeMapTextureId );
-		this->_testModel0.render( this->_skyboxShader );
+		this->_skyModel0.render( this->_skyboxShader );
 		glDepthMask( GL_TRUE );
 		glCullFace( GL_BACK );
 

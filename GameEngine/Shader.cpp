@@ -1,8 +1,8 @@
 #include "Shader.h"
 
-
 Shader::Shader() : _shaderProgramId( 0 )
 {
+
 }
 
 
@@ -99,6 +99,13 @@ void Shader::setMat4( const std::string& name, const glm::mat4& mat ) const
 }
 
 
+void Shader::setTextureUnit( const std::string& name, int value ) const
+{
+	glUniform1i( glGetUniformLocation( this->_shaderProgramId, name.c_str() ), ( GLint )value );
+	return;
+}
+
+
 void Shader::createShaderProgram( const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath )
 {
 	// Load Shader Code
@@ -122,10 +129,8 @@ void Shader::createShaderProgram( const std::string& vertexShaderFilePath, const
 	glValidateProgram( this->_shaderProgramId );
 	Shader::checkShaderError( this->_shaderProgramId, GL_VALIDATE_STATUS );
 
-	// Set uniform variables
-	glUseProgram( this->_shaderProgramId );
-
 	// Clean up and delete shader objects once linked into our program
+	glUseProgram( this->_shaderProgramId );
 	glDetachShader( this->_shaderProgramId, vertexShaderId );
 	glDetachShader( this->_shaderProgramId, fragmentShaderId );
 	glDeleteShader( vertexShaderId );
@@ -152,6 +157,9 @@ std::string Shader::loadShaderSourceCode( const char* filepath )
 	std::string contents = "";
 
 	std::ifstream shaderFile;
+
+	shaderFile.exceptions( std::ifstream::failbit | std::ifstream::badbit );
+
 	try
 	{
 		shaderFile.open( filepath );
@@ -165,7 +173,7 @@ std::string Shader::loadShaderSourceCode( const char* filepath )
 
 		if ( contents.size() == 0 ) std::cout << "ERROR::SHADER::NO_CONTENT\n" << filepath << std::endl;
 	}
-	catch ( std::ifstream::failure& e )
+	catch ( const std::ifstream::failure& e )
 	{
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\n" << e.what() << std::endl;
 	}

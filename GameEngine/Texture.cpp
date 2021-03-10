@@ -24,12 +24,12 @@ void Texture::load( bool flip )
 {
 	stbi_set_flip_vertically_on_load( flip );
 
-	int width, height, nChannels;
+	int width, height, numChannels;
 
-	unsigned char* data = stbi_load( (this->directory + "/" + this->path).c_str(), &width, &height, &nChannels, 0 );
+	unsigned char* data = stbi_load( (this->directory + "/" + this->path).c_str(), &width, &height, &numChannels, 0 );
 
 	GLenum colorMode = GL_RGB;
-	switch ( nChannels )
+	switch ( numChannels )
 	{
 	case 1:
 		colorMode = GL_RED;

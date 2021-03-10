@@ -26,27 +26,61 @@ private:
 	std::vector<std::uint32_t>	_indices;
 	std::vector<Texture>		_textures;
 
+
+
 private:
 	GLuint _vao;
 	GLuint _vbo;
 	GLuint _ebo;
 
-	void load();
+
+	/**
+	 * Create the Vertex Array Object
+	 *
+	 * Generates the VAO. 
+	 * Generates the VBO that the VAO will refer to.
+	 * Generate VertexAttribPointers and enables them
+	 * Generates the EBO
+	 *
+	 * @return void
+	 */
+	void createVAO();
+
+
+
 public:
-	// Give mesh all necessary data
+	/**
+	 * Gives mesh the necessary data needed to generate a VAO
+	 *
+	 * Calls createVAO after initializing _vertices, _indices, and _textures
+	 *
+	 * @return void
+	 */
 	Mesh( std::vector<Vertex>& vertices, std::vector<std::uint32_t>& indices, std::vector<Texture>& textures );
+
+
 	~Mesh();
 
 
-
-	// Initialize buffers
+	/**
+	 * Render the mesh
+	 *
+	 * Activates, binds, and sets the proper texture units to the diffuse, specular, normal, and height properties in the shader materials struct.
+	 *
+	 * @return void
+	 */
 	void render( Shader& shader );
-	//void draw( Shader& shader );
 
 
+	/**
+	 * Deallocates the memory of the GPU
+	 *
+	 * Deletes VAO, VBO, and EBO
+	 *
+	 * @return void
+	 */
 	void cleanup();
 };
-
 
 
 

@@ -45,6 +45,8 @@ private:
 	 * @return GLuint a reference number to the shader object
 	 */
 	static GLuint createShaderObject( GLenum shaderType, const std::string& filePath );
+
+
 public:
 	Shader();
 
@@ -69,32 +71,83 @@ public:
 	GLuint getShaderProgramId() const;
 
 
-	/// Utility Uniform Functions
+	/// Utility Set Uniform Functions
 	void setBool( const std::string& name, bool value ) const;
-
 
 	void setInt( const std::string& name, int value ) const;
 
+	void setUInt( const std::string& name, unsigned int value ) const;
 
 	void setFloat( const std::string& name, float value ) const;
 
+	void setDouble( const std::string& name, double value ) const;
+
+
+	void setBVec2( const std::string& name, const glm::bvec2& value ) const;
+
+	void setIVec2( const std::string& name, const glm::ivec2& value ) const;
+
+	void setUVec2( const std::string& name, const glm::uvec2& value ) const;
 
 	void setVec2( const std::string& name, const glm::vec2& value ) const;
 
+	void setDVec2( const std::string& name, const glm::dvec2& value ) const;
+
+
+	void setBVec2( const std::string& name, bool x, bool y ) const;
+
+	void setIVec2( const std::string& name, int x, int y ) const;
+
+	void setUVec2( const std::string& name, unsigned int x, unsigned int y ) const;
 
 	void setVec2( const std::string& name, float x, float y ) const;
 
+	void setDVec2( const std::string& name, double x, double y ) const;
+
+
+
+	void setBVec3( const std::string& name, const glm::bvec3& value ) const;
+
+	void setIVec3( const std::string& name, const glm::ivec3& value ) const;
+
+	void setUVec3( const std::string& name, const glm::uvec3& value ) const;
 
 	void setVec3( const std::string& name, const glm::vec3& value ) const;
 
+	void setDVec3( const std::string& name, const glm::dvec3& value ) const;
+
+
+	void setBVec3( const std::string& name, bool x, bool y, bool z ) const;
+
+	void setIVec3( const std::string& name, int x, int y, int z ) const;
+
+	void setUVec3( const std::string& name, unsigned int x, unsigned int y, unsigned int z ) const;
 
 	void setVec3( const std::string& name, float x, float y, float z ) const;
 
+	void setDVec3( const std::string& name, double x, double y, double z ) const;
+
+
+	void setBVec3( const std::string& name, const glm::bvec4& value ) const;
+
+	void setIVec3( const std::string& name, const glm::ivec4& value ) const;
+
+	void setUVec3( const std::string& name, const glm::uvec4& value ) const;
 
 	void setVec4( const std::string& name, const glm::vec4& value ) const;
 
+	void setDVec3( const std::string& name, const glm::dvec4& value ) const;
+
+
+	void setBVec3( const std::string& name, bool x, bool y, bool z, bool w ) const;
+
+	void setIVec3( const std::string& name, int x, int y, int z, int w ) const;
+
+	void setUVec3( const std::string& name, unsigned int x, unsigned int y, unsigned int z, unsigned int w ) const;
 
 	void setVec4( const std::string& name, float x, float y, float z, float w ) const;
+
+	void setDVec3( const std::string& name, double x, double y, double z, double w ) const; 
 
 
 	void setMat2( const std::string& name, const glm::mat2& mat ) const;
@@ -104,6 +157,9 @@ public:
 
 
 	void setMat4( const std::string& name, const glm::mat4& mat ) const;
+
+
+	void setTextureUnit( const std::string& name, int value ) const;
 
 
 	/**

@@ -4,7 +4,7 @@
 Mesh::Mesh( std::vector<Vertex>& vertices, std::vector<std::uint32_t>& indices, std::vector<Texture>& textures ) :
 	_vertices( vertices ), _indices( indices ), _textures( textures )
 {
-	this->load();
+	this->createVAO();
 }
 
 Mesh::~Mesh()
@@ -14,7 +14,7 @@ Mesh::~Mesh()
 
 void Mesh::cleanup()
 {
-	// [!] if ( set up alread condition )
+	// [!] if ( set up already condition )
 	glDeleteVertexArrays( 1, &this->_vao );
 	glDeleteBuffers( 1, &this->_vbo );
 	glDeleteBuffers( 1, &this->_ebo );
@@ -22,36 +22,37 @@ void Mesh::cleanup()
 }
 
 
-void Mesh::load()
+void Mesh::createVAO()
 {
-	glGenVertexArrays( 1, &this->_vao );
-	glGenBuffers( 1, &this->_vbo );
-	glGenBuffers( 1, &this->_ebo );
-
 	/// VAO
+	glGenVertexArrays( 1, &this->_vao );
 	glBindVertexArray( this->_vao );
-	
+
 	/// VBO
+	glGenBuffers( 1, &this->_vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, this->_vbo );
 	glBufferData( GL_ARRAY_BUFFER, this->_vertices.size() * sizeof( Vertex ), &this->_vertices[0], GL_STATIC_DRAW );
 
 	/// EBO
+	glGenBuffers( 1, &this->_ebo );
 	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, this->_ebo );
 	glBufferData( GL_ELEMENT_ARRAY_BUFFER, this->_indices.size() * sizeof( std::uint32_t ), &this->_indices[0], GL_STATIC_DRAW );
 
-
-	// Position
-	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), ( void* )0 );
+	/// Vertex Attribute Pointers
+	// Position Attribute
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), ( void* )offsetof( Vertex, position ) );
 	glEnableVertexAttribArray( 0 );
-	// Normal
+	// Normal Attribute
 	glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), ( void* )offsetof( Vertex, normal ) );
 	glEnableVertexAttribArray( 1 );
-	// TextureCoordinates
+	// TextureCoordinates Attribute
 	glVertexAttribPointer( 2, 2, GL_FLOAT, GL_FALSE, sizeof( Vertex ), ( void* )offsetof( Vertex, textureCoordinates ) );
 	glEnableVertexAttribArray( 2 );
 
-
+	/// Clean up
 	glBindVertexArray( 0 );
+	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+	glBindBuffer( GL_ARRAY_BUFFER, 0 );
 	return;
 }
 
@@ -60,21 +61,17 @@ void Mesh::load()
 
 void Mesh::render( Shader& shader )
 {
-
 	std::int8_t diffuseMapNumber = 0;
 	std::int8_t specularMapNumber = 0;
 	std::int8_t normalsMapNumber = 0;
 	std::int8_t heightMapNumber = 0;
 
-	for ( std::uint16_t i = 0; i < this->_textures.size(); i++ )
+	for ( std::uint16_t textureUnit = 0; textureUnit < this->_textures.size(); textureUnit++ )
 	{
-		assert( i >= 0 && i <= 31 );
-		glActiveTexture( GL_TEXTURE0 + i );
+		assert( textureUnit >= 0 && textureUnit <= 31 );
 
-
-		// [!] material. struct
 		std::string name;
-		switch ( this->_textures[i].type )
+		switch ( this->_textures[textureUnit].type )
 		{
 		case aiTextureType_DIFFUSE:
 			name = "material.diffuse" + std::to_string( diffuseMapNumber++ );
@@ -90,9 +87,10 @@ void Mesh::render( Shader& shader )
 			break;
 		}
 
-		// Set the respective texture unit
-		shader.setInt( name, i );
-		this->_textures[i].bind();
+		// Set the respective texture unit uniform
+		glActiveTexture( GL_TEXTURE0 + textureUnit );
+		this->_textures[textureUnit].bind();
+		shader.setTextureUnit( name, textureUnit );
 	}
 
 	// Render

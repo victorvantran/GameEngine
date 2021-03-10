@@ -54,7 +54,7 @@ public:
 	 * @parmeter vSynch a boolean toggle for double buffering on or off
 	 * @return void
 	 */
-	void setAttributes( bool vSynch = GL_TRUE );
+	void setAttributes( bool vSynch = GL_FALSE );
 
 
 	/**
@@ -63,7 +63,6 @@ public:
 	 * @return void
 	 */
 	void setCallbacks();
-
 
 
 	/**
@@ -75,7 +74,6 @@ public:
 	 * @return void
 	 */
 	void clear();
-
 
 
 	/**

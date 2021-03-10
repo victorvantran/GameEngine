@@ -5,16 +5,6 @@ layout( location = 1 ) in vec3 aNormal;
 layout( location = 2 ) in vec2 aTexCoord;
 
 
-/// Position
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-
-
-/// Lighting
-uniform mat3 vNormMatrix;
-
-
 // View Space
 out vec3 vNormal;
 out vec3 vFragPos;
@@ -23,6 +13,16 @@ out vec3 vLightPos;
 
 /// Texture
 out vec2 TexCoord;
+
+
+/// Position
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
+
+/// Lighting
+uniform mat3 vNormMatrix;
 
 
 

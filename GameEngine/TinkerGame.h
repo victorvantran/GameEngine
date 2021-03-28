@@ -7,22 +7,105 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Model.h"
+#include "ModelArray.h"
+#include "WoodenChair.h"
 
 class TinkerGame : public Game
 {
 private:
 	Shader _objectShader;
+	Shader _objectInstancedShader;
 	Shader _lightSourceShader;
 	Shader _outlineShader;
 	Shader _skyboxShader;
 
 	Model _skyModel0 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
-	Model _testModel0 = Model( glm::vec3( 0.0f, 10.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
-	Model _testModel1 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
-	Model _testModel2 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+
+	ModelArray _testModelArray = ModelArray( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+	
+	/*
+	Model _testModel0 = Model( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+	Model _testModel1 = Model( glm::vec3( 2.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+	Model _chairYellowModel = Model( glm::vec3( 4.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+	Model _toiletModel = Model( glm::vec3( 6.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+	Model _squareStoolModel = Model( glm::vec3( 8.0f, 0.0f, 0.0f ), glm::vec3( 0.001f, 0.001f, 0.001f ) );
+	Model _ottomanModel = Model( glm::vec3( 10.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+	Model _wickerModel = Model( glm::vec3( 12.0f, 0.0f, 0.0f ), glm::vec3( 0.001f, 0.001f, 0.001f ) );
+	Model _checkerModel = Model( glm::vec3( 14.0f, 0.0f, 0.0f ), glm::vec3( 0.01f, 0.01f, 0.01f ) );
+	Model _schoolModel = Model( glm::vec3( 16.0f, 0.0f, 0.0f ), glm::vec3( 0.25f, 0.25f, 0.25f ) );
+	*/
+
+	WoodenChair _woodenChair = WoodenChair( glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+
 
 
 	GLuint _cubeMapTextureId;
+
+
+
+	glm::vec3 cubeWorldPositions[50] =
+	{
+		glm::vec3( 0.0f,  0.0f,  0.0f ),
+		glm::vec3( 2.0f,  5.0f, -5.0f ),
+		glm::vec3( -1.5f, -2.2f, -2.5f ),
+		glm::vec3( -3.8f, -2.0f, -12.3f ),
+		glm::vec3( 2.4f, -0.4f, -3.5f ),
+		glm::vec3( -1.7f,  3.0f, -7.5f ),
+		glm::vec3( 1.3f, -2.0f, -2.5f ),
+		glm::vec3( 1.5f,  2.0f, -2.5f ),
+		glm::vec3( 1.5f,  0.2f, -1.5f ),
+		glm::vec3( -1.3f,  1.0f, -1.5f ),
+
+		glm::vec3( 10.0f,  20.0f,  10.0f ),
+		glm::vec3( 12.0f,  15.0f, -51.0f ),
+		glm::vec3( -11.5f, -12.2f, -2.5f ),
+		glm::vec3( -31.8f, -2.0f, -12.3f ),
+		glm::vec3( 21.4f, -10.4f, -3.5f ),
+		glm::vec3( -11.7f,  31.0f, -7.5f ),
+		glm::vec3( 11.3f, -2.0f, -2.5f ),
+		glm::vec3( 11.5f,  2.0f, -12.5f ),
+		glm::vec3( 11.5f,  10.2f, -11.5f ),
+		glm::vec3( -1.3f,  1.0f, -11.5f ),
+
+
+
+		glm::vec3( 20.0f,  20.0f,  20.0f ),
+		glm::vec3( 12.0f,  25.0f, -21.0f ),
+		glm::vec3( -21.5f, -12.2f, -22.5f ),
+		glm::vec3( -21.8f, -22.0f, -12.3f ),
+		glm::vec3( 22.4f, -12.4f, -23.5f ),
+		glm::vec3( -12.7f,  31.0f, -7.5f ),
+		glm::vec3( 11.3f, -22.0f, -2.5f ),
+		glm::vec3( 21.5f,  2.0f, -22.5f ),
+		glm::vec3( 21.5f,  20.2f, -11.5f ),
+		glm::vec3( -2.3f,  1.0f, -21.5f ),
+
+
+
+		glm::vec3( 30.0f,  23.0f,  23.0f ),
+		glm::vec3( 12.0f,  25.0f, -31.0f ),
+		glm::vec3( -23.5f, -13.2f, -32.5f ),
+		glm::vec3( -31.8f, -22.0f, -12.3f ),
+		glm::vec3( 22.3f, -32.4f, -23.5f ),
+		glm::vec3( -12.7f,  33.0f, -37.5f ),
+		glm::vec3( 13.3f, -22.0f, -32.5f ),
+		glm::vec3( 23.5f,  2.0f, -22.5f ),
+		glm::vec3( 31.5f,  20.2f, -11.5f ),
+		glm::vec3( -2.3f,  1.0f, -31.5f ),
+
+
+
+		glm::vec3( 40.0f,  24.0f,  23.0f ),
+		glm::vec3( 12.0f,  24.0f, -41.0f ),
+		glm::vec3( -23.5f, -43.2f, -32.5f ),
+		glm::vec3( -34.8f, -42.0f, -12.3f ),
+		glm::vec3( 22.4f, -42.4f, -23.5f ),
+		glm::vec3( -12.7f,  43.0f, -34.5f ),
+		glm::vec3( 14.3f, -22.0f, -34.5f ),
+		glm::vec3( 43.5f,  2.0f, -22.5f ),
+		glm::vec3( 41.5f,  40.2f, -11.5f ),
+		glm::vec3( -4.3f,  4.0f, -31.5f ),
+	};
 
 public:
 	TinkerGame() : 
@@ -35,10 +118,21 @@ public:
 
 	~TinkerGame() 
 	{
+		
 		this->_skyModel0.cleanup();
+		this->_woodenChair.cleanup();
+		/*
 		this->_testModel0.cleanup();
 		this->_testModel1.cleanup();
-		this->_testModel2.cleanup();
+		this->_chairYellowModel.cleanup();
+		this->_toiletModel.cleanup();
+		this->_squareStoolModel.cleanup();
+		this->_ottomanModel.cleanup();
+		this->_wickerModel.cleanup();
+		this->_checkerModel.cleanup();
+		this->_schoolModel.cleanup();
+		*/
+
 		glDeleteTextures( 1, &this->_cubeMapTextureId );
 	}
 
@@ -50,9 +144,13 @@ public:
 	{
 		stbi_set_flip_vertically_on_load( true );
 
-
 		this->_lightSourceShader.createShaderProgram( "assets/shaders/object_vs.shader", "assets/shaders/light_source_fs.shader" );
+
 		this->_objectShader.createShaderProgram( "assets/shaders/object_vs.shader", "assets/shaders/object_fs.shader" );
+		this->_objectInstancedShader.createShaderProgram( "assets/shaders/object_instanced_vs.shader", "assets/shaders/object_fs.shader" );
+		//this->_objectInstancedShader.createShaderProgram( "assets/shaders/object_vs.shader", "assets/shaders/object_fs.shader" );
+
+
 		this->_outlineShader.createShaderProgram( "assets/shaders/outline_vs.shader", "assets/shaders/outline_fs.shader" );
 		this->_skyboxShader.createShaderProgram( "assets/shaders/skybox_vs.shader", "assets/shaders/skybox_fs.shader" );
 
@@ -68,24 +166,28 @@ public:
 		//this->_testModel0.load( "assets/models/cube/scene.gltf" );
 		//this->_testModel0.load( "assets/models/wooden_crate/scene.obj" );
 		//this->_testModel0.load( "assets/models/dice/scene.obj" );
-		this->_testModel0.load( "assets/models/apple/scene.gltf" );
-
-
-		this->_testModel1.load( "assets/models/cube/scene.obj" );
-
-		this->_testModel2.load( "assets/models/cube/scene.obj" );
-
-
-
-
-
-
-
-
-
-
+		//this->_testModel0.load( "assets/models/apple/scene.gltf" );
 		
+		/*
+		this->_testModel0.load( "assets/models/wooden_chair/scene.obj" );
+		this->_testModel1.load( "assets/models/leather_chair/scene.obj" );
+		this->_chairYellowModel.load( "assets/models/chair_yellow/scene.obj" );
+		this->_toiletModel.load( "assets/models/toilet/scene.obj" ); // material 4.0
+		this->_squareStoolModel.load( "assets/models/square_stool/scene.obj" );
+		this->_ottomanModel.load( "assets/models/ottoman/scene.obj" );
+		this->_wickerModel.load( "assets/models/chair_wicker/scene.obj" );
+		this->_checkerModel.load( "assets/models/chair_checker/scene.obj" );
+		this->_schoolModel.load( "assets/models/chair_school/scene.obj" );
+		*/
+		
+		this->_woodenChair.initiate();
 
+		//this->_testModelArray.load("assets/models/toilet/scene.obj");
+		this->_testModelArray.initiate();
+		this->_testModelArray.load( "assets/models/chair_yellow/scene.obj" );
+
+
+		// Skybox class
 		glGenTextures( 1, &this->_cubeMapTextureId );
 		glBindTexture( GL_TEXTURE_CUBE_MAP, this->_cubeMapTextureId );
 
@@ -99,19 +201,7 @@ public:
 			"assets/textures/skybox/front.png",
 			"assets/textures/skybox/back.png",
 		};
-		
-
-		/*
-		std::vector<std::string> textures_faces = std::vector<std::string>{
-			"assets/textures/skybox/right.jpg",
-			"assets/textures/skybox/left.jpg",
-			"assets/textures/skybox/top.jpg",
-			"assets/textures/skybox/bottom.jpg",
-			"assets/textures/skybox/front.jpg",
-			"assets/textures/skybox/back.jpg",
-		};
-		*/
-
+	
 
 		GLint width, height, nChannels;
 		unsigned char* data;
@@ -183,6 +273,12 @@ public:
 		this->_objectShader.setMat4( "view", view );
 		this->_objectShader.setMat4( "projection", projection );
 
+
+		this->_objectInstancedShader.use();
+		this->_objectInstancedShader.setMat4( "view", view );
+		this->_objectInstancedShader.setMat4( "projection", projection );
+
+
 		this->_lightSourceShader.use();
 		this->_lightSourceShader.setMat4( "view", view );
 		this->_lightSourceShader.setMat4( "projection", projection );
@@ -221,6 +317,7 @@ public:
 		this->_objectShader.setVec4( "directionalLight.diffuse", directionalLightDiffuse );
 		this->_objectShader.setVec4( "directionalLight.specular", directionalLightSpecular );
 
+
 		/// Point Light 0
 		this->_objectShader.use();
 		glm::vec4 pointLight0Color = glm::vec4( 0.5f, 0.0f, 0.5f, 1.0f );
@@ -236,6 +333,7 @@ public:
 		this->_objectShader.setFloat( "pointLights[0].kConstant", 1.0f );
 		this->_objectShader.setFloat( "pointLights[0].kLinear", 0.09f );
 		this->_objectShader.setFloat( "pointLights[0].kQuadratic", 0.032f );
+		
 
 		/// Spot Light 0
 		glm::vec4 spotLight0Color = glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f );
@@ -265,7 +363,7 @@ public:
 		this->_objectShader.setFloat( "spotLights[0].kConstant", 1.0f );
 		this->_objectShader.setFloat( "spotLights[0].kLinear", 0.09f );
 		this->_objectShader.setFloat( "spotLights[0].kQuadratic", 0.032f );
-
+		
 
 
 
@@ -276,6 +374,7 @@ public:
 
 
 
+		
 		//// Skybox
 		glDepthMask( GL_FALSE );
 		glCullFace( GL_FRONT );
@@ -284,8 +383,12 @@ public:
 		this->_skyModel0.render( this->_skyboxShader );
 		glDepthMask( GL_TRUE );
 		glCullFace( GL_BACK );
+		
 
 
+
+
+		/*
 		//// Render Floor
 		this->_objectShader.use();
 		glm::mat4 floorModel = glm::mat4( 1.0f );
@@ -297,13 +400,13 @@ public:
 		this->_objectShader.setMat3( "vNormMatrix", vNormMatrixFloor );
 		this->_objectShader.setFloat( "material.shininess", 32.0f );
 		this->_testModel2.render( this->_objectShader );
+		*/
 
 
 
 
 
-
-
+		/*
 		//// Renders with outlining
 		// Discriminate in passing all stencil bits for the upcoming fragments, passing it's origin value by masking with 0xFF
 		// Updates the stencil buffer with 1s wherever the object's fragments are rendered
@@ -352,12 +455,228 @@ public:
 
 
 		//// Renders after outlining (not covered by outline)
+		
+
+
+
 		// Return to stencil normalcy (Enable stencil buffer writing, pass through all values with no modifying, allow for depth testing)
 		glStencilMask( 0xFF );
 		glStencilFunc( GL_ALWAYS, 0, 0xFF );
 		glEnable( GL_DEPTH_TEST );
+		*/
 
 
+
+		/*
+		glm::vec3 translations[100];
+		int index = 0;
+		float offset = 0.1f;
+		for ( int y = -10; y < 10; y += 2 )
+		{
+			for ( int x = -10; x < 10; x += 2 )
+			{
+				glm::vec3 translation;
+				translation.x = ( float )x / 10.0f + offset;
+				translation.y = ( float )y / 10.0f + offset;
+				translation.z = 0.0f;
+
+				translations[index++] = translation;
+			}
+		}
+		this->_objectShader.use();
+		for ( unsigned int i = 0; i < 100; i++ )
+		{
+			this->_objectShader.setVec3("offsets[" + std::to_string( i ) + "]", translations[i]);
+		}
+
+
+		//// Render Wooden Chair
+		this->_objectShader.use();
+		glm::mat4 model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_woodenChair.getPosition() );
+		//model = glm::rotate( model, glm::radians( 0.0f ), glm::vec3( 1.0f, 0.0f, 0.0f ) );
+		model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		model = glm::scale( model, this->_woodenChair.getScale() );
+		this->_objectShader.setMat4( "model", model );
+		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_objectShader.setFloat( "material.shininess", 16.0f );
+		this->_woodenChair.renderInstanced( this->_objectShader );
+		*/
+
+
+
+
+		/*
+		//// Render Test Array
+		this->_objectInstancedShader.use();
+		glm::mat4 model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_testModelArray.getPosition() );
+		model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		model = glm::scale( model, this->_testModelArray.getScale() );
+		this->_objectInstancedShader.setMat4( "model", model );
+		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_objectInstancedShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_objectInstancedShader.setFloat( "material.shininess", 16.0f );
+		this->_testModelArray.render( this->_objectInstancedShader );
+		*/
+		//// Render Test Array
+		this->_objectInstancedShader.use();
+		glm::mat4 model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_testModelArray.getPosition() );
+		model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		model = glm::scale( model, this->_testModelArray.getScale() );
+		this->_objectInstancedShader.setMat4( "model", model );
+		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_objectInstancedShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_objectInstancedShader.setFloat( "material.shininess", 16.0f );
+		this->_testModelArray.render( this->_objectInstancedShader );
+
+
+
+		/*
+		//// Render TestModel1
+		this->_objectShader.use();
+		model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_testModel1.getPosition() );
+		model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+
+		model = glm::scale( model, this->_testModel1.getScale() );
+		this->_objectShader.setMat4( "model", model );
+		vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_objectShader.setFloat( "material.shininess", 32.0f );
+		this->_testModel1.render( this->_objectShader );
+
+
+		//// Render Chair_Yellow
+		this->_objectShader.use();
+		model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_chairYellowModel.getPosition() );
+		model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		model = glm::scale( model, this->_chairYellowModel.getScale() );
+		this->_objectShader.setMat4( "model", model );
+		vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_objectShader.setFloat( "material.shininess", 0.0f );
+		this->_chairYellowModel.render( this->_objectShader );
+
+
+
+		//// Render Toilet
+		this->_objectShader.use();
+		model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_toiletModel.getPosition() );
+		model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		model = glm::scale( model, this->_toiletModel.getScale() );
+		this->_objectShader.setMat4( "model", model );
+		vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_objectShader.setFloat( "material.shininess", 4.0f );
+		this->_toiletModel.render( this->_objectShader );
+
+
+
+		//// Render Square Stool
+		this->_objectShader.use();
+		model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_squareStoolModel.getPosition() );
+		model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		model = glm::scale( model, this->_squareStoolModel.getScale() );
+		this->_objectShader.setMat4( "model", model );
+		vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_objectShader.setFloat( "material.shininess", 1024.0f );
+		this->_squareStoolModel.render( this->_objectShader );
+		*/
+
+		/*
+		for ( int i = 0; i < 50; i++ )
+		{
+			glm::vec3 randomPos = glm::vec3(
+				cubeWorldPositions[i % 40].x + i / 1.0f + ( ( i % 2 == 0 ) ? 1 : -1 ) * std::cosf( glfwGetTime() * ( i / 100.0f ) ) * 5.0f * ( i / 100.0f ),
+				cubeWorldPositions[i % 40].y + i / 1.0f,
+				cubeWorldPositions[i % 40].z + i / 1.0f + ( ( i % 2 == 0 ) ? 1 : -1 ) * std::sinf( glfwGetTime() * ( i / 100.0f ) ) * 5.0f * ( i / 100.0f )
+			);
+
+			//// Render Ottoman
+			this->_objectShader.use();
+			model = glm::mat4( 1.0f );
+			model = glm::translate( model, randomPos );
+			model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+			model = glm::scale( model, this->_ottomanModel.getScale() );
+			this->_objectShader.setMat4( "model", model );
+			vNormMatrix = glm::mat3( 1.0f );
+			vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+			this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
+			this->_objectShader.setFloat( "material.shininess", 0.0f );
+			this->_ottomanModel.render( this->_objectShader );
+		}
+
+		for (int i = 0; i < 10; i++)
+		{
+			glm::vec3 randomPos = glm::vec3(
+				cubeWorldPositions[i % 40].x + i / 1.0f + ( ( i % 2 == 0 ) ? 1 : -1 ) * std::cosf( glfwGetTime() * ( i / 100.0f ) ) * 5.0f * ( i / 100.0f ),
+				cubeWorldPositions[i % 40].y + i / 1.0f,
+				cubeWorldPositions[i % 40].z + i / 1.0f + ( ( i % 2 == 0 ) ? 1 : -1 ) * std::sinf( glfwGetTime() * ( i / 100.0f ) ) * 5.0f * ( i / 100.0f )
+			);
+
+			//// Render Wicker
+			this->_objectShader.use();
+			model = glm::mat4( 1.0f );
+			model = glm::translate( model, randomPos );
+			model = glm::rotate( model, glm::radians( 360.0f * (i % 2 == 0 ? 1 : -1) * std::sinf( glfwGetTime() * ( i / 100.0f ) ) ), glm::vec3( 1.0f, 0.3f, -0.4f ) );
+			model = glm::scale( model, this->_wickerModel.getScale() );
+			this->_objectShader.setMat4( "model", model );
+			vNormMatrix = glm::mat3( 1.0f );
+			vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+			this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
+			this->_objectShader.setFloat( "material.shininess", 0.0f );
+			this->_wickerModel.render( this->_objectShader );
+		}
+		*/
+
+
+		/*
+		//// Render Checker
+		this->_objectShader.use();
+		model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_checkerModel.getPosition() );
+		model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		model = glm::scale( model, this->_checkerModel.getScale() );
+		this->_objectShader.setMat4( "model", model );
+		vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_objectShader.setFloat( "material.shininess", 0.0f );
+		this->_checkerModel.render( this->_objectShader );
+
+
+
+		//// Render School
+		this->_objectShader.use();
+		model = glm::mat4( 1.0f );
+		model = glm::translate( model, this->_schoolModel.getPosition() );
+		model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
+		model = glm::scale( model, this->_schoolModel.getScale() );
+		this->_objectShader.setMat4( "model", model );
+		vNormMatrix = glm::mat3( 1.0f );
+		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
+		this->_objectShader.setMat3( "vNormMatrix", vNormMatrix );
+		this->_objectShader.setFloat( "material.shininess", 4.0f );
+		this->_schoolModel.render( this->_objectShader );
+
+		*/
+
+
+		/*
 		//// Render PointLightSourceModel
 		this->_lightSourceShader.use();
 		glm::vec3 pointLightSource0Pos = pointLight0Pos;
@@ -377,24 +696,13 @@ public:
 		this->_lightSourceShader.setMat4( "model", spotLightSource0Model );
 		this->_lightSourceShader.setVec4( "lightColor", spotLight0Color );
 		this->_testModel1.render( this->_lightSourceShader );
-
-
-
-
-
-
-
-		/*
-		//// Skybox
-		glDepthMask( GL_FALSE );
-		glCullFace( GL_FRONT );
-		this->_skyboxShader.use();
-		glBindTexture( GL_TEXTURE_2D, this->_cubeMapTextureId );
-
-		this->_testModel0.render( this->_skyboxShader );
-		glDepthMask( GL_TRUE );
-		glCullFace( GL_BACK );
 		*/
+
+
+
+
+
+
 
 
 

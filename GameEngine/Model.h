@@ -39,17 +39,29 @@ protected:
 
 public:
 	Model( glm::vec3 position, glm::vec3 scale );
-	~Model();
+	virtual ~Model();
 
 	void load( std::string path );
 
+
+
+
 	void processNode( aiNode* node, const aiScene* scene );
+
+
+
+
 	Mesh processMesh( aiMesh* mesh, const aiScene* scene );
+
+
+
+
 	std::vector<Texture> loadMaterialTextures( aiMaterial* material, aiTextureType type );
 
-	void initiate();
+	virtual void initiate();
 
 	void render( Shader& shader );
+	void renderInstanced( Shader& shader );
 
 	void cleanup();
 

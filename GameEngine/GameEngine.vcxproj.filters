@@ -25,6 +25,9 @@
     <Filter Include="assets\textures">
       <UniqueIdentifier>{1d0bc5b8-40d8-4060-8b5b-9a02c04e408a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\models">
+      <UniqueIdentifier>{69785f92-1006-4699-906b-366bb42be60f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -92,6 +95,9 @@
     <None Include="assets\shaders\skybox_vs.shader">
       <Filter>assets\shaders</Filter>
     </None>
+    <None Include="assets\shaders\object_instanced_vs.shader">
+      <Filter>assets\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -131,6 +137,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WoodenChair.h">
+      <Filter>assets\models</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

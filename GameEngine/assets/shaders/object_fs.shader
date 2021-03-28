@@ -53,8 +53,8 @@ vec4 getDirectionalLight( DirectionalLight directionalLight, vec3 vNormalUnit, v
 	
 	// Specular light
 	vec3 vReflectDir = reflect( -directionalLight.vDirection, vNormalUnit );
-	float specImpact = pow( max( dot( vViewDirUnit, vReflectDir ), 0.0 ), material.shininess );
-	vec4 specular = ( directionalLight.specular *  specImpact ) * texture( material.diffuse0, TexCoord );
+	float specImpact = (material.shininess == 0) ? 0 : pow( max( dot( vViewDirUnit, vReflectDir ), 0.0 ), material.shininess );
+	vec4 specular = ( directionalLight.specular *  specImpact ) * texture( material.specular0, TexCoord );
 	
 	return ambient + diffuse + specular;
 }
@@ -97,7 +97,7 @@ vec4 getPointLight( PointLight pointLight, vec3 vNormalUnit, vec3 vFragPos, vec3
 	// Specular light
 	vec3 vReflectDir = reflect( -vLightDirUnit, vNormalUnit );
 	float specImpact = pow( max( dot( vViewDirUnit, vReflectDir ), 0.0f ), material.shininess );
-	vec4 specular = ( pointLight.specular * specImpact ) * texture( material.diffuse0, TexCoord );
+	vec4 specular = ( pointLight.specular * specImpact ) * texture( material.specular0, TexCoord );
 
 	return ( ambient + diffuse + specular ) * attenuation;
 }
@@ -182,14 +182,14 @@ void main()
 	// Point Lighting
 	for ( int i = 0; i < NR_POINT_LIGHTS; i++ )
 	{
-		cumulativeLight += getPointLight( pointLights[i], vNormalUnit, vFragPos, vViewDirUnit );
+		//cumulativeLight += getPointLight( pointLights[i], vNormalUnit, vFragPos, vViewDirUnit );
 	}
 
 	
 	// Spot Lighting
 	for ( int i = 0; i < NR_SPOT_LIGHTS; i++ )
 	{
-		cumulativeLight += getSpotLight( spotLights[i], vNormalUnit, vFragPos, vViewDirUnit );
+		//cumulativeLight += getSpotLight( spotLights[i], vNormalUnit, vFragPos, vViewDirUnit );
 	}
 
 	// Emission Lighting

@@ -204,6 +204,18 @@ void Model::render( Shader& shader )
 }
 
 
+void Model::renderInstanced( Shader& shader )
+{
+	for ( Mesh& mesh : this->_meshes )
+	{
+		mesh.renderInstanced( shader );
+	}
+
+	return;
+}
+
+
+
 void Model::cleanup()
 {
 	for ( Mesh& mesh : this->_meshes )

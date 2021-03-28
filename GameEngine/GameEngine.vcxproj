@@ -169,6 +169,7 @@
   <ItemGroup>
     <None Include="assets\shaders\light_source_fs.shader" />
     <None Include="assets\shaders\object_fs.shader" />
+    <None Include="assets\shaders\object_instanced_vs.shader" />
     <None Include="assets\shaders\object_vs.shader" />
     <None Include="assets\shaders\outline_fs.shader" />
     <None Include="assets\shaders\outline_vs.shader" />
@@ -180,7 +181,9 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshArray.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelArray.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Shader.h" />
@@ -189,6 +192,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TinkerGame.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="WoodenChair.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\textures\dewey_finn.jpg" />

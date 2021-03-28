@@ -43,7 +43,7 @@ public:
 	 * @parameter resizable a boolean toggle for working area resizability
 	 * @return void
 	 */
-	bool initiate( std::string title = "untitled", GLboolean fullscreen = GL_TRUE, GLboolean resizable = GL_FALSE );
+	bool initiate( std::string title = "untitled", GLboolean fullscreen = GL_FALSE, GLboolean resizable = GL_FALSE );
 
 
 	/**

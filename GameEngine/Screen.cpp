@@ -33,6 +33,7 @@ bool Screen::initiate( std::string title, GLboolean fullscreen, GLboolean resiza
 {
 	glfwWindowHint( GLFW_RESIZABLE, resizable && !fullscreen );
 	glfwWindowHint( GLFW_FOCUSED, true );
+	glfwWindowHint( GLFW_SAMPLES, 4 ); // [!]
 
 	// Create a window object
 	if ( fullscreen )
@@ -109,7 +110,8 @@ void Screen::setCallbacks()
 
 void Screen::clear()
 {
-	glClearColor( 0.3f, 0.3f, 0.3f, 1.0f );
+	//glClearColor( 0.3f, 0.3f, 0.3f, 1.0f );
+	glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 	return;
 }

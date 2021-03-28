@@ -92,6 +92,9 @@ void Game::initializeBufferConfigurations()
 	glEnable( GL_CULL_FACE );
 	glCullFace( GL_BACK );
 
+	// MultiSample
+	glEnable( GL_MULTISAMPLE ); // [!]
+
 	return;
 }
 

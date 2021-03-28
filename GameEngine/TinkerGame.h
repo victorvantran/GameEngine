@@ -42,70 +42,9 @@ private:
 	GLuint _cubeMapTextureId;
 
 
+	unsigned int amount = 1000;
+	glm::mat4* modelMatrices = new glm::mat4[amount];
 
-	glm::vec3 cubeWorldPositions[50] =
-	{
-		glm::vec3( 0.0f,  0.0f,  0.0f ),
-		glm::vec3( 2.0f,  5.0f, -5.0f ),
-		glm::vec3( -1.5f, -2.2f, -2.5f ),
-		glm::vec3( -3.8f, -2.0f, -12.3f ),
-		glm::vec3( 2.4f, -0.4f, -3.5f ),
-		glm::vec3( -1.7f,  3.0f, -7.5f ),
-		glm::vec3( 1.3f, -2.0f, -2.5f ),
-		glm::vec3( 1.5f,  2.0f, -2.5f ),
-		glm::vec3( 1.5f,  0.2f, -1.5f ),
-		glm::vec3( -1.3f,  1.0f, -1.5f ),
-
-		glm::vec3( 10.0f,  20.0f,  10.0f ),
-		glm::vec3( 12.0f,  15.0f, -51.0f ),
-		glm::vec3( -11.5f, -12.2f, -2.5f ),
-		glm::vec3( -31.8f, -2.0f, -12.3f ),
-		glm::vec3( 21.4f, -10.4f, -3.5f ),
-		glm::vec3( -11.7f,  31.0f, -7.5f ),
-		glm::vec3( 11.3f, -2.0f, -2.5f ),
-		glm::vec3( 11.5f,  2.0f, -12.5f ),
-		glm::vec3( 11.5f,  10.2f, -11.5f ),
-		glm::vec3( -1.3f,  1.0f, -11.5f ),
-
-
-
-		glm::vec3( 20.0f,  20.0f,  20.0f ),
-		glm::vec3( 12.0f,  25.0f, -21.0f ),
-		glm::vec3( -21.5f, -12.2f, -22.5f ),
-		glm::vec3( -21.8f, -22.0f, -12.3f ),
-		glm::vec3( 22.4f, -12.4f, -23.5f ),
-		glm::vec3( -12.7f,  31.0f, -7.5f ),
-		glm::vec3( 11.3f, -22.0f, -2.5f ),
-		glm::vec3( 21.5f,  2.0f, -22.5f ),
-		glm::vec3( 21.5f,  20.2f, -11.5f ),
-		glm::vec3( -2.3f,  1.0f, -21.5f ),
-
-
-
-		glm::vec3( 30.0f,  23.0f,  23.0f ),
-		glm::vec3( 12.0f,  25.0f, -31.0f ),
-		glm::vec3( -23.5f, -13.2f, -32.5f ),
-		glm::vec3( -31.8f, -22.0f, -12.3f ),
-		glm::vec3( 22.3f, -32.4f, -23.5f ),
-		glm::vec3( -12.7f,  33.0f, -37.5f ),
-		glm::vec3( 13.3f, -22.0f, -32.5f ),
-		glm::vec3( 23.5f,  2.0f, -22.5f ),
-		glm::vec3( 31.5f,  20.2f, -11.5f ),
-		glm::vec3( -2.3f,  1.0f, -31.5f ),
-
-
-
-		glm::vec3( 40.0f,  24.0f,  23.0f ),
-		glm::vec3( 12.0f,  24.0f, -41.0f ),
-		glm::vec3( -23.5f, -43.2f, -32.5f ),
-		glm::vec3( -34.8f, -42.0f, -12.3f ),
-		glm::vec3( 22.4f, -42.4f, -23.5f ),
-		glm::vec3( -12.7f,  43.0f, -34.5f ),
-		glm::vec3( 14.3f, -22.0f, -34.5f ),
-		glm::vec3( 43.5f,  2.0f, -22.5f ),
-		glm::vec3( 41.5f,  40.2f, -11.5f ),
-		glm::vec3( -4.3f,  4.0f, -31.5f ),
-	};
 
 public:
 	TinkerGame() : 
@@ -184,7 +123,9 @@ public:
 
 		//this->_testModelArray.load("assets/models/toilet/scene.obj");
 		this->_testModelArray.initiate();
-		this->_testModelArray.load( "assets/models/chair_yellow/scene.obj" );
+		//this->_testModelArray.load( "assets/models/wooden_chair/scene.obj" );
+		//this->_testModelArray.load( "assets/models/wooden_crate/scene.obj" );
+		this->_testModelArray.load( "assets/models/rock/scene.obj" );
 
 
 		// Skybox class
@@ -245,6 +186,36 @@ public:
 
 
 				
+
+
+
+		srand( glfwGetTime() ); // initialize random seed	
+		float radius = 50.0;
+		float offset = 2.5f;
+		for ( unsigned int i = 0; i < amount; i++ )
+		{
+			glm::mat4 model = glm::mat4( 1.0f );
+			// 1. translation: displace along circle with 'radius' in range [-offset, offset]
+			float angle = ( float )i / ( float )amount * 360.0f;
+			float displacement = ( rand() % ( int )( 2 * offset * 100 ) ) / 100.0f - offset;
+			float x = sin( angle ) * radius + displacement;
+			displacement = ( rand() % ( int )( 2 * offset * 100 ) ) / 100.0f - offset;
+			float y = displacement * 0.4f; // keep height of field smaller compared to width of x and z
+			displacement = ( rand() % ( int )( 2 * offset * 100 ) ) / 100.0f - offset;
+			float z = cos( angle ) * radius + displacement;
+			model = glm::translate( model, glm::vec3( x, y, z ) );
+
+			// 2. scale: scale between 0.05 and 0.25f
+			float scale = ( rand() % 20 ) / 100.0f + 0.05;
+			model = glm::scale( model, glm::vec3( scale ) );
+
+			// 3. rotation: add random rotation around a (semi)randomly picked rotation axis vector
+			float rotAngle = ( rand() % 360 );
+			model = glm::rotate( model, rotAngle, glm::vec3( 0.4f, 0.6f, 0.8f ) );
+
+			// 4. now add to list of matrices
+			modelMatrices[i] = model;
+		}
 
 		return;
 	}
@@ -316,6 +287,14 @@ public:
 		this->_objectShader.setVec4( "directionalLight.ambient", directionalLightAmbient );
 		this->_objectShader.setVec4( "directionalLight.diffuse", directionalLightDiffuse );
 		this->_objectShader.setVec4( "directionalLight.specular", directionalLightSpecular );
+
+
+		this->_objectInstancedShader.use();
+		this->_objectInstancedShader.setVec3( "directionalLight.vDirection", vDirectionalLightDirUnit );
+		this->_objectInstancedShader.setVec4( "directionalLight.ambient", directionalLightAmbient );
+		this->_objectInstancedShader.setVec4( "directionalLight.diffuse", directionalLightDiffuse );
+		this->_objectInstancedShader.setVec4( "directionalLight.specular", directionalLightSpecular );
+
 
 
 		/// Point Light 0
@@ -522,6 +501,8 @@ public:
 		this->_objectInstancedShader.setFloat( "material.shininess", 16.0f );
 		this->_testModelArray.render( this->_objectInstancedShader );
 		*/
+
+
 		//// Render Test Array
 		this->_objectInstancedShader.use();
 		glm::mat4 model = glm::mat4( 1.0f );

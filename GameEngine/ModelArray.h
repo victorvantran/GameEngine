@@ -215,11 +215,56 @@ public:
 
 	virtual void initiate()
 	{
-		this->_instances.push_back( glm::vec3( 1, 1, 1 ) );
-		this->_instances.push_back( glm::vec3( 2, 2, 2 ) );
-		this->_instances.push_back( glm::vec3( 3, 3, 3 ) );
-		this->_instances.push_back( glm::vec3( 4, 4, 4 ) );
-		this->_instances.push_back( glm::vec3( 5, 5, 5 ) );
+		// Test initiation [!]
+		/*
+		float offset = 1.0f;
+		for ( int y = -300; y < 300; y += 2 )
+		{
+			for ( int x = -300; x < 300; x += 2 )
+			{
+				glm::vec3 translation;
+				translation.x = ( float )x / 1.0f + offset;
+				translation.y = ( float )y / 1.0f + offset;
+				translation.z = 0;
+				this->_instances.push_back( translation );
+			}
+		}
+		*/
+		srand( glfwGetTime() ); // initialize random seed	
+
+		unsigned int amount = 100000;
+		float radius = 50.0;
+		float offset = 2.5f;
+		for ( unsigned int i = 0; i < amount; i++ )
+		{
+			glm::mat4 model = glm::mat4( 1.0f );
+			// 1. translation: displace along circle with 'radius' in range [-offset, offset]
+			float angle = ( float )i / ( float )amount * 360.0f;
+			float displacement = ( rand() % ( int )( 2 * offset * 100 ) ) / 100.0f - offset;
+			float x = sin( angle ) * radius + displacement;
+			displacement = ( rand() % ( int )( 2 * offset * 100 ) ) / 100.0f - offset;
+			float y = displacement * 0.4f; // keep height of field smaller compared to width of x and z
+			displacement = ( rand() % ( int )( 2 * offset * 100 ) ) / 100.0f - offset;
+			float z = cos( angle ) * radius + displacement;
+			model = glm::translate( model, glm::vec3( x, y, z ) );
+
+			// 2. scale: scale between 0.05 and 0.25f
+			float scale = ( rand() % 20 ) / 100.0f + 0.05;
+			model = glm::scale( model, glm::vec3( scale ) );
+
+			// 3. rotation: add random rotation around a (semi)randomly picked rotation axis vector
+			float rotAngle = ( rand() % 360 );
+			model = glm::rotate( model, rotAngle, glm::vec3( 0.4f, 0.6f, 0.8f ) );
+
+			// 4. now add to list of matrices
+			//modelMatrices[i] = model;
+
+
+			glm::vec3 translation = glm::vec3(x, y, z);
+			this->_instances.push_back( translation );
+
+		}
+
 	}
 
 

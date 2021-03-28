@@ -26,8 +26,8 @@ private:
 	std::vector<Vertex>			_vertices;
 	std::vector<std::uint32_t>	_indices;
 	std::vector<Texture>		_textures;
-	std::vector<glm::vec3>& _instances; // for now instances is defined by world position
-
+	//std::vector<glm::vec3>& _instances; // for now instances is defined by world position
+	std::vector<glm::mat4>& _instances;
 
 private:
 	GLuint _vao;
@@ -53,7 +53,7 @@ private:
 
 
 		std::cout << "Instances: " << this->_instances.size() << std::endl;
-		std::cout << "Instance: " << this->_instances[0].x << ", " << this->_instances[0].y << ", " << this->_instances[0].z << std::endl;
+		//std::cout << "Instance: " << this->_instances[0].x << ", " << this->_instances[0].y << ", " << this->_instances[0].z << std::endl;
 
 	
 		
@@ -73,13 +73,32 @@ private:
 		/// Instance VBO
 		glGenBuffers( 1, &this->_instanceVBO );
 		glBindBuffer( GL_ARRAY_BUFFER, this->_instanceVBO );
-		glBufferData( GL_ARRAY_BUFFER, this->_instances.size() * sizeof( glm::vec3 ), &this->_instances[0], GL_STATIC_DRAW );
+		glBufferData( GL_ARRAY_BUFFER, this->_instances.size() * sizeof( glm::mat4 ), &this->_instances[0], GL_STATIC_DRAW );
 		
+
+
+		std::size_t vec4Size = sizeof( glm::vec4 );
+		glEnableVertexAttribArray( 3 );
+		glVertexAttribPointer( 3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, ( void* )0 );
+		glEnableVertexAttribArray( 4 );
+		glVertexAttribPointer( 4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, ( void* )( 1 * vec4Size ) );
+		glEnableVertexAttribArray( 5 );
+		glVertexAttribPointer( 5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, ( void* )( 2 * vec4Size ) );
+		glEnableVertexAttribArray( 6 );
+		glVertexAttribPointer( 6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, ( void* )( 3 * vec4Size ) );
+
+		glVertexAttribDivisor( 3, 1 );
+		glVertexAttribDivisor( 4, 1 );
+		glVertexAttribDivisor( 5, 1 );
+		glVertexAttribDivisor( 6, 1 );
+
+	
+		/*
 		// Instance Id Attribute
 		glVertexAttribPointer( 3, 3, GL_FLOAT, GL_FALSE, sizeof( glm::vec3 ), ( void* )0 );
 		glEnableVertexAttribArray( 3 );
 		glVertexAttribDivisor( 3, 1 );
-		
+		*/
 
 
 
@@ -93,7 +112,7 @@ private:
 
 
 public:
-	MeshArray( std::vector<Vertex>& vertices, std::vector<std::uint32_t>& indices, std::vector<Texture>& textures, std::vector<glm::vec3>& instances )
+	MeshArray( std::vector<Vertex>& vertices, std::vector<std::uint32_t>& indices, std::vector<Texture>& textures, std::vector<glm::mat4>& instances )
 		: _vertices( vertices ), _indices( indices ), _textures( textures ), _instances(instances)
 	{
 		this->createVAO();

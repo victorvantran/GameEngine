@@ -37,8 +37,8 @@ protected:
 	std::vector<MeshArray> _meshes;
 	std::string _directory;
 	std::vector<Texture> _textures_loaded;
-	std::vector<glm::vec3> _instances; // for now instances is defined by world position
-
+	//std::vector<glm::vec3> _instances; // for now instances is defined by world position
+	std::vector<glm::mat4> _instances;
 public:
 	ModelArray( glm::vec3 position, glm::vec3 scale )
 		: _position( position ), _scale( scale )
@@ -213,7 +213,7 @@ public:
 	}
 
 
-	virtual void initiate()
+	virtual void initiate( unsigned int amount )
 	{
 		// Test initiation [!]
 		/*
@@ -230,14 +230,18 @@ public:
 			}
 		}
 		*/
+
 		srand( glfwGetTime() ); // initialize random seed	
 
-		unsigned int amount = 100000;
+		//float radius = 100.0;
+		//float offset = 50.5f;
 		float radius = 50.0;
-		float offset = 2.5f;
+		float offset = 5.5f;
 		for ( unsigned int i = 0; i < amount; i++ )
 		{
 			glm::mat4 model = glm::mat4( 1.0f );
+			//model = glm::translate( model, this->_position );
+
 			// 1. translation: displace along circle with 'radius' in range [-offset, offset]
 			float angle = ( float )i / ( float )amount * 360.0f;
 			float displacement = ( rand() % ( int )( 2 * offset * 100 ) ) / 100.0f - offset;
@@ -248,6 +252,8 @@ public:
 			float z = cos( angle ) * radius + displacement;
 			model = glm::translate( model, glm::vec3( x, y, z ) );
 
+
+
 			// 2. scale: scale between 0.05 and 0.25f
 			float scale = ( rand() % 20 ) / 100.0f + 0.05;
 			model = glm::scale( model, glm::vec3( scale ) );
@@ -256,16 +262,10 @@ public:
 			float rotAngle = ( rand() % 360 );
 			model = glm::rotate( model, rotAngle, glm::vec3( 0.4f, 0.6f, 0.8f ) );
 
-			// 4. now add to list of matrices
-			//modelMatrices[i] = model;
-
-
-			glm::vec3 translation = glm::vec3(x, y, z);
-			this->_instances.push_back( translation );
-
+			this->_instances.push_back( model );
 		}
-
 	}
+
 
 
 	void render( Shader& shader )
@@ -277,7 +277,7 @@ public:
 	}
 
 
-	std::vector<glm::vec3>& getInstances()
+	std::vector<glm::mat4>& getInstances()
 	{
 		return this->_instances;
 	}

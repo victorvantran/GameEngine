@@ -122,10 +122,10 @@ public:
 		this->_woodenChair.initiate();
 
 		//this->_testModelArray.load("assets/models/toilet/scene.obj");
-		this->_testModelArray.initiate();
-		//this->_testModelArray.load( "assets/models/wooden_chair/scene.obj" );
+		this->_testModelArray.initiate( 1000 );
+		this->_testModelArray.load( "assets/models/wooden_chair/scene.obj" );
 		//this->_testModelArray.load( "assets/models/wooden_crate/scene.obj" );
-		this->_testModelArray.load( "assets/models/rock/scene.obj" );
+		//this->_testModelArray.load( "assets/models/rock/scene.obj" );
 
 
 		// Skybox class
@@ -236,6 +236,7 @@ public:
 	{
 		this->_screen.clear();
 
+
 		//// Set up constant matrix projections for shaders
 		glm::mat4 view = this->_camera.getViewMatrix();
 		glm::mat4 projection = glm::perspective( glm::radians( this->_camera.getZoom() ), ( float )this->_screen.getWidth() / ( float )this->_screen.getHeight(), 0.1f, 2000.0f );
@@ -312,7 +313,21 @@ public:
 		this->_objectShader.setFloat( "pointLights[0].kConstant", 1.0f );
 		this->_objectShader.setFloat( "pointLights[0].kLinear", 0.09f );
 		this->_objectShader.setFloat( "pointLights[0].kQuadratic", 0.032f );
-		
+
+
+
+		this->_objectInstancedShader.use();
+		this->_objectInstancedShader.setVec3( "pointLights[0].vPosition", vPointLight0Pos );
+		this->_objectInstancedShader.setVec4( "pointLights[0].ambient", pointLight0Ambient );
+		this->_objectInstancedShader.setVec4( "pointLights[0].diffuse", pointLight0Diffuse );
+		this->_objectInstancedShader.setVec4( "pointLights[0].specular", pointLight0Specular );
+		this->_objectInstancedShader.setFloat( "pointLights[0].kConstant", 1.0f );
+		this->_objectInstancedShader.setFloat( "pointLights[0].kLinear", 0.09f );
+		this->_objectInstancedShader.setFloat( "pointLights[0].kQuadratic", 0.032f );
+
+
+
+
 
 		/// Spot Light 0
 		glm::vec4 spotLight0Color = glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f );
@@ -345,8 +360,17 @@ public:
 		
 
 
-
-
+		this->_objectInstancedShader.use();
+		this->_objectInstancedShader.setVec3( "spotLights[0].vPosition", vSpotLight0Pos );
+		this->_objectInstancedShader.setVec3( "spotLights[0].vDirection", vSpotLight0Direction );
+		this->_objectInstancedShader.setFloat( "spotLights[0].innerCutOff", glm::cos( glm::radians( 12.5f ) ) );
+		this->_objectInstancedShader.setFloat( "spotLights[0].outerCutOff", glm::cos( glm::radians( 17.5f ) ) );
+		this->_objectInstancedShader.setVec4( "spotLights[0].ambient", spotLight0Ambient );
+		this->_objectInstancedShader.setVec4( "spotLights[0].diffuse", spotLight0Diffuse );
+		this->_objectInstancedShader.setVec4( "spotLights[0].specular", spotLight0Specular );
+		this->_objectInstancedShader.setFloat( "spotLights[0].kConstant", 1.0f );
+		this->_objectInstancedShader.setFloat( "spotLights[0].kLinear", 0.09f );
+		this->_objectInstancedShader.setFloat( "spotLights[0].kQuadratic", 0.032f );
 
 		//// Renders before outlining (covered by outline)
 		glStencilMask( 0x00 );
@@ -487,6 +511,8 @@ public:
 
 
 
+
+
 		/*
 		//// Render Test Array
 		this->_objectInstancedShader.use();
@@ -502,19 +528,12 @@ public:
 		this->_testModelArray.render( this->_objectInstancedShader );
 		*/
 
-
 		//// Render Test Array
 		this->_objectInstancedShader.use();
-		glm::mat4 model = glm::mat4( 1.0f );
-		model = glm::translate( model, this->_testModelArray.getPosition() );
-		model = glm::rotate( model, glm::radians( 180.0f * std::sinf( glfwGetTime() / 2 ) ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
-		model = glm::scale( model, this->_testModelArray.getScale() );
-		this->_objectInstancedShader.setMat4( "model", model );
-		glm::mat3 vNormMatrix = glm::mat3( 1.0f );
-		vNormMatrix = glm::mat3( glm::transpose( glm::inverse( view * model ) ) );
-		this->_objectInstancedShader.setMat3( "vNormMatrix", vNormMatrix );
 		this->_objectInstancedShader.setFloat( "material.shininess", 16.0f );
 		this->_testModelArray.render( this->_objectInstancedShader );
+
+
 
 
 

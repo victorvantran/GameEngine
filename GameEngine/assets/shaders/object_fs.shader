@@ -22,7 +22,7 @@ struct Material
 	sampler2D specular2;
 	sampler2D specular3;
 
-	sampler2D emission;
+	sampler2D emission0;
 	float shininess;
 };
 
@@ -193,15 +193,27 @@ void main()
 	}
 
 	// Emission Lighting
-	//vec3 emission = vec3( 1.0f, 1.0f, 1.0f ) * ( vec3( texture( material.emission, TexCoord ) ) );
-	//cumulativeLight += emission;
+	//vec4 emission0 = vec4( 1.0f, 1.0f, 1.0f, 1.0f ) * vec4( vec3( texture( material.emission0, TexCoord ) ), 1.0f );
+	
+	/*
+	vec4 emission0 = vec4( 1.0f, 1.0f, 0.0f, 0.0f ) * vec4( vec3( texture( material.emission0, TexCoord ) ), 1.0f );
+	cumulativeLight += emission0;
+
+	FragColor = cumulativeLight;
+
+	//float average = ( FragColor.r + FragColor.g + FragColor.b ) / 3.0;
+	//FragColor = vec4( average, average, average, 1.0 );
+	*/
 
 
 	FragColor = cumulativeLight;
 
+	float average = ( FragColor.r + FragColor.g + FragColor.b ) / 3.0;
+	vec4 emission0 = vec4( 1.0f, 1.0f, 0.0f, 0.0f ) * vec4( vec3( texture( material.emission0, TexCoord ) ), 1.0f );
 
-	//float average = ( FragColor.r + FragColor.g + FragColor.b ) / 3.0;
-	//FragColor = vec4( average, average, average, 1.0 );
+	FragColor = vec4(average + emission0.g, average, average, 1.0);
+
+
 	return;
 
 }

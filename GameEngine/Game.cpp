@@ -189,6 +189,21 @@ void Game::processInputs()
 	}
 
 
+	if ( Keyboard::getKey( GLFW_KEY_B ) )
+	{
+		this->_camera.setPosition( glm::vec3( 128.452, 61.5898, 97.1159 ) );
+
+	}
+
+	if ( Keyboard::getKey( GLFW_KEY_SPACE ) )
+	{
+		// ( 128.452, 61.5898, 97.1159 )
+
+		glm::vec3 pos = this->_camera.getPosition();
+		std::cout << "( " << pos.x << ", " << pos.y << ", " << pos.z << " ) " << std::endl;
+	}
+
+
 	return;
 }
 

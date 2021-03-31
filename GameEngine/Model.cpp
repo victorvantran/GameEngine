@@ -122,6 +122,11 @@ Mesh Model::processMesh( aiMesh* mesh, const aiScene* scene )
 
 		std::vector<Texture> specularMaps = loadMaterialTextures( material, aiTextureType_SPECULAR );
 		textures.insert( textures.end(), specularMaps.begin(), specularMaps.end() );
+
+		/* Other texture types */
+
+		std::vector<Texture> emissiveColorMaps = loadMaterialTextures( material, aiTextureType_EMISSIVE );
+		textures.insert( textures.end(), emissiveColorMaps.begin(), emissiveColorMaps.end() );
 	}
 
 	return Mesh( vertices, indices, textures );
@@ -199,17 +204,6 @@ void Model::render( Shader& shader )
 	
 
 
-
-	return;
-}
-
-
-void Model::renderInstanced( Shader& shader )
-{
-	for ( Mesh& mesh : this->_meshes )
-	{
-		mesh.renderInstanced( shader );
-	}
 
 	return;
 }

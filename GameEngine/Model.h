@@ -61,7 +61,6 @@ public:
 	virtual void initiate();
 
 	void render( Shader& shader );
-	void renderInstanced( Shader& shader );
 
 	void cleanup();
 

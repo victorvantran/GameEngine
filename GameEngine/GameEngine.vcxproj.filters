@@ -98,9 +98,6 @@
     <None Include="assets\shaders\object_instanced_vs.shader">
       <Filter>assets\shaders</Filter>
     </None>
-    <None Include="assets\shaders\object_instanced_fs.shader">
-      <Filter>assets\shaders</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">

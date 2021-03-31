@@ -70,17 +70,6 @@ public:
 	 * @return void
 	 */
 	void render( Shader& shader );
-	
-
-
-	/**
-	 * Render the mesh
-	 *
-	 * Activates, binds, and sets the proper texture units to the diffuse, specular, normal, and height properties in the shader materials struct.
-	 *
-	 * @return void
-	 */
-	void renderInstanced( Shader& shader );
 
 
 	/**

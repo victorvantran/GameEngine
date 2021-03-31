@@ -18,7 +18,6 @@ Camera::Camera( glm::vec3 position, glm::vec3 up, float yaw, float pitch ) :
 Camera::~Camera() {}
 
 
-
 glm::vec3 Camera::getPosition() const
 {
 	return this->_position;
@@ -82,6 +81,24 @@ float Camera::getZoom() const
 glm::mat4 Camera::getViewMatrix()
 {
 	return glm::lookAt( this->_position, this->_position + this->_front, this->_up );
+}
+
+
+void Camera::setYaw(float yaw)
+{
+	this->_yaw = yaw;
+}
+
+
+void Camera::setFront( glm::vec3 front )
+{
+	this->_front = glm::normalize( front );
+}
+
+
+void Camera::setPosition( glm::vec3 position )
+{
+	this->_position = position;
 }
 
 

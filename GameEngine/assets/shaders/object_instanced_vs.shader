@@ -3,7 +3,6 @@
 layout( location = 0 ) in vec3 aPosition;
 layout( location = 1 ) in vec3 aNormal;
 layout( location = 2 ) in vec2 aTexCoord;
-//layout( location = 3 ) in vec3 aOffset;
 layout( location = 3 ) in mat4 instanceMatrix;
 
 
@@ -23,36 +22,18 @@ uniform mat4 projection;
 
 
 
-
-
 void main()
-{
-	//gl_Position = projection * view * model * vec4( vec3( 0.0f, 0.0f, 0.0f ), 1.0f );
-	
+{	
+	//gl_Position = projection * view * model * vec4( aPosition, 1.0f );
 	gl_Position = projection * view * instanceMatrix * vec4( aPosition, 1.0f );
-	//gl_Position = projection * view * model * vec4( aPosition, 1.0f );
-
-	//gl_Position = projection * view * model * vec4( aPosition + aOffset, 1.0f );
-	//gl_Position = projection * view * model * vec4( aPosition, 1.0f );
-
-
-	//glm::mat3( glm::transpose( glm::inverse( view * model ) )
 
 	//vNormal = vNormMatrix * aNormal;
 	vNormal = mat3( transpose( inverse( view * instanceMatrix ) ) ) * aNormal;
 
+	//vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
 	vFragPos = vec3( view * instanceMatrix * vec4( aPosition, 1.0f ) );
-	//vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
-
-	//vFragPos = vec3( view * model * vec4( aPosition + aOffset, 1.0f ) );
-	//vFragPos = vec3( view * model * vec4( aPosition, 1.0f ) );
-	
-
-	//vFragPos = vec3( view * model * vec4( vec3(0.0f,0.0f,0.0f), 1.0f ) );
-
 
 	TexCoord = aTexCoord;
-
 	return;
 }
 

@@ -169,7 +169,6 @@
   <ItemGroup>
     <None Include="assets\shaders\light_source_fs.shader" />
     <None Include="assets\shaders\object_fs.shader" />
-    <None Include="assets\shaders\object_instanced_fs.shader" />
     <None Include="assets\shaders\object_instanced_vs.shader" />
     <None Include="assets\shaders\object_vs.shader" />
     <None Include="assets\shaders\outline_fs.shader" />

@@ -230,13 +230,12 @@ public:
 			}
 		}
 		*/
-
-		srand( glfwGetTime() ); // initialize random seed	
+		srand( glfwGetTime() * 1000 ); // initialize random seed	
 
 		//float radius = 100.0;
 		//float offset = 50.5f;
-		float radius = 50.0;
-		float offset = 5.5f;
+		float radius = 25.0f;
+		float offset = 2.0f;
 		for ( unsigned int i = 0; i < amount; i++ )
 		{
 			glm::mat4 model = glm::mat4( 1.0f );
@@ -244,6 +243,7 @@ public:
 
 			// 1. translation: displace along circle with 'radius' in range [-offset, offset]
 			float angle = ( float )i / ( float )amount * 360.0f;
+			//float angle = ( float )i / ( float )(amount + rand()) * 360.0f;
 			float displacement = ( rand() % ( int )( 2 * offset * 100 ) ) / 100.0f - offset;
 			float x = sin( angle ) * radius + displacement;
 			displacement = ( rand() % ( int )( 2 * offset * 100 ) ) / 100.0f - offset;
@@ -256,7 +256,7 @@ public:
 
 			// 2. scale: scale between 0.05 and 0.25f
 			float scale = ( rand() % 20 ) / 100.0f + 0.05;
-			model = glm::scale( model, glm::vec3( scale ) );
+			model = glm::scale( model, glm::vec3( scale ) * this->_scale );
 
 			// 3. rotation: add random rotation around a (semi)randomly picked rotation axis vector
 			float rotAngle = ( rand() % 360 );
@@ -277,14 +277,31 @@ public:
 	}
 
 
+
+	void cleanup()
+	{
+		for ( MeshArray& meshArray : this->_meshes )
+		{
+			meshArray.cleanup();
+		}
+
+		for ( Texture& texture : this->_textures_loaded )
+		{
+			texture.cleanup();
+		}
+
+		return;
+	}
+
+
+
+	/// Getters
 	std::vector<glm::mat4>& getInstances()
 	{
 		return this->_instances;
 	}
 
 
-
-	/// Getters
 	glm::vec3 getPosition() const
 	{
 		return this->_position;

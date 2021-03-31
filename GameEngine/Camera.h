@@ -56,6 +56,14 @@ public:
 	glm::mat4 getViewMatrix();
 
 
+	// Setters
+	void setYaw( float yaw );
+
+	void setFront( glm::vec3 front );
+
+	void setPosition( glm::vec3 position );
+
+
 	/**
 	 * Update the position of the camera based on a direction and deltaTime for velocity
 	 *
